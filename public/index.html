@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JNJ SRL — Sistema Administrativo y Contable</title>
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img src="img/logo.png" alt="Logo JNJ SRL" style="width:38px; height:38px; object-fit:contain; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.25);">
+        <div class="brand-text">
+          <span class="brand-name">JNJ SRL</span>
+          <span class="brand-sub">Software Integral 2026</span>
+        </div>
+      </div>
+
+      <nav id="app-menu" class="sidebar-nav" aria-label="Módulos">
+        <button data-modulo="dashboard" class="activo" data-tooltip="Panel de Control General">
+          <span class="nav-icon" aria-hidden="true">📊</span>
+          <span class="nav-label">Tablero Principal</span>
+          <span class="nav-key">1</span>
+        </button>
+        <button data-modulo="facturacion" data-tooltip="Facturación Rápida / Punto de Venta">
+          <span class="nav-icon" aria-hidden="true">🧾</span>
+          <span class="nav-label">Facturación / POS</span>
+          <span class="nav-key">2</span>
+        </button>
+        <button data-modulo="inventario" data-tooltip="Inventario y Kárdex con CPP">
+          <span class="nav-icon" aria-hidden="true">📦</span>
+          <span class="nav-label">Inventario & Kárdex</span>
+          <span class="nav-key">3</span>
+        </button>
+        <button data-modulo="clientes" data-tooltip="Directorio y Cartera de Clientes">
+          <span class="nav-icon" aria-hidden="true">👥</span>
+          <span class="nav-label">Clientes</span>
+          <span class="nav-key">4</span>
+        </button>
+        <button data-modulo="cxc" data-tooltip="Cobros y Recibos de Caja">
+          <span class="nav-icon" aria-hidden="true">💵</span>
+          <span class="nav-label">Cuentas por Cobrar</span>
+          <span class="nav-key">5</span>
+        </button>
+        <button data-modulo="bancos" data-tooltip="Cuentas Bancarias y Cajas">
+          <span class="nav-icon" aria-hidden="true">🏦</span>
+          <span class="nav-label">Bancos & Tesorería</span>
+          <span class="nav-key">6</span>
+        </button>
+
+        <div style="height:1px; background:rgba(255,255,255,0.1); margin:8px 12px;"></div>
+
+        <button data-modulo="catalogo" data-tooltip="Plan de cuentas XXX-XX-XXX">
+          <span class="nav-icon" aria-hidden="true">📂</span>
+          <span class="nav-label">Catálogo de Cuentas</span>
+          <span class="nav-key">7</span>
+        </button>
+        <button data-modulo="asientos" data-tooltip="Partida doble estricta">
+          <span class="nav-icon" aria-hidden="true">📝</span>
+          <span class="nav-label">Asientos Contables</span>
+          <span class="nav-key">8</span>
+        </button>
+        <button data-modulo="reportes" data-tooltip="Balance General y Estado de Resultados">
+          <span class="nav-icon" aria-hidden="true">📈</span>
+          <span class="nav-label">Estados Financieros</span>
+          <span class="nav-key">9</span>
+        </button>
+        <button data-modulo="companias" data-tooltip="Gestionar empresas">
+          <span class="nav-icon" aria-hidden="true">🏢</span>
+          <span class="nav-label">Compañías</span>
+          <span class="nav-key">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="sidebar-status">
+          <span class="dot"></span>
+          <span>JNJ SRL Online</span>
+        </div>
+        <span class="sidebar-version">v2.0 · Multi-Tenant</span>
+      </div>
+    </aside>
+
+    <!-- ===================== MAIN COLUMN ===================== -->
+    <div class="app-main">
+
+      <!-- Top Bar -->
+      <header id="app-header" class="topbar">
+        <div class="topbar-left">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-3.5-3.5"/>
+            </svg>
+            <input id="global-search" type="text" placeholder="Buscar cuenta o descripción..." autocomplete="off">
+            <kbd class="search-kbd">/</kbd>
+            <div id="search-results" class="search-dropdown hidden"></div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="company-control">
+            <span class="company-label">Compañía</span>
+            <select id="sel-compania"></select>
+          </div>
+          <span id="periodo-label" class="period-chip">Período: --/----</span>
+
+          <div class="topbar-divider"></div>
+
+          <div class="topbar-menu">
+            <button class="icon-btn" id="btn-notificaciones" data-tooltip="Notificaciones" aria-label="Notificaciones">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/>
+                <path d="M10 20a2 2 0 0 0 4 0"/>
+              </svg>
+              <span class="badge">3</span>
+            </button>
+            <div id="panel-notificaciones" class="popover hidden" role="menu">
+              <div class="popover-head">Notificaciones <span class="badge badge-plain">3 nuevas</span></div>
+              <div class="popover-item"><span class="pop-dot warn"></span><div><strong>Mayorización pendiente</strong><p>Ejecute la mayorización del período activo.</p></div></div>
+              <div class="popover-item"><span class="pop-dot info"></span><div><strong>Cierre mensual</strong><p>Recuerde cerrar el mes al final del ejercicio.</p></div></div>
+              <div class="popover-item"><span class="pop-dot accent"></span><div><strong>Respaldo sugerido</strong><p>Considere crear un respaldo de la base de datos.</p></div></div>
+            </div>
+          </div>
+
+          <div class="topbar-menu">
+            <button class="profile" id="btn-perfil" aria-label="Menú de usuario">
+              <span class="avatar">AD</span>
+              <span class="profile-meta">
+                <span class="profile-name">Administrador</span>
+                <span class="profile-role">Contador</span>
+              </span>
+              <svg class="profile-chevron" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+            <div id="panel-perfil" class="popover popover-right hidden" role="menu">
+              <div class="popover-head">Administrador</div>
+              <button class="popover-item" data-ir="companias"><span class="pop-icon">▦</span> Compañías</button>
+              <button class="popover-item" data-ir="reportes"><span class="pop-icon">▤</span> Reportes</button>
+              <div class="popover-sep"></div>
+              <button class="popover-item danger" id="btn-salir"><span class="pop-icon">⏻</span> Cerrar sesión</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main id="app-contenido" class="content"></main>
+
+      <footer id="app-footer">
+        <span>Partida doble estricta · Mayorización en cascada · NIC / NIIF</span>
+        <span class="footer-extra">SUPER JAZ · Compu-Jaz S.A.</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===================== LOGIN ===================== -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; margin-bottom:12px;">
+        <img src="img/logo.png" alt="Logo JNJ SRL" style="width:72px; height:72px; object-fit:contain; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+        <div>
+          <div class="brand-name" style="font-size:22px; font-weight:800;">JNJ SRL</div>
+          <div class="brand-sub" style="font-size:12px; color:var(--muted);">Sistema Administrativo y Contable</div>
+        </div>
+      </div>
+      <h1>Iniciar sesión</h1>
+      <p class="login-hint">Acceso restringido al sistema contable</p>
+      <form id="login-form" novalidate>
+        <label for="login-user">Usuario</label>
+        <input id="login-user" type="text" autocomplete="username" placeholder="Ingrese su usuario">
+        <label for="login-pass">Contraseña</label>
+        <div class="pass-wrap">
+          <input id="login-pass" type="password" autocomplete="current-password" placeholder="Ingrese su contraseña">
+          <button type="button" class="pass-eye" id="login-eye" data-tooltip="Mostrar / ocultar contraseña" aria-label="Mostrar contraseña">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div id="login-error" class="msg msg-error hidden"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="login-btn" style="padding:12px; font-size:14px; font-weight:700; margin-top:8px;">Ingresar al sistema</button>
+      </form>
+      <div class="login-foot" style="color:var(--muted); font-size:12px; margin-top:20px;">
+        Acceso restringido y protegido &middot; <b>JNJ SRL Cloud</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL ===================== -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-cerrar" id="modal-cerrar" aria-label="Cerrar">&times;</button>
+      <div id="modal-titulo"></div>
+      <div id="modal-cuerpo"></div>
+    </div>
+  </div>
+
+  <script src="js/html2pdf.bundle.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "sistema-contable",
+  "version": "1.0.0",
+  "description": "Sistema Contable Integral multicompañía (HTML/CSS/JS + Node.js + SQLite)",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
