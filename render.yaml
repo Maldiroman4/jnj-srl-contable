@@ -7,7 +7,7 @@ services:
     startCommand: npm start
     envVars:
       - key: NODE_VERSION
-        value: 20.18.0
+        value: 22.14.0
       - key: ADMIN_USER
         value: Joel777
       - key: ADMIN_PASS
