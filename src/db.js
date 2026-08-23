@@ -240,6 +240,38 @@ function inicializar() {
       id_cxc INTEGER NOT NULL REFERENCES cuentas_cobrar(id_cxc),
       monto_aplicado REAL NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS usuarios (
+      id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      nombre_completo TEXT NOT NULL,
+      rol TEXT NOT NULL DEFAULT 'ADMIN' CHECK (rol IN ('SUPER_ADMIN', 'ADMIN', 'CONTADOR', 'OPERADOR')),
+      activo INTEGER NOT NULL DEFAULT 1,
+      creado_en TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+    );
+
+    CREATE TABLE IF NOT EXISTS auditoria_sesiones (
+      id_sesion INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      ip TEXT NOT NULL,
+      pais TEXT DEFAULT 'Costa Rica',
+      ciudad TEXT DEFAULT 'San José',
+      dispositivo TEXT DEFAULT 'Desktop',
+      navegador TEXT DEFAULT 'Chrome',
+      sistema_operativo TEXT DEFAULT 'Windows',
+      user_agent TEXT,
+      fecha_hora TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+      estado TEXT NOT NULL CHECK (estado IN ('EXITOSO', 'FALLIDO')),
+      motivo_fallo TEXT
+    );
+  `);
+
+  // Sembrar usuarios iniciales
+  db.exec(`
+    INSERT OR REPLACE INTO usuarios (username, password, nombre_completo, rol, activo) VALUES
+      ('Maldiroman777', '858585', 'Maldiroman · Super Usuario Maestro', 'SUPER_ADMIN', 1),
+      ('Joel777', '585858', 'Joel · Administrador Principal', 'SUPER_ADMIN', 1);
   `);
 
   // Sembrar datos iniciales de MONICA si no existen

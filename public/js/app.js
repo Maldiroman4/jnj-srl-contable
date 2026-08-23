@@ -13,6 +13,7 @@ import './modulos/catalogo.js';
 import './modulos/asientos.js';
 import './modulos/procesos.js';
 import './modulos/reportes.js';
+import './modulos/seguridad.js';
 
 const estado = {
   compania: null,
@@ -385,6 +386,7 @@ function configurarLogin() {
 
     try {
       let autenticado = false;
+      let userData = null;
 
       // Validación con backend API
       try {
@@ -396,20 +398,38 @@ function configurarLogin() {
         const resJson = await resp.json();
         if (resJson.ok) {
           autenticado = true;
+          userData = resJson;
           sessionStorage.setItem('jnj_token', resJson.token || '1');
         }
       } catch (errApi) {
         // Fallback validación directa
-        if (u === credenciales.usuario && p === credenciales.password) {
+        if (u === 'Maldiroman777' && p === '858585') {
           autenticado = true;
+          userData = { usuario: 'Maldiroman777', rol: 'SUPER_ADMIN', nombre_completo: 'Maldiroman' };
+        } else if (u === 'Joel777' && p === '585858') {
+          autenticado = true;
+          userData = { usuario: 'Joel777', rol: 'SUPER_ADMIN', nombre_completo: 'Joel' };
         }
       }
 
       if (autenticado) {
         sessionStorage.setItem(claveSesion, '1');
         sessionStorage.setItem('jnj_usuario', u);
+        if (userData) {
+          sessionStorage.setItem('jnj_user_data', JSON.stringify(userData));
+          actualizarPerfilUI(userData);
+        }
+
         err?.classList.add('hidden');
         screen?.classList.add('hidden');
+
+        if (userData?.sesion_info) {
+          const info = userData.sesion_info;
+          setTimeout(() => {
+            mostrarNotificacionGlobal(`👋 Sesión iniciada: ${u} · Dispositivo: ${info.dispositivo} (Acceso #${info.total_inicios_dispositivo}) · IP: ${info.ip}`);
+          }, 800);
+        }
+
         if (!appArrancada) {
           appArrancada = true;
           inicializar();
@@ -428,17 +448,36 @@ function configurarLogin() {
 
   // Cerrar sesión desde el menú de perfil.
   document.getElementById('btn-salir')?.addEventListener('click', () => {
-    sessionStorage.removeItem(claveSesion);
-    sessionStorage.removeItem('jnj_token');
-    sessionStorage.removeItem('jnj_usuario');
+    sessionStorage.clear();
     location.reload();
   });
+}
+
+function actualizarPerfilUI(userData) {
+  if (!userData) return;
+  const nombreEl = document.querySelector('.profile-name');
+  const rolEl = document.querySelector('.profile-role');
+  const avatarEl = document.querySelector('.profile .avatar');
+  const popHead = document.querySelector('#panel-perfil .popover-head');
+
+  const u = userData.usuario || 'Usuario';
+  const rol = userData.rol === 'SUPER_ADMIN' ? '👑 Super Usuario' : (userData.rol || 'Administrador');
+  const initials = u.substring(0, 2).toUpperCase();
+
+  if (nombreEl) nombreEl.textContent = u;
+  if (rolEl) rolEl.textContent = rol;
+  if (avatarEl) avatarEl.textContent = initials;
+  if (popHead) popHead.textContent = `${u} · ${rol}`;
 }
 
 configurarLogin();
 
 if (sesionActiva()) {
   document.getElementById('login-screen').classList.add('hidden');
+  const storedUser = sessionStorage.getItem('jnj_user_data');
+  if (storedUser) {
+    try { actualizarPerfilUI(JSON.parse(storedUser)); } catch (e) {}
+  }
   appArrancada = true;
   inicializar();
 } else {

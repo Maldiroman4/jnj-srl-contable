@@ -22,6 +22,7 @@ app.use('/api/cxc', require('./src/routes/cxc'));
 app.use('/api/cxp', require('./src/routes/cxp'));
 app.use('/api/bancos', require('./src/routes/bancos'));
 app.use('/api/dashboard', require('./src/routes/dashboard'));
+app.use('/api/seguridad', require('./src/routes/seguridad'));
 
 app.use((err, req, res, next) => {
   console.error(err);
