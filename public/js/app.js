@@ -35,6 +35,7 @@ export function setCompania(c) {
 
 export async function inicializar() {
   inicializarInterfaz();
+  configurarSidebarMovil();
 
   document.getElementById('modal-cerrar').addEventListener('click', () => {
     document.getElementById('modal').classList.add('hidden');
@@ -164,6 +165,10 @@ export function mostrarNotificacionGlobal(mensaje, esError = false) {
 export async function mostrar(nombre) {
   document.querySelectorAll('#app-menu button').forEach(b =>
     b.classList.toggle('activo', b.dataset.modulo === nombre));
+
+  document.querySelectorAll('#mobile-tab-bar .tab-item[data-modulo]').forEach(b =>
+    b.classList.toggle('activo', b.dataset.modulo === nombre));
+
   const contenido = document.getElementById('app-contenido');
   const def = modulos[nombre];
   if (!def) {
@@ -172,9 +177,50 @@ export async function mostrar(nombre) {
   }
   try {
     await def.render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (e) {
     contenido.innerHTML = `<div class="msg msg-error">${e.message}</div>`;
   }
+}
+
+function configurarSidebarMovil() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  const btnAbrir = document.getElementById('btn-toggle-sidebar');
+  const btnCerrar = document.getElementById('btn-close-sidebar');
+  const tabMas = document.getElementById('tab-btn-mas');
+
+  const abrir = () => {
+    sidebar?.classList.add('open');
+    backdrop?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const cerrar = () => {
+    sidebar?.classList.remove('open');
+    backdrop?.classList.add('hidden');
+    document.body.style.overflow = '';
+  };
+
+  btnAbrir?.addEventListener('click', abrir);
+  tabMas?.addEventListener('click', abrir);
+  btnCerrar?.addEventListener('click', cerrar);
+  backdrop?.addEventListener('click', cerrar);
+
+  // Cerrar drawer al hacer clic en cualquier opción del sidebar en tablet/móvil
+  document.querySelectorAll('#app-menu button').forEach(b => {
+    b.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) cerrar();
+    });
+  });
+
+  // Manejar clics de los tabs móviles inferiores
+  document.querySelectorAll('#mobile-tab-bar .tab-item[data-modulo]').forEach(b => {
+    b.addEventListener('click', () => {
+      cerrar();
+      mostrar(b.dataset.modulo);
+    });
+  });
 }
 
 function actualizarBarra() {

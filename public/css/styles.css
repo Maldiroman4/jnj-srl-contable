@@ -1,11 +1,11 @@
 /* ==========================================================================
    JNJ SRL — APPLE HIG & CUPERTINO BLUE HARMONY DESIGN SYSTEM
-   Paleta Tonal Azul (Deep Ocean, Royal Cobalt, Electric Azure, Glacier Ice)
+   Full Responsive Layout (Desktop 4K/1080p, iPad/Tablets & iPhone/Android)
    ========================================================================== */
 
 /* ---------------------------------- Tokens -------------------------------- */
 :root {
-  /* Escala Tonal Azul de Alta Precisión */
+  /* Escala Tonal Azul */
   --blue-50: #eff6ff;
   --blue-100: #dbeafe;
   --blue-200: #bfdbfe;
@@ -23,8 +23,8 @@
   --surface: #ffffff;
   --surface-secondary: #f8fafc;
   --surface-tertiary: #edf2f7;
-  --surface-glass: rgba(255, 255, 255, 0.85);
-  --surface-glass-subtle: rgba(255, 255, 255, 0.65);
+  --surface-glass: rgba(255, 255, 255, 0.88);
+  --surface-glass-subtle: rgba(255, 255, 255, 0.70);
   --surface-hover: rgba(37, 99, 235, 0.04);
   --surface-active: rgba(37, 99, 235, 0.08);
 
@@ -46,10 +46,8 @@
 
   --accent-cyan: #0ea5e9;
   --accent-cyan-soft: rgba(14, 165, 233, 0.12);
-
   --accent-indigo: #6366f1;
   --accent-indigo-soft: rgba(99, 102, 241, 0.12);
-
   --accent-sky: #38bdf8;
   --accent-teal: #06b6d4;
 
@@ -73,7 +71,7 @@
   --sidebar-ink-active: #ffffff;
   --sidebar-border: rgba(255, 255, 255, 0.06);
 
-  /* Sombras y Luces Ambientales */
+  /* Sombras y Luces */
   --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(37, 99, 235, 0.03);
   --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(37, 99, 235, 0.04);
@@ -81,7 +79,7 @@
   --shadow-sheet: 0 28px 64px -12px rgba(10, 25, 47, 0.28), 0 8px 20px -4px rgba(37, 99, 235, 0.12);
   --shadow-blue-glow: 0 4px 16px rgba(37, 99, 235, 0.35);
 
-  /* Radios Squircle Cupertino */
+  /* Radios Squircle */
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -94,7 +92,7 @@
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Inter", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: "SF Mono", "JetBrains Mono", "Menlo", Monaco, "Consolas", monospace;
 
-  /* Curvas de Animación Apple */
+  /* Curvas Apple */
   --ease-apple: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -108,6 +106,7 @@
 html, body {
   height: 100%;
   background-color: var(--bg);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -119,6 +118,7 @@ body {
   color: var(--ink);
   background: var(--bg);
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -137,12 +137,13 @@ button { font-family: inherit; }
 .hidden { display: none !important; }
 
 /* ==========================================================================
-   LAYOUT GENERAL — Cupertino macOS Deep Ocean Sidebar + Main Column
+   LAYOUT GENERAL & RESPONSIVE MAIN
    ========================================================================== */
 .app-layout {
   display: flex;
   min-height: 100vh;
   background-color: var(--bg);
+  position: relative;
 }
 
 .app-main {
@@ -152,11 +153,12 @@ button { font-family: inherit; }
   flex-direction: column;
   margin-left: 270px;
   background-color: var(--bg);
+  transition: margin-left .3s var(--ease-apple);
 }
 
 .content {
   flex: 1;
-  padding: 30px 36px 48px;
+  padding: 28px 32px 48px;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -169,13 +171,13 @@ button { font-family: inherit; }
 }
 
 /* ==========================================================================
-   DEEP OCEAN BLUE SIDEBAR (macOS Pro Glass Aesthetic)
+   SIDEBAR (Desktop Fijo / Mobile & Tablet Sliding Drawer)
    ========================================================================== */
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
   width: 270px;
-  z-index: 60;
+  z-index: 90;
   display: flex;
   flex-direction: column;
   background: var(--sidebar-bg);
@@ -183,11 +185,37 @@ button { font-family: inherit; }
   -webkit-backdrop-filter: blur(30px) saturate(190%);
   border-right: 1px solid var(--sidebar-border);
   box-shadow: 4px 0 24px rgba(10, 25, 47, 0.15);
+  transition: transform .3s var(--ease-apple);
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 25, 47, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 85;
+  transition: opacity .3s ease;
+}
+
+.sidebar-close-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  place-items: center;
+  cursor: pointer;
+  line-height: 1;
 }
 
 .brand {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   padding: 22px 20px 18px;
   border-bottom: 1px solid var(--sidebar-border);
@@ -219,6 +247,7 @@ button { font-family: inherit; }
   flex-direction: column;
   gap: 5px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sidebar-nav button {
@@ -227,7 +256,8 @@ button { font-family: inherit; }
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 10px 14px;
+  padding: 11px 14px;
+  min-height: 44px;
   border: none;
   border-radius: var(--radius-md);
   background: transparent;
@@ -243,7 +273,6 @@ button { font-family: inherit; }
 .sidebar-nav button:hover {
   background: rgba(255, 255, 255, 0.06);
   color: var(--sidebar-ink-hover);
-  transform: translateX(2px);
 }
 
 .sidebar-nav button:active {
@@ -267,7 +296,7 @@ button { font-family: inherit; }
   width: 22px;
   height: 22px;
   flex-shrink: 0;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .nav-label { flex: 1; }
@@ -321,32 +350,39 @@ button { font-family: inherit; }
 .sidebar-version { color: #64748b; font-size: 11px; }
 
 /* ==========================================================================
-   FROSTED GLACIER TOP BAR
+   TOPBAR
    ========================================================================== */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  height: 64px;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 0 32px;
+  gap: 12px;
+  padding: 8px 24px;
   background: var(--surface-glass);
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
   border-bottom: 1px solid var(--separator);
 }
 
+.mobile-menu-btn {
+  display: none;
+  min-width: 44px;
+  min-height: 44px;
+  margin-right: 8px;
+}
+
 .topbar-left { display: flex; align-items: center; flex: 1; min-width: 0; }
-.topbar-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; flex-wrap: wrap; }
 .topbar-divider { width: 1px; height: 26px; background: var(--separator); }
 
 /* --- Búsqueda Global --- */
 .search-wrap {
   position: relative;
-  width: min(440px, 48vw);
+  width: min(380px, 45vw);
 }
 
 .search-wrap .search-icon {
@@ -375,7 +411,7 @@ button { font-family: inherit; }
 
 #global-search {
   width: 100%;
-  height: 38px;
+  height: 40px;
   padding: 0 44px 0 38px;
   font-family: var(--sans);
   font-size: 13.5px;
@@ -386,8 +422,6 @@ button { font-family: inherit; }
   border-radius: var(--radius-full);
   transition: all .2s var(--ease-apple);
 }
-
-#global-search::placeholder { color: var(--muted); }
 
 #global-search:focus {
   outline: none;
@@ -427,7 +461,7 @@ button { font-family: inherit; }
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -446,10 +480,10 @@ button { font-family: inherit; }
 .company-label { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
 
 #sel-compania {
-  min-width: 220px;
-  max-width: 300px;
-  height: 34px;
-  padding: 0 30px 0 12px;
+  min-width: 180px;
+  max-width: 260px;
+  height: 36px;
+  padding: 0 28px 0 10px;
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 600;
@@ -461,7 +495,6 @@ button { font-family: inherit; }
   transition: all .2s var(--ease-apple);
 }
 
-#sel-compania:hover { border-color: var(--primary); background-color: #ffffff; }
 #sel-compania:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16); background-color: #fff; }
 
 .period-chip {
@@ -472,7 +505,7 @@ button { font-family: inherit; }
   background: var(--blue-50);
   border: 1px solid var(--blue-200);
   border-radius: var(--radius-sm);
-  padding: 6px 12px;
+  padding: 6px 10px;
   white-space: nowrap;
 }
 
@@ -481,8 +514,8 @@ button { font-family: inherit; }
   position: relative;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--separator);
   border-radius: var(--radius-md);
   background: #ffffff;
@@ -495,11 +528,7 @@ button { font-family: inherit; }
   background: var(--blue-50);
   color: var(--primary);
   border-color: var(--blue-300);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-xs);
 }
-
-.icon-btn:active { transform: scale(0.96); }
 
 .icon-btn .badge {
   position: absolute;
@@ -523,7 +552,7 @@ button { font-family: inherit; }
   top: calc(100% + 10px);
   right: 0;
   z-index: 70;
-  width: 340px;
+  width: min(340px, 90vw);
   background: var(--surface-glass);
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
@@ -534,7 +563,7 @@ button { font-family: inherit; }
   animation: apple-pop .2s var(--ease-apple);
 }
 
-.popover-right { width: 220px; }
+.popover-right { width: min(240px, 90vw); }
 
 @keyframes apple-pop {
   from { opacity: 0; transform: translateY(-8px) scale(.96); }
@@ -568,7 +597,8 @@ button { font-family: inherit; }
   align-items: flex-start;
   gap: 10px;
   width: 100%;
-  padding: 9px 12px;
+  padding: 10px 12px;
+  min-height: 44px;
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -586,7 +616,7 @@ button { font-family: inherit; }
 .pop-dot.info { background: var(--primary); }
 .pop-dot.accent { background: var(--accent-cyan); }
 
-.pop-icon { width: 20px; color: var(--primary); font-size: 14px; text-align: center; flex-shrink: 0; }
+.pop-icon { width: 20px; color: var(--primary); font-size: 16px; text-align: center; flex-shrink: 0; }
 .popover-sep { height: 1px; background: var(--separator); margin: 6px 4px; }
 .popover-item.danger { color: var(--danger); }
 .popover-item.danger .pop-icon { color: var(--danger); }
@@ -597,7 +627,8 @@ button { font-family: inherit; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 5px 12px 5px 5px;
+  padding: 4px 12px 4px 4px;
+  min-height: 40px;
   border: 1px solid var(--separator);
   border-radius: var(--radius-full);
   background: #ffffff;
@@ -609,7 +640,6 @@ button { font-family: inherit; }
   background: var(--blue-50);
   border-color: var(--blue-300);
   box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
 }
 
 .avatar {
@@ -632,18 +662,19 @@ button { font-family: inherit; }
 .profile:hover .profile-chevron, .profile.open .profile-chevron { transform: rotate(180deg); }
 
 /* ==========================================================================
-   PAGE HEADER & STAT CARDS (Bento Grid)
+   PAGE HEADER & STAT CARDS
    ========================================================================== */
 .page-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 24px;
 }
 
 .page-title h1 {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--ink);
@@ -664,8 +695,8 @@ button { font-family: inherit; }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
   margin-bottom: 24px;
 }
 
@@ -674,7 +705,7 @@ button { font-family: inherit; }
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 20px 22px;
+  padding: 18px 20px;
   background: var(--surface);
   border: 1px solid rgba(37, 99, 235, 0.08);
   border-radius: var(--radius-lg);
@@ -719,12 +750,12 @@ button { font-family: inherit; }
 
 .stat-value {
   font-family: var(--mono);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--ink);
 }
-.stat-value.small { font-size: 18px; }
+.stat-value.small { font-size: 17px; }
 
 /* ==========================================================================
    PANELS & INSET GROUPED CARDS
@@ -734,7 +765,7 @@ button { font-family: inherit; }
   border: 1px solid rgba(37, 99, 235, 0.08);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: 24px 26px;
+  padding: 22px 24px;
   margin-bottom: 22px;
   transition: box-shadow .25s var(--ease-apple);
 }
@@ -746,8 +777,8 @@ button { font-family: inherit; }
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ink);
-  margin-bottom: 18px;
-  padding-bottom: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--separator);
   display: flex;
   align-items: center;
@@ -766,7 +797,7 @@ button { font-family: inherit; }
   font-size: 14px;
   font-weight: 700;
   color: var(--ink-secondary);
-  margin: 22px 0 12px;
+  margin: 20px 0 12px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -787,19 +818,20 @@ button { font-family: inherit; }
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 /* ==========================================================================
-   CUPERTINO BUTTONS (Sapphire & Azure Glow)
+   BUTTONS (Touch-friendly & Apple Press Effect)
    ========================================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 9px 18px;
+  padding: 10px 18px;
+  min-height: 42px;
   font-family: var(--sans);
   font-size: 13.5px;
   font-weight: 600;
@@ -809,13 +841,13 @@ button { font-family: inherit; }
   cursor: pointer;
   transition: all .2s var(--ease-apple);
   user-select: none;
+  touch-action: manipulation;
 }
 
 .btn:active {
-  transform: scale(0.975);
+  transform: scale(0.97);
 }
 
-/* Botón Primario */
 .btn-primary, .btn:not(.btn-secondary):not(.btn-gris):not(.btn-danger):not(.btn-sm) {
   background: var(--primary-gradient);
   color: #ffffff;
@@ -827,7 +859,6 @@ button { font-family: inherit; }
   transform: translateY(-1px);
 }
 
-/* Botón Secundario / Frosted Azure */
 .btn-secondary, .btn-gris {
   background: var(--blue-50);
   color: var(--primary);
@@ -840,19 +871,15 @@ button { font-family: inherit; }
   transform: translateY(-1px);
 }
 
-/* Botón Destructivo */
 .btn-danger {
   background: var(--danger);
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
 }
 
-.btn-danger:hover {
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
-}
-
 .btn-sm {
-  padding: 5px 12px;
+  padding: 6px 12px;
+  min-height: 34px;
   font-size: 12px;
   border-radius: var(--radius-sm);
 }
@@ -860,7 +887,7 @@ button { font-family: inherit; }
 .btn-block { width: 100%; }
 
 /* ==========================================================================
-   FORMS & INPUTS (Subtle Azure Accents)
+   FORMS & INPUTS (Prevent iOS Auto-Zoom on Mobile)
    ========================================================================== */
 label {
   display: block;
@@ -879,12 +906,13 @@ select,
 textarea {
   width: 100%;
   font-family: var(--sans);
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--ink);
   background: #ffffff;
   border: 1px solid var(--separator-opaque);
   border-radius: var(--radius-md);
-  padding: 9px 14px;
+  padding: 10px 14px;
+  min-height: 42px;
   transition: all .2s var(--ease-apple);
 }
 
@@ -892,10 +920,6 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
-}
-
-input::placeholder, textarea::placeholder {
-  color: var(--faint);
 }
 
 .form-grid {
@@ -910,8 +934,10 @@ input::placeholder, textarea::placeholder {
    ========================================================================== */
 .table-scroll {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md);
   border: 1px solid var(--separator);
+  margin-bottom: 12px;
 }
 
 table {
@@ -964,7 +990,7 @@ td.num, th.num {
 }
 
 /* ==========================================================================
-   MODAL & SHEETS
+   MODAL & CUPERTINO SHEET (Responsive Sheet on Mobile)
    ========================================================================== */
 .modal {
   position: fixed;
@@ -973,8 +999,8 @@ td.num, th.num {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background: rgba(10, 25, 47, 0.45);
+  padding: 20px;
+  background: rgba(10, 25, 47, 0.55);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   animation: apple-fade .2s var(--ease-apple);
@@ -988,12 +1014,22 @@ td.num, th.num {
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sheet);
   border: 1px solid rgba(191, 219, 254, 0.6);
-  padding: 28px 32px;
+  padding: 26px 30px;
   max-width: 620px;
   width: 100%;
   max-height: 88vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   animation: apple-sheet .28s var(--ease-apple);
+}
+
+.modal-sheet-handle {
+  display: none;
+  width: 36px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-full);
+  margin: -10px auto 14px auto;
 }
 
 @keyframes apple-sheet {
@@ -1003,17 +1039,17 @@ td.num, th.num {
 
 .modal-cerrar {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 16px;
+  right: 16px;
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border: none;
   border-radius: 50%;
   background: var(--blue-50);
   color: var(--primary);
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
   transition: all .2s var(--ease-apple);
@@ -1026,7 +1062,7 @@ td.num, th.num {
 }
 
 #modal-titulo h3 {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
   letter-spacing: -0.025em;
   color: var(--ink);
@@ -1036,23 +1072,74 @@ td.num, th.num {
 }
 
 /* ==========================================================================
+   CUPERTINO MOBILE TAB BAR (iOS Bottom Navigation)
+   ========================================================================== */
+.mobile-tab-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 62px;
+  background: rgba(10, 25, 47, 0.94);
+  backdrop-filter: blur(25px) saturate(190%);
+  -webkit-backdrop-filter: blur(25px) saturate(190%);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 80;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: all .15s ease;
+  touch-action: manipulation;
+}
+
+.tab-icon {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.tab-item.activo {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.tab-item.activo .tab-icon {
+  filter: drop-shadow(0 2px 6px rgba(56, 189, 248, 0.5));
+}
+
+/* ==========================================================================
    DYNAMIC ISLAND / NOTIFICATION TOAST
    ========================================================================== */
 #jnj-toast-global {
   font-family: var(--sans);
-  background: rgba(10, 25, 47, 0.92) !important;
+  background: rgba(10, 25, 47, 0.94) !important;
   backdrop-filter: blur(25px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(25px) saturate(190%) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
   border-radius: var(--radius-full) !important;
-  box-shadow: 0 16px 36px rgba(10, 25, 47, 0.35) !important;
-  font-size: 13.5px !important;
+  box-shadow: 0 16px 36px rgba(10, 25, 47, 0.4) !important;
+  font-size: 13px !important;
   letter-spacing: -0.01em;
+  max-width: 90vw;
 }
 
 /* ==========================================================================
-   LOGIN SCREEN (Deep Ocean Blue Gradient)
+   LOGIN SCREEN
    ========================================================================== */
 .login-screen {
   position: fixed;
@@ -1061,34 +1148,35 @@ td.num, th.num {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 20px;
   background: radial-gradient(circle at top right, #dbeafe 0%, #f0f4f9 60%, #c7d2fe 100%);
+  overflow-y: auto;
 }
 
 .login-card {
-  width: min(440px, 92vw);
-  background: rgba(255, 255, 255, 0.92);
+  width: min(440px, 94vw);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(30px) saturate(190%);
   border: 1px solid rgba(191, 219, 254, 0.8);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sheet);
-  padding: 38px 36px;
+  padding: 36px 30px;
   text-align: center;
   animation: apple-sheet .35s var(--ease-apple);
 }
 
 .login-card h1 {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.03em;
-  margin: 14px 0 4px;
+  margin: 12px 0 4px;
   color: var(--ink);
 }
 
 .login-hint {
   font-size: 13px;
   color: var(--muted);
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .login-card form {
@@ -1108,10 +1196,11 @@ td.num, th.num {
   border: none;
   color: var(--primary);
   cursor: pointer;
+  padding: 4px;
 }
 
 .login-foot {
-  margin-top: 22px;
+  margin-top: 20px;
   font-size: 12px;
   color: var(--muted);
 }
@@ -1147,7 +1236,8 @@ td.num, th.num {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
   padding: 14px 32px;
   font-size: 12px;
   color: var(--muted);
@@ -1157,20 +1247,181 @@ td.num, th.num {
 }
 
 /* ==========================================================================
-   SCROLLBARS (Minimalist Azure Scrollbars)
+   SCROLLBARS
    ========================================================================== */
-::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: rgba(37, 99, 235, 0.2);
   border-radius: var(--radius-full);
-  border: 2px solid transparent;
-  background-clip: content-box;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(37, 99, 235, 0.4);
-  border: 2px solid transparent;
-  background-clip: content-box;
+
+/* ==========================================================================
+   MEDIA QUERIES — TABLETS & IPADS (≤ 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .app-main {
+    margin-left: 0;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 10px 0 50px rgba(10, 25, 47, 0.5);
+  }
+
+  .sidebar-close-btn {
+    display: grid;
+  }
+
+  .mobile-menu-btn {
+    display: grid;
+  }
+
+  .content {
+    padding: 22px 20px 60px;
+  }
+
+  .search-wrap {
+    width: min(280px, 40vw);
+  }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES — PHONES & SMALL SCREENS (≤ 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Prevent iOS zoom on input focus */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  .topbar {
+    padding: 8px 14px;
+    min-height: 56px;
+  }
+
+  .topbar-right {
+    gap: 8px;
+  }
+
+  .search-wrap {
+    display: none; /* Accessible from mobile search button if needed or dashboard */
+  }
+
+  .period-chip {
+    display: none;
+  }
+
+  .profile .profile-meta,
+  .profile .profile-chevron {
+    display: none;
+  }
+
+  .profile {
+    padding: 3px;
+    border-radius: 50%;
+  }
+
+  .content {
+    padding: 16px 14px 85px; /* Espacio inferior para tab bar */
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .page-title h1 {
+    font-size: 20px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .stat-card {
+    padding: 14px 12px;
+    gap: 10px;
+  }
+
+  .stat-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .stat-value {
+    font-size: 17px;
+  }
+
+  .stat-value.small {
+    font-size: 14px;
+  }
+
+  .panel {
+    padding: 16px 14px;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .toolbar {
+    gap: 8px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  /* Responsive Cupertino Bottom Sheet Modal */
+  .modal {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal-box {
+    border-radius: 24px 24px 0 0;
+    max-height: 90vh;
+    padding: 20px 18px 30px;
+    animation: apple-bottom-sheet .3s var(--ease-apple);
+  }
+
+  .modal-sheet-handle {
+    display: block;
+  }
+
+  @keyframes apple-bottom-sheet {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  /* Mobile Bottom Tab Bar */
+  .mobile-tab-bar {
+    display: flex;
+  }
+
+  #app-footer {
+    display: none;
+  }
 }
 
 /* ==========================================================================
@@ -1182,7 +1433,7 @@ td.num, th.num {
   #app-contenido, #app-contenido * { visibility: visible; }
   #app-contenido { position: absolute; inset: 0; max-width: none; padding: 0; margin: 0; }
   .sidebar, .topbar, #app-footer, .toolbar, .page-header, .stats-grid, .no-print,
-  .topbar-menu, .popover, .search-wrap { display: none !important; }
+  .topbar-menu, .popover, .search-wrap, .mobile-tab-bar, .sidebar-backdrop { display: none !important; }
   .app-layout { display: block; }
   .app-main { margin-left: 0; }
   .panel { border: none; box-shadow: none; padding: 0; }

@@ -31,15 +31,15 @@ export async function render() {
 
       <!-- VISTA 1: FORMULARIO POS -->
       <div id="vista-nueva-factura">
-        <div style="display:grid; grid-template-columns: 1.8fr 1fr; gap:20px; align-items:start;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px; align-items:start;">
           
           <!-- PANEL IZQUIERDO -->
           <div style="display:flex; flex-direction:column; gap:16px;">
             
             <!-- Cliente y Condición -->
             <div class="panel" style="padding:16px;">
-              <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:14px;">
-                <div>
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:14px;">
+                <div style="grid-column: span 1;">
                   <label style="display:block; font-size:12px; font-weight:700; color:#475569; margin-bottom:4px;">Cliente</label>
                   <select id="fac-cliente" style="width:100%; padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; font-size:14px;">
                     ${clientes.map(c => `<option value="${c.id_cliente}">${c.codigo} - ${c.nombre} (${c.cedula_rnc || 'Sin Doc'})</option>`).join('')}
@@ -61,9 +61,8 @@ export async function render() {
 
             <!-- Buscador Rápido de Productos -->
             <div class="panel" style="padding:14px;">
-              <div style="display:flex; gap:10px; align-items:center;">
-                <span style="font-size:18px;">🔍</span>
-                <select id="fac-select-prod" style="flex:1; padding:10px 14px; border-radius:8px; border:1px solid #0f766e; font-size:14px; font-weight:600; background:#f0fdfa;">
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <select id="fac-select-prod" style="flex:1; min-width:220px; padding:10px 14px; border-radius:8px; border:1px solid #0284c7; font-size:14px; font-weight:600; background:#f0f9ff;">
                   <option value="">-- Seleccionar producto para agregar a la factura (F2) --</option>
                   ${productos.map(p => `
                     <option value="${p.id_producto}">

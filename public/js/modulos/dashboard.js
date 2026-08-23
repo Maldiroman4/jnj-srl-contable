@@ -101,8 +101,8 @@ export async function render() {
 
         </div>
 
-        <!-- DOS COLUMNAS: ÚLTIMAS VENTAS Y ALERTAS DE STOCK -->
-        <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:20px;">
+        <!-- DOS COLUMNAS: ÚLTIMAS VENTAS Y ALERTAS DE STOCK (Responsive) -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
           
           <div class="panel">
             <h2>Últimas Facturas Emitidas</h2>

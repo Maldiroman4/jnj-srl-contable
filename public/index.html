@@ -2,9 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a192f">
   <title>JNJ SRL — Sistema Administrativo y Contable</title>
   <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="apple-touch-icon" href="img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,14 +17,21 @@
 <body>
   <div class="app-layout">
 
-    <!-- ===================== SIDEBAR ===================== -->
+    <!-- Backdrop para Drawer en Móviles/Tablets -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+
+    <!-- ===================== SIDEBAR (Cupertino Drawer en Móvil) ===================== -->
     <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <img src="img/logo.png" alt="Logo JNJ SRL" style="width:38px; height:38px; object-fit:contain; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.25);">
-        <div class="brand-text">
-          <span class="brand-name">JNJ SRL</span>
-          <span class="brand-sub">Software Integral 2026</span>
+        <div style="display:flex; align-items:center; gap:12px; flex:1;">
+          <img src="img/logo.png" alt="Logo JNJ SRL" style="width:38px; height:38px; object-fit:contain; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.25);">
+          <div class="brand-text">
+            <span class="brand-name">JNJ SRL</span>
+            <span class="brand-sub">Software Integral 2026</span>
+          </div>
         </div>
+        <!-- Botón cerrar para vista móvil -->
+        <button class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Cerrar menú">&times;</button>
       </div>
 
       <nav id="app-menu" class="sidebar-nav" aria-label="Módulos">
@@ -94,6 +105,15 @@
       <!-- Top Bar -->
       <header id="app-header" class="topbar">
         <div class="topbar-left">
+          <!-- Botón Hamburguesa para Móviles & Tablets -->
+          <button class="icon-btn mobile-menu-btn" id="btn-toggle-sidebar" aria-label="Abrir menú">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
           <div class="search-wrap">
             <svg class="search-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="7"/>
@@ -132,19 +152,19 @@
 
           <div class="topbar-menu">
             <button class="profile" id="btn-perfil" aria-label="Menú de usuario">
-              <span class="avatar">AD</span>
+              <span class="avatar">JO</span>
               <span class="profile-meta">
-                <span class="profile-name">Administrador</span>
-                <span class="profile-role">Contador</span>
+                <span class="profile-name">Joel777</span>
+                <span class="profile-role">Administrador</span>
               </span>
               <svg class="profile-chevron" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m6 9 6 6 6-6"/>
               </svg>
             </button>
             <div id="panel-perfil" class="popover popover-right hidden" role="menu">
-              <div class="popover-head">Administrador</div>
-              <button class="popover-item" data-ir="companias"><span class="pop-icon">▦</span> Compañías</button>
-              <button class="popover-item" data-ir="reportes"><span class="pop-icon">▤</span> Reportes</button>
+              <div class="popover-head">Joel777 · Administrador</div>
+              <button class="popover-item" data-ir="companias"><span class="pop-icon">🏢</span> Compañías</button>
+              <button class="popover-item" data-ir="reportes"><span class="pop-icon">📈</span> Reportes</button>
               <div class="popover-sep"></div>
               <button class="popover-item danger" id="btn-salir"><span class="pop-icon">⏻</span> Cerrar sesión</button>
             </div>
@@ -156,30 +176,54 @@
       <main id="app-contenido" class="content"></main>
 
       <footer id="app-footer">
-        <span>Partida doble estricta · Mayorización en cascada · NIC / NIIF</span>
-        <span class="footer-extra">SUPER JAZ · Compu-Jaz S.A.</span>
+        <span>JNJ SRL · Sistema Contable & Administrativo Multi-Tenant</span>
+        <span class="footer-extra">Partida Doble · NIC / NIIF · CAByS</span>
       </footer>
     </div>
   </div>
 
-  <!-- ===================== LOGIN ===================== -->
+  <!-- ===================== CUPERTINO MOBILE TAB BAR (iOS Style) ===================== -->
+  <nav id="mobile-tab-bar" class="mobile-tab-bar" aria-label="Navegación rápida móvil">
+    <button data-modulo="dashboard" class="tab-item activo">
+      <span class="tab-icon">📊</span>
+      <span class="tab-label">Tablero</span>
+    </button>
+    <button data-modulo="facturacion" class="tab-item">
+      <span class="tab-icon">🧾</span>
+      <span class="tab-label">POS</span>
+    </button>
+    <button data-modulo="inventario" class="tab-item">
+      <span class="tab-icon">📦</span>
+      <span class="tab-label">Kárdex</span>
+    </button>
+    <button data-modulo="reportes" class="tab-item">
+      <span class="tab-icon">📈</span>
+      <span class="tab-label">Reportes</span>
+    </button>
+    <button id="tab-btn-mas" class="tab-item">
+      <span class="tab-icon">☰</span>
+      <span class="tab-label">Menú</span>
+    </button>
+  </nav>
+
+  <!-- ===================== LOGIN SCREEN ===================== -->
   <div id="login-screen" class="login-screen">
     <div class="login-card">
-      <div class="login-brand" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; margin-bottom:12px;">
-        <img src="img/logo.png" alt="Logo JNJ SRL" style="width:72px; height:72px; object-fit:contain; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+      <div class="login-brand" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; margin-bottom:14px;">
+        <img src="img/logo.png" alt="Logo JNJ SRL" style="width:72px; height:72px; object-fit:contain; border-radius:14px; box-shadow:0 4px 16px rgba(2,132,199,0.3); border:2px solid rgba(56,189,248,0.3);">
         <div>
           <div class="brand-name" style="font-size:22px; font-weight:800;">JNJ SRL</div>
           <div class="brand-sub" style="font-size:12px; color:var(--muted);">Sistema Administrativo y Contable</div>
         </div>
       </div>
       <h1>Iniciar sesión</h1>
-      <p class="login-hint">Acceso restringido al sistema contable</p>
+      <p class="login-hint">Acceso seguro exclusivo para <b>Joel777</b></p>
       <form id="login-form" novalidate>
         <label for="login-user">Usuario</label>
-        <input id="login-user" type="text" autocomplete="username" placeholder="Ingrese su usuario">
+        <input id="login-user" type="text" autocomplete="username" placeholder="Usuario autorizado">
         <label for="login-pass">Contraseña</label>
         <div class="pass-wrap">
-          <input id="login-pass" type="password" autocomplete="current-password" placeholder="Ingrese su contraseña">
+          <input id="login-pass" type="password" autocomplete="current-password" placeholder="Contraseña">
           <button type="button" class="pass-eye" id="login-eye" data-tooltip="Mostrar / ocultar contraseña" aria-label="Mostrar contraseña">
             <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
@@ -191,14 +235,16 @@
         <button type="submit" class="btn btn-primary btn-block" id="login-btn" style="padding:12px; font-size:14px; font-weight:700; margin-top:8px;">Ingresar al sistema</button>
       </form>
       <div class="login-foot" style="color:var(--muted); font-size:12px; margin-top:20px;">
-        Acceso restringido y protegido &middot; <b>JNJ SRL Cloud</b>
+        Acceso restringido y protegido &middot; <b>JNJ SRL Cloud 2026</b>
       </div>
     </div>
   </div>
 
-  <!-- ===================== MODAL ===================== -->
+  <!-- ===================== MODAL (Apple Sheet) ===================== -->
   <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-box">
+      <!-- Indicador táctil superior para móviles -->
+      <div class="modal-sheet-handle"></div>
       <button class="modal-cerrar" id="modal-cerrar" aria-label="Cerrar">&times;</button>
       <div id="modal-titulo"></div>
       <div id="modal-cuerpo"></div>
