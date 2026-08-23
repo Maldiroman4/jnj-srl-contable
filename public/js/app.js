@@ -80,7 +80,17 @@ export async function inicializar() {
     const cSel = comps.find(x => x.id_compania === Number(ultima)) || comps[0];
     sel.value = cSel.id_compania;
     setCompania(cSel);
-    await mostrar('dashboard');
+
+    // Obtener rol del usuario autenticado
+    const userDataRaw = sessionStorage.getItem('jnj_user_data');
+    let rolUsuario = 'CONTADOR';
+    if (userDataRaw) {
+      try { rolUsuario = JSON.parse(userDataRaw).rol || 'CONTADOR'; } catch (e) {}
+    }
+    aplicarPermisosRol(rolUsuario);
+
+    const moduloInicial = (rolUsuario === 'SUPER_ADMIN') ? 'seguridad' : 'dashboard';
+    await mostrar(moduloInicial);
     await refrescar();
   } catch (e) {
     const contenido = document.getElementById('app-contenido');
@@ -405,10 +415,10 @@ function configurarLogin() {
         // Fallback validación directa
         if (u === 'Maldiroman777' && p === '858585') {
           autenticado = true;
-          userData = { usuario: 'Maldiroman777', rol: 'SUPER_ADMIN', nombre_completo: 'Maldiroman' };
+          userData = { usuario: 'Maldiroman777', rol: 'SUPER_ADMIN', nombre_completo: 'Maldiroman · Super Usuario' };
         } else if (u === 'Joel777' && p === '585858') {
           autenticado = true;
-          userData = { usuario: 'Joel777', rol: 'SUPER_ADMIN', nombre_completo: 'Joel' };
+          userData = { usuario: 'Joel777', rol: 'CONTADOR', nombre_completo: 'Joel · Contador' };
         }
       }
 
@@ -418,6 +428,7 @@ function configurarLogin() {
         if (userData) {
           sessionStorage.setItem('jnj_user_data', JSON.stringify(userData));
           actualizarPerfilUI(userData);
+          aplicarPermisosRol(userData.rol || 'CONTADOR');
         }
 
         err?.classList.add('hidden');
@@ -433,6 +444,9 @@ function configurarLogin() {
         if (!appArrancada) {
           appArrancada = true;
           inicializar();
+        } else {
+          const moduloTarget = (userData?.rol === 'SUPER_ADMIN') ? 'seguridad' : 'dashboard';
+          mostrar(moduloTarget);
         }
       } else {
         err.textContent = 'Credenciales incorrectas. Verifique el usuario y la contraseña.';
@@ -468,6 +482,48 @@ function actualizarPerfilUI(userData) {
   if (rolEl) rolEl.textContent = rol;
   if (avatarEl) avatarEl.textContent = initials;
   if (popHead) popHead.textContent = `${u} · ${rol}`;
+}
+
+export function aplicarPermisosRol(rol) {
+  const esSuperUser = (rol === 'SUPER_ADMIN');
+  const modulosContables = ['dashboard', 'facturacion', 'inventario', 'clientes', 'cxc', 'bancos', 'catalogo', 'asientos', 'reportes'];
+
+  // Para Super Usuario (Maldiroman777): Oculta módulos contables operativos, muestra Seguridad y Compañías
+  // Para Contador (Joel777): Muestra módulos contables, oculta Seguridad
+  document.querySelectorAll('#app-menu button').forEach(b => {
+    const mod = b.dataset.modulo;
+    if (mod === 'seguridad') {
+      b.style.display = esSuperUser ? 'flex' : 'none';
+    } else if (modulosContables.includes(mod)) {
+      b.style.display = esSuperUser ? 'none' : 'flex';
+    } else if (mod === 'companias') {
+      b.style.display = 'flex';
+    }
+  });
+
+  // Ajustar menú emergente del perfil
+  document.querySelectorAll('#panel-perfil button[data-ir]').forEach(b => {
+    const ir = b.dataset.ir;
+    if (ir === 'seguridad') {
+      b.style.display = esSuperUser ? 'flex' : 'none';
+    } else if (modulosContables.includes(ir)) {
+      b.style.display = esSuperUser ? 'none' : 'flex';
+    }
+  });
+
+  // Ajustar barra móvil inferior
+  const tabSeguridad = document.getElementById('mobile-tab-seguridad');
+  if (tabSeguridad) {
+    tabSeguridad.style.display = esSuperUser ? 'flex' : 'none';
+  }
+
+  // Ocultar tabs contables en móvil si es Super Usuario
+  document.querySelectorAll('#mobile-tab-bar .tab-item').forEach(b => {
+    const mod = b.dataset.modulo;
+    if (mod && mod !== 'seguridad' && modulosContables.includes(mod)) {
+      b.style.display = esSuperUser ? 'none' : 'flex';
+    }
+  });
 }
 
 configurarLogin();

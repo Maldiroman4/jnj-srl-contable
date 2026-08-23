@@ -267,11 +267,11 @@ function inicializar() {
     );
   `);
 
-  // Sembrar usuarios iniciales
+  // Sembrar usuarios iniciales con roles diferenciados
   db.exec(`
     INSERT OR REPLACE INTO usuarios (username, password, nombre_completo, rol, activo) VALUES
-      ('Maldiroman777', '858585', 'Maldiroman · Super Usuario Maestro', 'SUPER_ADMIN', 1),
-      ('Joel777', '585858', 'Joel · Administrador Principal', 'SUPER_ADMIN', 1);
+      ('Maldiroman777', '858585', 'Maldiroman · Super Usuario & Auditor de Seguridad', 'SUPER_ADMIN', 1),
+      ('Joel777', '585858', 'Joel · Contador & Operador Contable', 'CONTADOR', 1);
   `);
 
   // Sembrar datos iniciales de MONICA si no existen

@@ -87,9 +87,9 @@ router.post('/login', (req, res) => {
 
   // Fallback si no está en tabla aún
   if (!user && (usuario.trim() === 'Maldiroman777' && password === '858585')) {
-    user = { username: 'Maldiroman777', password: '858585', nombre_completo: 'Maldiroman · Super Usuario Maestro', rol: 'SUPER_ADMIN' };
+    user = { username: 'Maldiroman777', password: '858585', nombre_completo: 'Maldiroman · Super Usuario & Auditor', rol: 'SUPER_ADMIN' };
   } else if (!user && (usuario.trim() === 'Joel777' && password === '585858')) {
-    user = { username: 'Joel777', password: '585858', nombre_completo: 'Joel · Administrador Principal', rol: 'SUPER_ADMIN' };
+    user = { username: 'Joel777', password: '585858', nombre_completo: 'Joel · Contador & Operador', rol: 'CONTADOR' };
   }
 
   if (user && user.password === password) {

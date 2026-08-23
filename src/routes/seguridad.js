@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const { db } = require('../db');
 const router = express.Router();
 
@@ -22,7 +24,7 @@ router.get('/auditoria', (req, res) => {
   res.json(registros);
 });
 
-// GET /api/seguridad/stats - Métricas para el Super Usuario
+// GET /api/seguridad/stats - Métricas de seguridad para Maldiroman
 router.get('/stats', (req, res) => {
   const total = db.prepare('SELECT COUNT(*) as c FROM auditoria_sesiones').get()?.c || 0;
   const exitosos = db.prepare("SELECT COUNT(*) as c FROM auditoria_sesiones WHERE estado = 'EXITOSO'").get()?.c || 0;
@@ -38,10 +40,6 @@ router.get('/stats', (req, res) => {
     ORDER BY cantidad DESC
   `).all();
 
-  const ultimasSesiones = db.prepare(`
-    SELECT * FROM auditoria_sesiones ORDER BY id_sesion DESC LIMIT 5
-  `).all();
-
   res.json({
     kpis: {
       total,
@@ -50,39 +48,139 @@ router.get('/stats', (req, res) => {
       dispositivosUnicos,
       ipsUnicas
     },
-    porDispositivo,
-    ultimasSesiones
+    porDispositivo
   });
+});
+
+// GET /api/seguridad/datos-cargados - Informe de datos y categorías cargadas en la Base de Datos
+router.get('/datos-cargados', (req, res) => {
+  try {
+    // 1. Totales por categorías de datos
+    const totalCompanias = db.prepare('SELECT COUNT(*) as c FROM companias').get()?.c || 0;
+    const totalCuentas = db.prepare('SELECT COUNT(*) as c FROM catalogo_cuentas').get()?.c || 0;
+    const totalAsientos = db.prepare('SELECT COUNT(*) as c FROM documentos_asientos').get()?.c || 0;
+    const totalMovimientosContables = db.prepare('SELECT COUNT(*) as c FROM asientos_detalle').get()?.c || 0;
+    const totalClientes = db.prepare('SELECT COUNT(*) as c FROM clientes').get()?.c || 0;
+    const totalProveedores = db.prepare('SELECT COUNT(*) as c FROM proveedores').get()?.c || 0;
+    const totalFacturas = db.prepare('SELECT COUNT(*) as c, COALESCE(SUM(total), 0) as monto FROM facturas').get() || { c: 0, monto: 0 };
+    const totalFacturasContado = db.prepare("SELECT COUNT(*) as c FROM facturas WHERE tipo_pago = 'CONTADO'").get()?.c || 0;
+    const totalFacturasCredito = db.prepare("SELECT COUNT(*) as c FROM facturas WHERE tipo_pago = 'CREDITO'").get()?.c || 0;
+    const totalProductos = db.prepare('SELECT COUNT(*) as c, COALESCE(SUM(stock_actual), 0) as stock, COALESCE(SUM(stock_actual * costo_unitario), 0) as valor FROM productos').get() || { c: 0, stock: 0, valor: 0 };
+    const totalBancos = db.prepare('SELECT COUNT(*) as c, COALESCE(SUM(saldo_actual), 0) as saldo FROM bancos_cuentas').get() || { c: 0, saldo: 0 };
+    const totalRecibos = db.prepare('SELECT COUNT(*) as c, COALESCE(SUM(monto), 0) as monto FROM recibos_caja').get() || { c: 0, monto: 0 };
+    const totalCxC = db.prepare("SELECT COUNT(*) as c, COALESCE(SUM(saldo), 0) as saldo FROM cuentas_cobrar WHERE estado != 'PAGADA'").get() || { c: 0, saldo: 0 };
+    const totalKardex = db.prepare('SELECT COUNT(*) as c FROM movimientos_inventario').get()?.c || 0;
+
+    // 2. Desglose detallado de Inventario por Categorías de Productos
+    const productosPorCategoria = db.prepare(`
+      SELECT 
+        COALESCE(categoria, 'General') as categoria,
+        COUNT(*) as total_items,
+        SUM(stock_actual) as stock_total,
+        SUM(stock_actual * costo_unitario) as valor_costo_total,
+        SUM(stock_actual * precio_venta) as valor_venta_total
+      FROM productos
+      GROUP BY categoria
+      ORDER BY total_items DESC
+    `).all();
+
+    // 3. Desglose de Cuentas Contables por Naturaleza
+    const cuentasPorTipo = db.prepare(`
+      SELECT 
+        CASE 
+          WHEN id_cuenta LIKE '1%' THEN 'Activo (1)'
+          WHEN id_cuenta LIKE '2%' THEN 'Pasivo (2)'
+          WHEN id_cuenta LIKE '3%' THEN 'Patrimonio (3)'
+          WHEN id_cuenta LIKE '4%' THEN 'Ingresos (4)'
+          WHEN id_cuenta LIKE '5%' THEN 'Costos (5)'
+          WHEN id_cuenta LIKE '6%' THEN 'Gastos Operativos (6)'
+          ELSE 'Otros'
+        END as tipo_cuenta,
+        COUNT(*) as cantidad
+      FROM catalogo_cuentas
+      GROUP BY tipo_cuenta
+      ORDER BY tipo_cuenta
+    `).all();
+
+    // 4. Últimos datos cargados recientemente en cada tabla
+    const ultimosProductos = db.prepare(`
+      SELECT codigo, descripcion, categoria, stock_actual, precio_venta, costo_unitario 
+      FROM productos 
+      ORDER BY id_producto DESC 
+      LIMIT 5
+    `).all();
+
+    const ultimasFacturas = db.prepare(`
+      SELECT f.numero_factura, COALESCE(c.nombre, 'Consumidor Final') as cliente_nombre, f.fecha, f.tipo_pago, f.total 
+      FROM facturas f 
+      LEFT JOIN clientes c ON f.id_cliente = c.id_cliente
+      ORDER BY f.id_factura DESC 
+      LIMIT 5
+    `).all();
+
+    const ultimosAsientos = db.prepare(`
+      SELECT a.numero_documento as numero, a.fecha, a.detalle_general as concepto, a.total_debitos as total_debe
+      FROM documentos_asientos a
+      ORDER BY a.id_documento DESC
+      LIMIT 5
+    `).all();
+
+    const ultimosClientes = db.prepare(`
+      SELECT codigo, nombre, cedula_rnc, telefono, email 
+      FROM clientes 
+      ORDER BY id_cliente DESC 
+      LIMIT 5
+    `).all();
+
+    // 5. Estado físico del archivo de Base de Datos SQLite
+    let dbSizeKB = 0;
+    const dbPath = path.join(__dirname, '..', '..', 'data', 'contabilidad.db');
+    if (fs.existsSync(dbPath)) {
+      dbSizeKB = Math.round(fs.statSync(dbPath).size / 1024);
+    }
+
+    res.json({
+      resumen_general: {
+        totalCompanias,
+        totalCuentas,
+        totalAsientos,
+        totalMovimientosContables,
+        totalClientes,
+        totalProveedores,
+        totalProductos: totalProductos.c,
+        stockTotalProductos: totalProductos.stock,
+        valorInventario: totalProductos.valor,
+        totalFacturas: totalFacturas.c,
+        montoFacturado: totalFacturas.monto,
+        totalFacturasContado,
+        totalFacturasCredito,
+        totalBancos: totalBancos.c,
+        saldoBancos: totalBancos.saldo,
+        totalRecibos: totalRecibos.c,
+        montoRecibos: totalRecibos.monto,
+        totalCxC: totalCxC.c,
+        saldoPendienteCxC: totalCxC.saldo,
+        totalKardex,
+        dbSizeKB
+      },
+      productosPorCategoria,
+      cuentasPorTipo,
+      ultimos_cargados: {
+        productos: ultimosProductos,
+        facturas: ultimasFacturas,
+        asientos: ultimosAsientos,
+        clientes: ultimosClientes
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // GET /api/seguridad/usuarios - Lista de usuarios
 router.get('/usuarios', (req, res) => {
   const usuarios = db.prepare('SELECT id_usuario, username, nombre_completo, rol, activo, creado_en FROM usuarios ORDER BY id_usuario').all();
   res.json(usuarios);
-});
-
-// POST /api/seguridad/usuarios - Crear o actualizar usuario
-router.post('/usuarios', (req, res) => {
-  const { username, password, nombre_completo, rol } = req.body || {};
-  if (!username || !password || !nombre_completo) {
-    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
-  }
-
-  try {
-    const rolFinal = rol || 'ADMIN';
-    const ins = db.prepare(`
-      INSERT INTO usuarios (username, password, nombre_completo, rol, activo)
-      VALUES (?, ?, ?, ?, 1)
-      ON CONFLICT(username) DO UPDATE SET
-        password = excluded.password,
-        nombre_completo = excluded.nombre_completo,
-        rol = excluded.rol
-    `).run(username.trim(), password, nombre_completo.trim(), rolFinal);
-
-    res.json({ ok: true, mensaje: 'Usuario guardado exitosamente.', id_usuario: ins.lastInsertRowid });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
 });
 
 module.exports = router;
