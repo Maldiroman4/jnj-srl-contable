@@ -13,98 +13,105 @@ export async function render() {
   try {
     const data = await (await fetch(`/api/dashboard/stats?compania=${estado.compania}`)).json();
     const k = data.kpis || {};
+    const compActual = estado.companias.find(c => c.id_compania === Number(estado.compania));
+    const compNombre = compActual?.razon_social || 'JNJ SRL';
 
     el.innerHTML = `
-      <div class="monica-dashboard" style="display:flex; flex-direction:column; gap:22px;">
+      <div class="monica-dashboard" style="display:flex; flex-direction:column; gap:18px;">
         
-        <!-- HERO BANNER JNJ SRL (Deep Ocean & Electric Azure Gradient) -->
-        <div class="panel" style="background:linear-gradient(135deg, #0a192f 0%, #0f2b48 50%, #1e40af 100%); color:#ffffff; border-radius:var(--radius-xl); padding:28px 32px; box-shadow:0 14px 34px -8px rgba(10, 25, 47, 0.4); border:1px solid rgba(56, 189, 248, 0.2);">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
-            <div style="display:flex; align-items:center; gap:20px;">
-              <img src="img/logo.png" alt="Logo JNJ SRL" style="width:64px; height:64px; object-fit:contain; border-radius:var(--radius-md); box-shadow:0 8px 24px rgba(2,132,199,0.4); border:2px solid rgba(56,189,248,0.4);">
+        <!-- HEADER PRINCIPAL / GREETING BAR -->
+        <div class="panel dashboard-hero" style="margin-bottom:0; padding:20px 24px; border-radius:var(--radius-lg); background:linear-gradient(135deg, #0a192f 0%, #0d2744 60%, #1e40af 100%); color:#ffffff; border:1px solid rgba(56,189,248,0.25); box-shadow:0 8px 24px rgba(10,25,47,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <img src="img/logo.png" alt="Logo JNJ SRL" style="width:44px; height:44px; object-fit:contain; border-radius:10px; box-shadow:0 4px 14px rgba(2,132,199,0.5); border:1.5px solid rgba(56,189,248,0.4); flex-shrink:0;">
               <div>
-                <div style="display:inline-flex; align-items:center; font-size:11px; font-weight:700; background:rgba(2, 132, 199, 0.35); color:#7dd3fc; padding:3px 12px; border-radius:var(--radius-full); text-transform:uppercase; margin-bottom:8px; border:1px solid rgba(125, 211, 252, 0.35);">
-                  Cupertino Blue 2.0 · JNJ SRL
+                <div style="display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; background:rgba(2,132,199,0.3); color:#7dd3fc; padding:2px 8px; border-radius:var(--radius-full); margin-bottom:4px;">
+                  <span>🏢</span> ${compNombre}
                 </div>
-                <h2 style="color:#ffffff; font-size:26px; margin:0 0 6px 0; letter-spacing:-0.03em;">Panel de Control Integral</h2>
-                <p style="color:#94a3b8; font-size:14px; margin:0; letter-spacing:-0.01em;">Facturación POS, Kárdex con CPP, Cuentas por Cobrar, Tesorería y Contabilidad en tiempo real.</p>
+                <h1 style="color:#ffffff; font-size:20px; font-weight:800; letter-spacing:-0.03em; margin:0;">Tablero Principal</h1>
               </div>
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="btn btn-primary" id="btn-quick-factura" style="padding:11px 20px; font-weight:700; border-radius:var(--radius-md);">
-                🧾 Facturar (POS)
+
+            <!-- Botones de Acción Rápida -->
+            <div class="dashboard-quick-actions" style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-primary" id="btn-quick-factura" style="padding:8px 16px; font-size:13px; font-weight:700; border-radius:var(--radius-sm);">
+                <span>🧾</span> Facturar (POS)
               </button>
-              <button class="btn" id="btn-quick-recibo" style="background:rgba(255,255,255,0.12); color:#ffffff; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); font-weight:600; padding:11px 18px; border-radius:var(--radius-md);">
-                💵 Recibo de Caja
+              <button class="btn" id="btn-quick-recibo" style="background:rgba(255,255,255,0.12); color:#ffffff; backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.2); font-size:13px; font-weight:600; padding:8px 14px; border-radius:var(--radius-sm);">
+                <span>💵</span> Recibo
               </button>
-              <button class="btn" id="btn-quick-producto" style="background:rgba(255,255,255,0.12); color:#ffffff; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); font-weight:600; padding:11px 18px; border-radius:var(--radius-md);">
-                📦 Nuevo Artículo
+              <button class="btn" id="btn-quick-producto" style="background:rgba(255,255,255,0.12); color:#ffffff; backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.2); font-size:13px; font-weight:600; padding:8px 14px; border-radius:var(--radius-sm);">
+                <span>📦</span> Artículo
               </button>
             </div>
           </div>
         </div>
 
         <!-- 4 TARJETAS KPI (Apple Bento Grid) -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:18px;">
+        <div class="dashboard-kpi-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
           
-          <div class="panel" style="padding:22px; border-radius:var(--radius-lg); margin-bottom:0;">
+          <!-- Ventas -->
+          <div class="panel stat-bento" style="padding:18px 20px; border-radius:var(--radius-md); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Ventas del Mes</span>
-              <span style="display:grid; place-items:center; width:36px; height:36px; border-radius:var(--radius-md); background:var(--apple-blue-soft); font-size:18px;">💳</span>
+              <span style="color:var(--muted); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Ventas del Mes</span>
+              <span style="display:grid; place-items:center; width:34px; height:34px; border-radius:var(--radius-sm); background:var(--blue-50); color:var(--primary); font-size:16px;">💳</span>
             </div>
-            <div style="font-size:26px; font-weight:800; font-family:var(--mono); color:var(--ink); margin:10px 0 4px; letter-spacing:-0.03em;">
+            <div style="font-size:22px; font-weight:800; font-family:var(--mono); color:var(--ink); margin:8px 0 2px; letter-spacing:-0.03em;">
               ${fmtMoneda(k.totalVentas || 0)}
             </div>
-            <div style="font-size:12.5px; color:var(--muted);">
+            <div style="font-size:12px; color:var(--muted);">
               <strong>${k.cantFacturas || 0}</strong> facturas emitidas
             </div>
           </div>
 
-          <div class="panel" style="padding:22px; border-radius:var(--radius-lg); margin-bottom:0;">
+          <!-- CxC -->
+          <div class="panel stat-bento" style="padding:18px 20px; border-radius:var(--radius-md); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Cuentas por Cobrar</span>
-              <span style="display:grid; place-items:center; width:36px; height:36px; border-radius:var(--radius-md); background:var(--apple-orange-soft); font-size:18px;">📋</span>
+              <span style="color:var(--muted); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Cuentas por Cobrar</span>
+              <span style="display:grid; place-items:center; width:34px; height:34px; border-radius:var(--radius-sm); background:var(--warn-soft); color:var(--warn); font-size:16px;">📋</span>
             </div>
-            <div style="font-size:26px; font-weight:800; font-family:var(--mono); color:var(--ink); margin:10px 0 4px; letter-spacing:-0.03em;">
+            <div style="font-size:22px; font-weight:800; font-family:var(--mono); color:var(--ink); margin:8px 0 2px; letter-spacing:-0.03em;">
               ${fmtMoneda(k.totalCxC || 0)}
             </div>
-            <div style="font-size:12.5px; color:${(k.cxcVencida || 0) > 0 ? 'var(--apple-red)' : 'var(--apple-green)'}; font-weight:600;">
+            <div style="font-size:12px; color:${(k.cxcVencida || 0) > 0 ? 'var(--danger)' : 'var(--ok)'}; font-weight:600;">
               ${fmtMoneda(k.cxcVencida || 0)} vencidas
             </div>
           </div>
 
-          <div class="panel" style="padding:22px; border-radius:var(--radius-lg); margin-bottom:0;">
+          <!-- Inventario -->
+          <div class="panel stat-bento" style="padding:18px 20px; border-radius:var(--radius-md); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Valor Inventario</span>
-              <span style="display:grid; place-items:center; width:36px; height:36px; border-radius:var(--radius-md); background:var(--apple-purple-soft); font-size:18px;">📦</span>
+              <span style="color:var(--muted); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Valor Inventario</span>
+              <span style="display:grid; place-items:center; width:34px; height:34px; border-radius:var(--radius-sm); background:var(--accent-indigo-soft); color:var(--accent-indigo); font-size:16px;">📦</span>
             </div>
-            <div style="font-size:26px; font-weight:800; font-family:var(--mono); color:var(--ink); margin:10px 0 4px; letter-spacing:-0.03em;">
+            <div style="font-size:22px; font-weight:800; font-family:var(--mono); color:var(--ink); margin:8px 0 2px; letter-spacing:-0.03em;">
               ${fmtMoneda(k.valorInventario || 0)}
             </div>
-            <div style="font-size:12.5px; color:var(--muted);">
-              <strong>${k.totalProductos || 0}</strong> artículos en catálogo
+            <div style="font-size:12px; color:var(--muted);">
+              <strong>${k.totalProductos || 0}</strong> artículos en kárdex
             </div>
           </div>
 
-          <div class="panel" style="padding:22px; border-radius:var(--radius-lg); margin-bottom:0;">
+          <!-- Bancos -->
+          <div class="panel stat-bento" style="padding:18px 20px; border-radius:var(--radius-md); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Bancos & Caja</span>
-              <span style="display:grid; place-items:center; width:36px; height:36px; border-radius:var(--radius-md); background:var(--apple-green-soft); font-size:18px;">🏦</span>
+              <span style="color:var(--muted); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;">Bancos & Caja</span>
+              <span style="display:grid; place-items:center; width:34px; height:34px; border-radius:var(--radius-sm); background:var(--ok-soft); color:var(--ok); font-size:16px;">🏦</span>
             </div>
-            <div style="font-size:26px; font-weight:800; font-family:var(--mono); color:var(--apple-green); margin:10px 0 4px; letter-spacing:-0.03em;">
+            <div style="font-size:22px; font-weight:800; font-family:var(--mono); color:#065f46; margin:8px 0 2px; letter-spacing:-0.03em;">
               ${fmtMoneda(k.totalBancos || 0)}
             </div>
-            <div style="font-size:12.5px; color:var(--muted);">
+            <div style="font-size:12px; color:var(--muted);">
               Liquidez disponible
             </div>
           </div>
 
         </div>
 
-        <!-- DOS COLUMNAS: ÚLTIMAS VENTAS Y ALERTAS DE STOCK (Responsive) -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+        <!-- DOS COLUMNAS: ÚLTIMAS VENTAS Y ALERTAS DE STOCK -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:18px;">
           
-          <div class="panel">
+          <div class="panel" style="margin-bottom:0;">
             <h2>Últimas Facturas Emitidas</h2>
             <div class="table-scroll">
               <table>
@@ -121,11 +128,11 @@ export async function render() {
                   ${(data.ultimasFacturas || []).length === 0 ? '<tr><td colspan="5" class="vacio">No hay facturas emitidas este mes.</td></tr>' : ''}
                   ${(data.ultimasFacturas || []).map(f => `
                     <tr>
-                      <td><strong style="color:var(--apple-blue);">${f.numero_factura}</strong></td>
+                      <td><strong style="color:var(--primary); font-family:var(--mono);">${f.numero_factura}</strong></td>
                       <td>${f.cliente_nombre}</td>
-                      <td style="color:var(--muted); font-size:12.5px;">${f.fecha}</td>
+                      <td style="color:var(--muted); font-size:12px;">${f.fecha}</td>
                       <td>
-                        <span class="tag" style="background:${f.tipo_pago === 'CONTADO' ? 'var(--apple-green-soft)' : 'var(--apple-orange-soft)'}; color:${f.tipo_pago === 'CONTADO' ? 'var(--apple-green)' : 'var(--apple-orange)'};">
+                        <span class="tag" style="background:${f.tipo_pago === 'CONTADO' ? 'var(--ok-soft)' : 'var(--warn-soft)'}; color:${f.tipo_pago === 'CONTADO' ? '#065f46' : 'var(--warn)'};">
                           ${f.tipo_pago}
                         </span>
                       </td>
@@ -137,7 +144,7 @@ export async function render() {
             </div>
           </div>
 
-          <div class="panel">
+          <div class="panel" style="margin-bottom:0;">
             <h2>Alertas de Stock Bajo</h2>
             <div class="table-scroll">
               <table>
@@ -149,14 +156,14 @@ export async function render() {
                   </tr>
                 </thead>
                 <tbody>
-                  ${(data.bajoStock || []).length === 0 ? '<tr><td colspan="3" class="vacio" style="color:var(--apple-green); font-weight:600;">✅ Todo el inventario sobre el mínimo.</td></tr>' : ''}
+                  ${(data.bajoStock || []).length === 0 ? '<tr><td colspan="3" class="vacio" style="color:var(--ok); font-weight:600;">✅ Todo el inventario sobre el mínimo.</td></tr>' : ''}
                   ${(data.bajoStock || []).map(p => `
                     <tr>
                       <td>
                         <strong>${p.descripcion}</strong>
                         <br><small style="color:var(--muted); font-family:var(--mono);">SKU: ${p.codigo}</small>
                       </td>
-                      <td class="num font-bold" style="color:var(--apple-red); font-size:15px;">${p.stock_actual}</td>
+                      <td class="num font-bold" style="color:var(--danger); font-size:15px;">${p.stock_actual}</td>
                       <td class="num font-mono" style="color:var(--muted);">${p.stock_minimo}</td>
                     </tr>
                   `).join('')}
