@@ -14,6 +14,7 @@ import './modulos/asientos.js';
 import './modulos/procesos.js';
 import './modulos/reportes.js';
 import './modulos/seguridad.js';
+import './modulos/extras.js';
 
 const estado = {
   compania: null,
@@ -89,7 +90,7 @@ export async function inicializar() {
     }
     aplicarPermisosRol(rolUsuario);
 
-    const moduloInicial = (rolUsuario === 'SUPER_ADMIN') ? 'seguridad' : 'dashboard';
+    const moduloInicial = 'catalogo';
     await mostrar(moduloInicial);
     await refrescar();
   } catch (e) {
@@ -445,8 +446,7 @@ function configurarLogin() {
           appArrancada = true;
           inicializar();
         } else {
-          const moduloTarget = (userData?.rol === 'SUPER_ADMIN') ? 'seguridad' : 'dashboard';
-          mostrar(moduloTarget);
+          mostrar('catalogo');
         }
       } else {
         err.textContent = 'Credenciales incorrectas. Verifique el usuario y la contraseña.';
@@ -486,19 +486,10 @@ function actualizarPerfilUI(userData) {
 
 export function aplicarPermisosRol(rol) {
   const esSuperUser = (rol === 'SUPER_ADMIN');
-  const modulosContables = ['dashboard', 'facturacion', 'inventario', 'clientes', 'cxc', 'bancos', 'catalogo', 'asientos', 'reportes'];
 
-  // Para Super Usuario (Maldiroman777): Oculta módulos contables operativos, muestra Seguridad y Compañías
-  // Para Contador (Joel777): Muestra módulos contables, oculta Seguridad
+  // Mostrar todos los módulos contables principales y la pestaña de Extras
   document.querySelectorAll('#app-menu button').forEach(b => {
-    const mod = b.dataset.modulo;
-    if (mod === 'seguridad') {
-      b.style.display = esSuperUser ? 'flex' : 'none';
-    } else if (modulosContables.includes(mod)) {
-      b.style.display = esSuperUser ? 'none' : 'flex';
-    } else if (mod === 'companias') {
-      b.style.display = 'flex';
-    }
+    b.style.display = 'flex';
   });
 
   // Ajustar menú emergente del perfil
@@ -506,23 +497,14 @@ export function aplicarPermisosRol(rol) {
     const ir = b.dataset.ir;
     if (ir === 'seguridad') {
       b.style.display = esSuperUser ? 'flex' : 'none';
-    } else if (modulosContables.includes(ir)) {
-      b.style.display = esSuperUser ? 'none' : 'flex';
+    } else {
+      b.style.display = 'flex';
     }
   });
 
-  // Ajustar barra móvil inferior
-  const tabSeguridad = document.getElementById('mobile-tab-seguridad');
-  if (tabSeguridad) {
-    tabSeguridad.style.display = esSuperUser ? 'flex' : 'none';
-  }
-
-  // Ocultar tabs contables en móvil si es Super Usuario
+  // Mostrar todos los tabs móviles
   document.querySelectorAll('#mobile-tab-bar .tab-item').forEach(b => {
-    const mod = b.dataset.modulo;
-    if (mod && mod !== 'seguridad' && modulosContables.includes(mod)) {
-      b.style.display = esSuperUser ? 'none' : 'flex';
-    }
+    b.style.display = 'flex';
   });
 }
 

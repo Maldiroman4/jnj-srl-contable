@@ -34,64 +34,49 @@
         <button class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Cerrar menú">&times;</button>
       </div>
 
-      <nav id="app-menu" class="sidebar-nav" aria-label="Módulos">
-        <button data-modulo="dashboard" class="activo" data-tooltip="Panel de Control General">
-          <span class="nav-icon" aria-hidden="true">📊</span>
-          <span class="nav-label">Tablero Principal</span>
-          <span class="nav-key">1</span>
-        </button>
-        <button data-modulo="facturacion" data-tooltip="Facturación Rápida / Punto de Venta">
-          <span class="nav-icon" aria-hidden="true">🧾</span>
-          <span class="nav-label">Facturación / POS</span>
-          <span class="nav-key">2</span>
-        </button>
-        <button data-modulo="inventario" data-tooltip="Inventario y Kárdex con CPP">
-          <span class="nav-icon" aria-hidden="true">📦</span>
-          <span class="nav-label">Inventario & Kárdex</span>
-          <span class="nav-key">3</span>
-        </button>
-        <button data-modulo="clientes" data-tooltip="Directorio y Cartera de Clientes">
-          <span class="nav-icon" aria-hidden="true">👥</span>
-          <span class="nav-label">Clientes</span>
-          <span class="nav-key">4</span>
-        </button>
-        <button data-modulo="cxc" data-tooltip="Cobros y Recibos de Caja">
-          <span class="nav-icon" aria-hidden="true">💵</span>
-          <span class="nav-label">Cuentas por Cobrar</span>
-          <span class="nav-key">5</span>
-        </button>
-        <button data-modulo="bancos" data-tooltip="Cuentas Bancarias y Cajas">
-          <span class="nav-icon" aria-hidden="true">🏦</span>
-          <span class="nav-label">Bancos & Tesorería</span>
-          <span class="nav-key">6</span>
-        </button>
+      <nav id="app-menu" class="sidebar-nav" aria-label="Módulos Contables">
+        <!-- SECCIÓN CONTABILIDAD PURA (CLIENTE REQUISITO) -->
+        <div class="sidebar-section-title" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#38bdf8;">
+          Contabilidad General
+        </div>
 
-        <div style="height:1px; background:rgba(255,255,255,0.1); margin:8px 12px;"></div>
-
-        <button data-modulo="catalogo" data-tooltip="Plan de cuentas XXX-XX-XXX">
-          <span class="nav-icon" aria-hidden="true">📂</span>
-          <span class="nav-label">Catálogo de Cuentas</span>
-          <span class="nav-key">7</span>
-        </button>
-        <button data-modulo="asientos" data-tooltip="Partida doble estricta">
-          <span class="nav-icon" aria-hidden="true">📝</span>
-          <span class="nav-label">Asientos Contables</span>
-          <span class="nav-key">8</span>
-        </button>
-        <button data-modulo="reportes" data-tooltip="Balance General y Estado de Resultados">
-          <span class="nav-icon" aria-hidden="true">📈</span>
-          <span class="nav-label">Estados Financieros</span>
-          <span class="nav-key">9</span>
-        </button>
-        <button data-modulo="companias" data-tooltip="Gestionar empresas">
+        <button data-modulo="companias" data-tooltip="Selección y gestión de empresas">
           <span class="nav-icon" aria-hidden="true">🏢</span>
           <span class="nav-label">Compañías</span>
-          <span class="nav-key">0</span>
+          <span class="nav-key">1</span>
         </button>
-        <button data-modulo="seguridad" data-tooltip="Auditoría de sesiones, IPs y dispositivos">
-          <span class="nav-icon" aria-hidden="true">🛡️</span>
-          <span class="nav-label">Seguridad & Auditoría</span>
-          <span class="nav-key">S</span>
+        <button data-modulo="catalogo" class="activo" data-tooltip="Plan de cuentas XXX-XX-XXX">
+          <span class="nav-icon" aria-hidden="true">📂</span>
+          <span class="nav-label">Catálogo de Cuentas</span>
+          <span class="nav-key">2</span>
+        </button>
+        <button data-modulo="asientos" data-tooltip="Partida doble estricta y comprobantes de diario">
+          <span class="nav-icon" aria-hidden="true">📝</span>
+          <span class="nav-label">Asientos Contables</span>
+          <span class="nav-key">3</span>
+        </button>
+        <button data-modulo="procesos" data-tooltip="Mayorización en cascada y cierres de período">
+          <span class="nav-icon" aria-hidden="true">⚙️</span>
+          <span class="nav-label">Procesos Selectos</span>
+          <span class="nav-key">4</span>
+        </button>
+        <button data-modulo="reportes" data-tooltip="Balance General, Estado de Resultados, Libro Mayor y Diarios">
+          <span class="nav-icon" aria-hidden="true">📈</span>
+          <span class="nav-label">Reportes Financieros</span>
+          <span class="nav-key">5</span>
+        </button>
+
+        <div style="height:1px; background:rgba(255,255,255,0.1); margin:10px 12px 6px;"></div>
+
+        <!-- SECCIÓN MÓDULOS EXTRAS & COMERCIALES -->
+        <div class="sidebar-section-title" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#94a3b8;">
+          Módulos Adicionales
+        </div>
+
+        <button data-modulo="extras" data-tooltip="Facturación POS, Kárdex, Clientes, Bancos y Seguridad">
+          <span class="nav-icon" aria-hidden="true">🧩</span>
+          <span class="nav-label">Módulos Extras (POS/Kárdex)</span>
+          <span class="nav-key">6</span>
         </button>
       </nav>
 
@@ -190,38 +175,33 @@
 
   <!-- ===================== CUPERTINO MOBILE TAB BAR (Apple iOS Vector Icons) ===================== -->
   <nav id="mobile-tab-bar" class="mobile-tab-bar" aria-label="Navegación rápida móvil">
-    <button data-modulo="dashboard" class="tab-item activo">
+    <button data-modulo="companias" class="tab-item">
       <span class="tab-icon">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="7" height="9"></rect>
-          <rect x="14" y="3" width="7" height="5"></rect>
-          <rect x="14" y="12" width="7" height="9"></rect>
-          <rect x="3" y="16" width="7" height="5"></rect>
+          <path d="M3 21h18"></path>
+          <path d="M19 21v-4"></path>
+          <path d="M19 17a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v4"></path>
+          <path d="M3 7l9-4 9 4v14"></path>
         </svg>
       </span>
-      <span class="tab-label">Tablero</span>
+      <span class="tab-label">Empresas</span>
     </button>
-    <button data-modulo="facturacion" class="tab-item">
+    <button data-modulo="catalogo" class="tab-item activo">
       <span class="tab-icon">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path>
-          <path d="M8 7h8"></path>
-          <path d="M8 11h8"></path>
-          <path d="M8 15h4"></path>
+          <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
         </svg>
       </span>
-      <span class="tab-label">POS</span>
+      <span class="tab-label">Catálogo</span>
     </button>
-    <button data-modulo="inventario" class="tab-item">
+    <button data-modulo="asientos" class="tab-item">
       <span class="tab-icon">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m7.5 4.27 9 5.15"></path>
-          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
-          <path d="m3.3 7 8.7 5 8.7-5"></path>
-          <path d="M12 22V12"></path>
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
         </svg>
       </span>
-      <span class="tab-label">Kárdex</span>
+      <span class="tab-label">Asientos</span>
     </button>
     <button data-modulo="reportes" class="tab-item">
       <span class="tab-icon">
@@ -232,20 +212,23 @@
       </span>
       <span class="tab-label">Reportes</span>
     </button>
-    <button data-modulo="seguridad" class="tab-item" id="mobile-tab-seguridad" style="display:none;">
+    <button data-modulo="extras" class="tab-item">
       <span class="tab-icon">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
         </svg>
       </span>
-      <span class="tab-label">Auditoría</span>
+      <span class="tab-label">Extras</span>
     </button>
     <button id="tab-btn-mas" class="tab-item">
       <span class="tab-icon">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="1.5"></circle>
-          <circle cx="12" cy="5" r="1.5"></circle>
-          <circle cx="12" cy="19" r="1.5"></circle>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
         </svg>
       </span>
       <span class="tab-label">Menú</span>
