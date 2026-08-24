@@ -69,14 +69,21 @@
         <div style="height:1px; background:rgba(255,255,255,0.1); margin:10px 12px 6px;"></div>
 
         <!-- SECCIÓN MÓDULOS EXTRAS & COMERCIALES -->
-        <div class="sidebar-section-title" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#94a3b8;">
+        <div class="sidebar-section-title conta-only-section" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#94a3b8;">
           Módulos Adicionales
         </div>
 
-        <button data-modulo="extras" data-tooltip="Facturación POS, Kárdex, Clientes, Bancos y Seguridad">
+        <button data-modulo="extras" class="conta-only-btn" data-tooltip="Facturación POS, Kárdex, Clientes, Bancos">
           <span class="nav-icon" aria-hidden="true">🧩</span>
           <span class="nav-label">Módulos Extras (POS/Kárdex)</span>
           <span class="nav-key">6</span>
+        </button>
+
+        <!-- SECCIÓN EXCLUSIVA SUPER USUARIO -->
+        <button data-modulo="seguridad" class="super-user-btn" id="btn-menu-seguridad" style="display:none;" data-tooltip="Auditoría de sesiones, IPs y base de datos">
+          <span class="nav-icon" aria-hidden="true">🛡️</span>
+          <span class="nav-label">Seguridad & Auditoría</span>
+          <span class="nav-key">S</span>
         </button>
       </nav>
 
@@ -212,7 +219,7 @@
       </span>
       <span class="tab-label">Reportes</span>
     </button>
-    <button data-modulo="extras" class="tab-item">
+    <button data-modulo="extras" class="tab-item conta-only-btn">
       <span class="tab-icon">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
@@ -222,6 +229,14 @@
         </svg>
       </span>
       <span class="tab-label">Extras</span>
+    </button>
+    <button data-modulo="seguridad" class="tab-item super-user-btn" id="mobile-tab-seguridad" style="display:none;">
+      <span class="tab-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </span>
+      <span class="tab-label">Auditoría</span>
     </button>
     <button id="tab-btn-mas" class="tab-item">
       <span class="tab-icon">
