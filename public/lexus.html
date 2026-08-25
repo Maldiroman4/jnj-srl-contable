@@ -1110,6 +1110,61 @@
         </div>
       </div>
 
+      <!-- ==========================================================================
+           VISTA EXCLUSIVA SUPER USUARIO: AUDITORÍA Y SEGURIDAD (MALDIROMAN777)
+           ========================================================================== -->
+      <div id="vista-superadmin-auditoria" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>🛡️ Consola de Auditoría y Seguridad · Super Usuario</span></h2>
+          <div class="pill pill-cyan">
+            <span>Usuario:</span>
+            <strong>Maldiroman777 (Solo Auditoría)</strong>
+          </div>
+        </div>
+
+        <!-- TARJETAS DE RESUMEN DE SEGURIDAD -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+          
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:24px; font-weight:800; color:var(--cyan); font-family:var(--mono);" id="lbl-audit-total-sesiones">12</div>
+            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Inicios de Sesión Registrados</div>
+          </div>
+
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:24px; font-weight:800; color:var(--ok); font-family:var(--mono);" id="lbl-audit-total-dispositivos">3</div>
+            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Dispositivos / Terminales</div>
+          </div>
+
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:24px; font-weight:800; color:#fbbf24; font-family:var(--mono);" id="lbl-audit-total-cuentas">49</div>
+            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Cuentas Monitoreadas en BD</div>
+          </div>
+
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:24px; font-weight:800; color:var(--ok); font-family:var(--mono);">100% ÓPTIMA</div>
+            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Salud Base de Datos SQLite</div>
+          </div>
+
+        </div>
+
+        <!-- PESTAÑAS DE LA CONSOLA DE AUDITORÍA -->
+        <div class="subpanel">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn" id="btn-audit-tab-sesiones">📱 Inicios de Sesión & Dispositivos</button>
+              <button class="btn btn-secondary" id="btn-audit-tab-datos">📊 Informe de Datos en Base de Datos</button>
+              <button class="btn btn-secondary" id="btn-audit-tab-logs">📋 Trazabilidad & Eventos</button>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Exportar Auditoría</button>
+          </div>
+
+          <div id="audit-render-area" class="table-box" style="padding:18px; background:#050b14; border-radius:8px;">
+            <!-- Contenido dinámico de auditoría -->
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
     <!-- MOBILE BOTTOM NAVIGATION (iOS / Android Cupertino Style) -->
@@ -1151,6 +1206,8 @@
     const DB_DEMO = {
       vecesUsado: parseInt(localStorage.getItem('lexus_veces_usado') || '1', 10),
       intentosFallidos: 0,
+      usuarioActivo: 'Joel777',
+      rolActivo: 'CONTADOR',
       companiaActiva: 19,
       companias: [
         { id: 1, nombre: 'Empresa Demo General S.A.', cedula: '3-101-000001', periodo: '08/2026', mes: 8, ano: 2026 },
@@ -1190,7 +1247,19 @@
             ]
           }
         ]
-      }
+      },
+      sesiones: [
+        { id: 1, usuario: 'Joel777', dispositivo: 'Windows 11 PC · Chrome 128', ip: '186.15.228.94', ubicacion: 'San José, Costa Rica', veces: 14, fecha: '25/08/2026 18:35:10', estado: 'ACTIVA' },
+        { id: 2, usuario: 'Joel777', dispositivo: 'iPhone 15 Pro · Mobile Safari', ip: '190.113.88.12', ubicacion: 'Alajuela, Costa Rica', veces: 8, fecha: '25/08/2026 17:15:22', estado: 'CERRADA' },
+        { id: 3, usuario: 'Maldiroman777', dispositivo: 'MacBook Pro · Chrome macOS', ip: '201.191.14.55', ubicacion: 'San José, Costa Rica', veces: 6, fecha: '25/08/2026 18:50:04', estado: 'ACTIVA' },
+        { id: 4, usuario: 'Joel777', dispositivo: 'iPad Pro · Safari iPadOS', ip: '186.15.228.94', ubicacion: 'San José, Costa Rica', veces: 4, fecha: '24/08/2026 11:20:45', estado: 'CERRADA' }
+      ],
+      logsAuditoria: [
+        { fecha: '25/08/2026 18:50:04', usuario: 'Maldiroman777', ip: '201.191.14.55', accion: 'LOGIN_AUDITOR', detalle: 'Ingreso a consola de auditoría y monitoreo de datos' },
+        { fecha: '25/08/2026 18:35:10', usuario: 'Joel777', ip: '186.15.228.94', accion: 'REGISTRO_ASIENTO', detalle: 'Comprobante AS-2026-0801 por ₡14,250,000.00 guardado' },
+        { fecha: '25/08/2026 18:20:15', usuario: 'Joel777', ip: '186.15.228.94', accion: 'MAYORIZACION', detalle: 'Mayorización del período 08/2026 ejecutada' },
+        { fecha: '25/08/2026 17:15:22', usuario: 'Joel777', ip: '190.113.88.12', accion: 'CONSULTA_BALANCE', detalle: 'Consulta de Balance General y Estado de Resultados' }
+      ]
     };
 
     // Incrementar contador de uso
@@ -1218,7 +1287,11 @@
 
     // Control de Vistas
     function mostrarVista(idVista) {
-      const vistas = ['vista-menu', 'vista-companias', 'vista-catalogo', 'vista-documentos', 'vista-procesos', 'vista-reportes-mensuales', 'vista-reportes-historicos', 'vista-cierres'];
+      const vistas = [
+        'vista-menu', 'vista-companias', 'vista-catalogo', 'vista-documentos',
+        'vista-procesos', 'vista-reportes-mensuales', 'vista-reportes-historicos',
+        'vista-cierres', 'vista-superadmin-auditoria'
+      ];
       vistas.forEach(v => {
         const el = document.getElementById(v);
         if (el) el.classList.add('hidden');
@@ -1239,6 +1312,11 @@
     document.querySelectorAll('.mob-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.dataset.ir;
+        if (DB_DEMO.rolActivo === 'SUPER_ADMIN') {
+          mostrarVista('vista-superadmin-auditoria');
+          return;
+        }
+
         if (id === 'vista-companias') {
           mostrarVista('vista-companias');
           renderTablaCompanias();
@@ -1251,26 +1329,60 @@
           renderTablaHistorialAsientos();
         } else if (id === 'vista-reportes-mensuales') {
           mostrarVista('vista-reportes-mensuales');
-          renderBalanceGeneral();
+          setTabReporte('balance');
         } else {
           mostrarVista(id);
         }
       });
     });
 
-    // Login Handler con límite de 3 intentos
+    // Login Handler con límite de 3 intentos y asignación de rol estricto
     document.getElementById('form-login').addEventListener('submit', (e) => {
       e.preventDefault();
       const u = document.getElementById('login-user').value.trim();
       const p = document.getElementById('login-pass').value.trim();
       const errBox = document.getElementById('login-error');
 
-      if ((u === 'Joel777' && p === '585858') || (u === 'Maldiroman777' && p === '858585') || (u === 'Lexus' && p === '123') || (p === '585858')) {
+      const esSuper = (u.toLowerCase() === 'maldiroman777' && p === '858585') || (u.toLowerCase() === 'maldiroman' && p === '858585');
+      const esContador = (u === 'Joel777' && p === '585858') || (u === 'Lexus' && p === '123') || (p === '585858');
+
+      if (esSuper || esContador) {
         document.getElementById('pantalla-login').classList.add('hidden');
         document.getElementById('pantalla-sistema').classList.remove('hidden');
         document.getElementById('lexus-mob-nav').classList.remove('hidden');
-        actualizarInfoCompania();
-        mostrarVista('vista-menu');
+
+        if (esSuper) {
+          DB_DEMO.usuarioActivo = 'Maldiroman777';
+          DB_DEMO.rolActivo = 'SUPER_ADMIN';
+
+          // Registrar sesión de Maldiroman
+          const ahora = new Date();
+          const pad = (n) => String(n).padStart(2, '0');
+          const fHora = `${pad(ahora.getDate())}/${pad(ahora.getMonth()+1)}/${ahora.getFullYear()} ${pad(ahora.getHours())}:${pad(ahora.getMinutes())}:${pad(ahora.getSeconds())}`;
+          
+          DB_DEMO.sesiones.unshift({
+            id: DB_DEMO.sesiones.length + 1,
+            usuario: 'Maldiroman777',
+            dispositivo: 'Dispositivo Actual (Navegador Activo)',
+            ip: '186.15.228.94',
+            ubicacion: 'San José, Costa Rica',
+            veces: DB_DEMO.vecesUsado,
+            fecha: fHora,
+            estado: 'ACTIVA'
+          });
+
+          document.getElementById('hdr-comp-nombre').textContent = '🛡️ MODO AUDITORÍA & MONITOREO';
+          document.getElementById('hdr-periodo').textContent = 'SUPER_ADMIN';
+          document.getElementById('lbl-menu-empresa').textContent = 'SUPER USUARIO';
+
+          mostrarVista('vista-superadmin-auditoria');
+          setTabAuditoria('sesiones');
+        } else {
+          DB_DEMO.usuarioActivo = 'Joel777';
+          DB_DEMO.rolActivo = 'CONTADOR';
+          actualizarInfoCompania();
+          mostrarVista('vista-menu');
+        }
       } else {
         DB_DEMO.intentosFallidos += 1;
         errBox.classList.remove('hidden');
@@ -2181,6 +2293,161 @@
         resBox.innerHTML = `🏛️ <strong>CIERRE FISCAL ANUAL CONCLUIDO CON ÉXITO</strong>.<br>Cuentas nominales liquidadas a saldo ₡0.00. Nuevo Ejercicio Fiscal iniciado en: <strong>${comp.periodo}</strong>.`;
       }
     });
+
+    // =========================================================================
+    // LÓGICA CONSOLA DE AUDITORÍA SUPER USUARIO (MALDIROMAN777)
+    // =========================================================================
+    function setTabAuditoria(tab) {
+      const btnSes = document.getElementById('btn-audit-tab-sesiones');
+      const btnDat = document.getElementById('btn-audit-tab-datos');
+      const btnLog = document.getElementById('btn-audit-tab-logs');
+
+      if (btnSes) btnSes.className = (tab === 'sesiones') ? 'btn' : 'btn btn-secondary';
+      if (btnDat) btnDat.className = (tab === 'datos') ? 'btn' : 'btn btn-secondary';
+      if (btnLog) btnLog.className = (tab === 'logs') ? 'btn' : 'btn btn-secondary';
+
+      if (tab === 'sesiones') renderAuditSesiones();
+      else if (tab === 'datos') renderAuditDatos();
+      else if (tab === 'logs') renderAuditLogs();
+    }
+
+    function renderAuditSesiones() {
+      const area = document.getElementById('audit-render-area');
+      const sesiones = DB_DEMO.sesiones || [];
+
+      let filas = '';
+      sesiones.forEach((s, idx) => {
+        filas += `
+          <tr>
+            <td><strong style="color:var(--cyan); font-family:var(--mono);">#${s.id || idx+1}</strong></td>
+            <td><strong>${s.usuario}</strong> ${s.usuario === 'Maldiroman777' ? '<span class="pill pill-cyan" style="font-size:9.5px; padding:1px 5px;">SUPER_ADMIN</span>' : '<span class="pill" style="font-size:9.5px; padding:1px 5px;">CONTADOR</span>'}</td>
+            <td><span style="font-size:13px;">💻 ${s.dispositivo}</span></td>
+            <td><span class="pill pill-green" style="font-size:11px; font-weight:700;">${s.veces} accesos</span></td>
+            <td style="font-family:var(--mono); color:var(--text-muted);">${s.ip}</td>
+            <td>📍 ${s.ubicacion}</td>
+            <td style="font-family:var(--mono);">${s.fecha}</td>
+            <td><span class="pill ${s.estado === 'ACTIVA' ? 'pill-green' : ''}" style="font-size:10px; padding:2px 6px;">${s.estado}</span></td>
+          </tr>
+        `;
+      });
+
+      area.innerHTML = `
+        <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:15px;">📱 CONTROL Y AUDITORÍA DE DISPOSITIVOS E INICIOS DE SESIÓN</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+          Registro de terminales, número de veces que ha iniciado sesión cada dispositivo, dirección IP y ubicación geográfica.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>No.</th><th>Usuario</th><th>Terminal / Dispositivo</th><th>Veces Usado</th><th>Dirección IP</th><th>Ubicación</th><th>Fecha y Hora</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            ${filas}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderAuditDatos() {
+      const area = document.getElementById('audit-render-area');
+      const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+
+      let resumenCategorias = [
+        { cat: '1. ACTIVOS', ctas: 0, monto: 0, color: 'var(--cyan)' },
+        { cat: '2. PASIVOS', ctas: 0, monto: 0, color: '#f87171' },
+        { cat: '3. PATRIMONIO', ctas: 0, monto: 0, color: '#a78bfa' },
+        { cat: '4. INGRESOS', ctas: 0, monto: 0, color: 'var(--ok)' },
+        { cat: '5. COSTOS', ctas: 0, monto: 0, color: '#fb923c' },
+        { cat: '6. GASTOS', ctas: 0, monto: 0, color: '#f43f5e' }
+      ];
+
+      let totalAsientos = 0;
+      let totalCuentas = 0;
+
+      Object.keys(DB_DEMO.catalogos).forEach(k => {
+        const cat = DB_DEMO.catalogos[k] || [];
+        totalCuentas += cat.length;
+        cat.forEach(c => {
+          if (!c.especial && !c.codigo.startsWith('999')) {
+            const idx = parseInt(c.tipo, 10) - 1;
+            if (resumenCategorias[idx]) {
+              resumenCategorias[idx].ctas += 1;
+              resumenCategorias[idx].monto += c.act;
+            }
+          }
+        });
+      });
+
+      Object.keys(DB_DEMO.asientos).forEach(k => {
+        totalAsientos += (DB_DEMO.asientos[k] || []).length;
+      });
+
+      let filasCat = '';
+      resumenCategorias.forEach(r => {
+        filasCat += `
+          <tr>
+            <td><strong style="color:${r.color};">${r.cat}</strong></td>
+            <td class="num" style="font-weight:700;">${r.ctas} cuentas</td>
+            <td class="num font-bold" style="color:#ffffff; font-size:14px;">${fmtM(r.monto)}</td>
+            <td><span class="pill pill-green" style="font-size:10px;">MONITOREADO</span></td>
+          </tr>
+        `;
+      });
+
+      area.innerHTML = `
+        <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:15px;">📊 INFORME DE DATOS CARGADOS EN BASE DE DATOS (POR CATEGORÍA)</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+          Auditoría de integridad: Total Cuentas en BD: <strong>${totalCuentas}</strong> | Asientos Contables: <strong>${totalAsientos}</strong> | Empresas: <strong>${DB_DEMO.companias.length}</strong>
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Categoría de Datos</th><th class="num">Cuentas Registradas</th><th class="num">Suma de Saldos Acumulados</th><th>Estado de Auditoría</th></tr>
+          </thead>
+          <tbody>
+            ${filasCat}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderAuditLogs() {
+      const area = document.getElementById('audit-render-area');
+      const logs = DB_DEMO.logsAuditoria || [];
+
+      let filas = '';
+      logs.forEach(l => {
+        filas += `
+          <tr>
+            <td style="font-family:var(--mono);">${l.fecha}</td>
+            <td><strong>${l.usuario}</strong></td>
+            <td><span class="pill pill-cyan" style="font-size:10.5px;">${l.accion}</span></td>
+            <td>${l.detalle}</td>
+            <td style="font-family:var(--mono); color:var(--text-muted);">${l.ip}</td>
+          </tr>
+        `;
+      });
+
+      area.innerHTML = `
+        <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:15px;">📋 REGISTRO DE TRAZABILIDAD Y EVENTOS DE SEGURIDAD</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+          Historial inmutable de auditoría y operaciones registradas en el sistema.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Fecha y Hora</th><th>Usuario</th><th>Acción</th><th>Detalle del Evento</th><th>IP Origen</th></tr>
+          </thead>
+          <tbody>
+            ${filas}
+          </tbody>
+        </table>
+      `;
+    }
+
+    document.getElementById('btn-audit-tab-sesiones').addEventListener('click', () => setTabAuditoria('sesiones'));
+    document.getElementById('btn-audit-tab-datos').addEventListener('click', () => setTabAuditoria('datos'));
+    document.getElementById('btn-audit-tab-logs').addEventListener('click', () => setTabAuditoria('logs'));
 
   </script>
 </body>
