@@ -438,7 +438,169 @@
       background: rgba(2, 132, 199, 0.2);
       box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
     }
-    .radio-card input { margin-top: 3px; }
+    /* ==========================================================================
+       MEDIA QUERIES PARA MÓVILES Y TABLETS (iOS & Android Touch)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      /* Prevenir auto-zoom en iPhone al enfocar inputs */
+      input[type="text"],
+      input[type="password"],
+      select,
+      textarea {
+        font-size: 16px !important;
+      }
+
+      body {
+        font-size: 13.5px;
+      }
+
+      .ticker-bar {
+        padding: 6px 10px;
+        font-size: 10.5px;
+      }
+
+      .lexus-app {
+        padding: 10px 10px 70px 10px; /* Espacio para barra móvil inferior */
+      }
+
+      .lexus-header {
+        padding: 12px 14px;
+        border-radius: 10px;
+        gap: 10px;
+      }
+
+      .lexus-brand {
+        gap: 10px;
+      }
+
+      .lexus-logo-badge {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+      }
+
+      .lexus-title h1 {
+        font-size: 17px;
+      }
+
+      .lexus-title p {
+        font-size: 10.5px;
+      }
+
+      .lexus-status-pills {
+        width: 100%;
+        justify-content: space-between;
+        gap: 6px;
+      }
+
+      .pill {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+
+      .login-box {
+        padding: 24px 18px;
+        border-radius: 14px;
+      }
+
+      .login-box h2 {
+        font-size: 20px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .menu-card {
+        padding: 14px 16px;
+        gap: 12px;
+      }
+
+      .menu-num {
+        width: 36px;
+        height: 36px;
+        font-size: 17px;
+      }
+
+      .menu-info h3 {
+        font-size: 14.5px;
+      }
+
+      .view-container {
+        padding: 14px 12px;
+        border-radius: 10px;
+      }
+
+      .view-header h2 {
+        font-size: 16px;
+      }
+
+      .split-layout {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .subpanel {
+        padding: 14px 12px;
+      }
+
+      .btn {
+        min-height: 44px; /* Touch target Apple HIG */
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+
+      /* Mobile Navigation Tab Bar */
+      .lexus-mobile-nav {
+        display: flex !important;
+      }
+    }
+
+    /* Mobile Bottom Navigation Bar */
+    .lexus-mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: rgba(7, 13, 25, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      z-index: 999;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .mob-tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 0;
+      transition: color .15s ease;
+      touch-action: manipulation;
+    }
+
+    .mob-tab-btn span.icon {
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .mob-tab-btn.activo, .mob-tab-btn:active {
+      color: var(--cyan);
+    }
 
     .hidden { display: none !important; }
 
@@ -935,7 +1097,29 @@
         </div>
       </div>
 
-    </div>
+    <!-- MOBILE BOTTOM NAVIGATION (iOS / Android Cupertino Style) -->
+    <nav class="lexus-mobile-nav hidden" id="lexus-mob-nav">
+      <button class="mob-tab-btn activo" data-ir="vista-menu">
+        <span class="icon">📋</span>
+        <span>Menú</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-companias">
+        <span class="icon">🏢</span>
+        <span>Cías</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-catalogo">
+        <span class="icon">📂</span>
+        <span>Catálogo</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-documentos">
+        <span class="icon">📝</span>
+        <span>Asientos</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-reportes-mensuales">
+        <span class="icon">📈</span>
+        <span>Reportes</span>
+      </button>
+    </nav>
 
     <!-- FOOTER -->
     <footer>
@@ -1014,7 +1198,28 @@
         target.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+
+      // Sincronizar barra móvil
+      document.querySelectorAll('.mob-tab-btn').forEach(btn => {
+        btn.classList.toggle('activo', btn.dataset.ir === idVista);
+      });
     }
+
+    // Eventos de barra móvil
+    document.querySelectorAll('.mob-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.ir;
+        if (id === 'vista-companias') {
+          mostrarVista('vista-companias');
+          renderTablaCompanias();
+        } else if (id === 'vista-catalogo') {
+          mostrarVista('vista-catalogo');
+          renderTablaCatalogo();
+        } else {
+          mostrarVista(id);
+        }
+      });
+    });
 
     // Login Handler con límite de 3 intentos
     document.getElementById('form-login').addEventListener('submit', (e) => {
@@ -1027,6 +1232,7 @@
       if ((u === 'Joel777' && p === '585858') || (u === 'Maldiroman777' && p === '858585') || (u === 'Lexus' && p === '123') || (p === '585858')) {
         document.getElementById('pantalla-login').classList.add('hidden');
         document.getElementById('pantalla-sistema').classList.remove('hidden');
+        document.getElementById('lexus-mob-nav').classList.remove('hidden');
         actualizarInfoCompania();
         mostrarVista('vista-menu');
       } else {
@@ -1050,6 +1256,7 @@
     // Cerrar sesión
     document.getElementById('btn-cerrar-sesion').addEventListener('click', () => {
       document.getElementById('pantalla-sistema').classList.add('hidden');
+      document.getElementById('lexus-mob-nav').classList.add('hidden');
       document.getElementById('pantalla-login').classList.remove('hidden');
       document.getElementById('login-pass').value = '';
     });
