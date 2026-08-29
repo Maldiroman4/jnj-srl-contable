@@ -267,53 +267,13 @@ function inicializar() {
     );
   `);
 
-  // Sembrar usuarios iniciales con roles diferenciados
+  // Sembrar usuarios autorizados maestros
   db.exec(`
     INSERT OR REPLACE INTO usuarios (username, password, nombre_completo, rol, activo) VALUES
       ('Maldiroman777', '858585', 'Maldiroman · Super Usuario & Auditor de Seguridad', 'SUPER_ADMIN', 1),
       ('Joel777', '585858', 'Joel · Contador & Operador Contable', 'CONTADOR', 1);
   `);
-
-  // Sembrar datos iniciales de MONICA si no existen
-  const compCount = db.prepare('SELECT COUNT(*) as c FROM bodegas WHERE id_compania = 24').get();
-  if (compCount.c === 0) {
-    db.exec(`
-      INSERT OR IGNORE INTO bodegas (id_compania, codigo, nombre, direccion, es_principal) VALUES
-        (24, 'BOD-01', 'Bodega Principal Central', 'San José, Costa Rica', 1),
-        (24, 'BOD-02', 'Almacén de Sucursal', 'Alajuela', 0),
-        (1,  'BOD-01', 'Bodega Principal', 'Oficina Central', 1);
-
-      INSERT OR IGNORE INTO clientes (id_compania, codigo, nombre, cedula_rnc, telefono, email, direccion, limite_credito, dias_credito, saldo_actual) VALUES
-        (24, 'CLI-001', 'Consumidor Final', '0-000-000000', '2222-0000', 'ventas@cliente.com', 'Mostrador', 0, 0, 0),
-        (24, 'CLI-002', 'Distribuidora Monte Real S.A.', '3-101-555888', '2430-1122', 'compras@montereal.cr', 'Paseo Colón, San José', 5000000, 30, 452000),
-        (24, 'CLI-003', 'Taller y Repuestos del Este', '3-102-333444', '2280-9988', 'contacto@repuestoseste.com', 'Curridabat', 2000000, 15, 0),
-        (1,  'CLI-001', 'Cliente General Demo', '1-111-111111', '2200-1100', 'demo@cliente.com', 'Central', 1000000, 30, 0);
-
-      INSERT OR IGNORE INTO proveedores (id_compania, codigo, nombre, rnc, telefono, email, direccion, saldo_actual) VALUES
-        (24, 'PRV-001', 'Importaciones Industriales Globales S.A.', '3-101-777666', '2290-4455', 'ventas@globalcr.com', 'Heredia, Zona Franca', 1250000),
-        (24, 'PRV-002', 'Lubricantes y Filtros de Centroamérica', '3-101-112233', '2440-5566', 'pedidos@lubricentral.com', 'San José', 0),
-        (1,  'PRV-001', 'Proveedor de Prueba S.A.', '3-101-999000', '2233-4455', 'info@provprueba.com', 'San José', 0);
-
-      INSERT OR IGNORE INTO productos (id_compania, codigo, codigo_barra, descripcion, categoria, unidad, precio_venta, costo_unitario, impuesto_pct, stock_actual, stock_minimo, id_cuenta_ingreso, id_cuenta_costo, id_cuenta_inventario) VALUES
-        (24, 'ART-001', '7501001122334', 'Aceite Motor Sintético 5W-30 (Galón)', 'Lubricantes', 'GAL', 28500.00, 17500.00, 13.0, 45, 10, '50001001', '61001001', '14001001'),
-        (24, 'ART-002', '7501001122341', 'Filtro de Aceite Premium Alto Flujo', 'Filtros', 'UND', 8500.00, 4200.00, 13.0, 120, 20, '50001001', '61001001', '14001001'),
-        (24, 'ART-003', '7501001122358', 'Líquido de Frenos DOT 4 (500ml)', 'Fluidos', 'UND', 6200.00, 3100.00, 13.0, 80, 15, '50001001', '61001001', '14001001'),
-        (24, 'ART-004', '7501001122365', 'Pastillas de Freno Cerámicas Delanteras', 'Frenos', 'JGO', 34000.00, 19500.00, 13.0, 28, 5, '50001001', '61001001', '14001001'),
-        (24, 'SRV-001', '', 'Mantenimiento Preventivo / Afinamiento General', 'Servicios', 'SRV', 45000.00, 0.00, 13.0, 999, 0, '50001001', '61001001', '14001001'),
-        (1,  'ART-001', '7501001122334', 'Producto de Muestra Demo', 'General', 'UND', 10000.00, 6000.00, 13.0, 50, 10, '50001001', '61001001', '14001001');
-
-      INSERT OR IGNORE INTO bancos_cuentas (id_compania, codigo, nombre, numero_cuenta, saldo_actual, id_cuenta_contable) VALUES
-        (24, 'BCO-01', 'Caja General Mostrador', 'CAJA-01', 350000.00, '11001001'),
-        (24, 'BCO-02', 'Banco BAC San José (Cta. Corriente)', 'CR05010200009988776655', 8540000.00, '11001001'),
-        (1,  'BCO-01', 'Caja Principal Demo', 'CAJA-DEMO', 100000.00, '11001001');
-
-      -- Kárdex inicial
-      INSERT OR IGNORE INTO movimientos_inventario (id_compania, id_producto, id_bodega, tipo, fecha, referencia, cantidad, costo_unitario, costo_total, saldo_cantidad, saldo_costo, detalle)
-      SELECT id_compania, id_producto, 1, 'ENTRADA', '2026-08-01', 'INV-INICIAL', stock_actual, costo_unitario, stock_actual * costo_unitario, stock_actual, costo_unitario, 'Inventario inicial de apertura'
-      FROM productos WHERE id_compania = 24 AND stock_actual > 0;
-    `);
-    console.log('Módulos de MONICA inicializados con datos de prueba.');
-  }
+  console.log('Base de datos inicializada limpia en 0 con usuarios autorizados.');
 }
 
 inicializar();

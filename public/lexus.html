@@ -1339,64 +1339,36 @@
        JAVASCRIPT AUTOCONTENIDO TOTALMENTE OPERATIVO
        ========================================================================== -->
   <script>
-    // --- ESTADO Y MOTOR CONTABLE COMPLETO ---
+    // Catálogo Maestro Estándar de Referencia para Costa Rica (para cuando se elige Opción 3)
+    const CATALOGO_MAESTRO_BASE = [
+      { codigo: '100-00-000', desc: 'ACTIVO CORRIENTE', tipo: '1', ini: 0, act: 0 },
+      { codigo: '101-01-001', desc: 'Caja General', tipo: '1', ini: 0, act: 0 },
+      { codigo: '101-02-001', desc: 'Bancos Moneda Nacional', tipo: '1', ini: 0, act: 0 },
+      { codigo: '105-01-001', desc: 'Cuentas por Cobrar Clientes', tipo: '1', ini: 0, act: 0 },
+      { codigo: '110-01-001', desc: 'Inventario de Mercaderías', tipo: '1', ini: 0, act: 0 },
+      { codigo: '200-00-000', desc: 'PASIVO CORRIENTE', tipo: '2', ini: 0, act: 0 },
+      { codigo: '201-01-001', desc: 'Cuentas por Pagar Proveedores', tipo: '2', ini: 0, act: 0 },
+      { codigo: '205-01-001', desc: 'Impuestos por Pagar (IVA 13%)', tipo: '2', ini: 0, act: 0 },
+      { codigo: '300-00-000', desc: 'PATRIMONIO', tipo: '3', ini: 0, act: 0 },
+      { codigo: '301-01-001', desc: 'Capital Social', tipo: '3', ini: 0, act: 0 },
+      { codigo: '400-00-000', desc: 'INGRESOS POR VENTAS', tipo: '4', ini: 0, act: 0 },
+      { codigo: '500-00-000', desc: 'COSTO DE VENTAS', tipo: '5', ini: 0, act: 0 },
+      { codigo: '600-00-000', desc: 'GASTOS DE OPERACIÓN', tipo: '6', ini: 0, act: 0 },
+      { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 0, especial: true }
+    ];
+
+    // --- ESTADO Y MOTOR CONTABLE LIMPIO EN CERO ---
     const DB_DEMO = {
       vecesUsado: parseInt(localStorage.getItem('lexus_veces_usado') || '1', 10),
       intentosFallidos: 0,
       usuarioActivo: 'Joel777',
       rolActivo: 'CONTADOR',
-      companiaActiva: 19,
-      companias: [
-        { id: 1, nombre: 'Empresa Demo General S.A.', cedula: '3-101-000001', periodo: '08/2026', mes: 8, ano: 2026 },
-        { id: 10, nombre: 'Corporación Comercial del Este', cedula: '3-101-000010', periodo: '08/2026', mes: 8, ano: 2026 },
-        { id: 19, nombre: 'Distribuidora Automotriz S.A.', cedula: '3-101-000019', periodo: '08/2026', mes: 8, ano: 2026 },
-        { id: 45, nombre: 'Inversiones y Servicios JNJ SRL', cedula: '3-101-000045', periodo: '08/2026', mes: 8, ano: 2026 }
-      ],
-      catalogos: {
-        19: [
-          { codigo: '100-00-000', desc: 'ACTIVO CORRIENTE', tipo: '1', ini: 0, act: 25400000 },
-          { codigo: '101-01-001', desc: 'Caja General', tipo: '1', ini: 0, act: 850000 },
-          { codigo: '101-02-001', desc: 'Banco BAC San José Colones', tipo: '1', ini: 0, act: 14250000 },
-          { codigo: '105-01-001', desc: 'Cuentas por Cobrar Clientes', tipo: '1', ini: 0, act: 4800000 },
-          { codigo: '110-01-001', desc: 'Inventario de Mercaderías', tipo: '1', ini: 0, act: 5500000 },
-          { codigo: '200-00-000', desc: 'PASIVO CORRIENTE', tipo: '2', ini: 0, act: 12150000 },
-          { codigo: '201-01-001', desc: 'Proveedores Nacionales', tipo: '2', ini: 0, act: 9200000 },
-          { codigo: '205-01-001', desc: 'Impuestos por Pagar (IVA)', tipo: '2', ini: 0, act: 2950000 },
-          { codigo: '300-00-000', desc: 'PATRIMONIO', tipo: '3', ini: 0, act: 28930000 },
-          { codigo: '301-01-001', desc: 'Capital Social', tipo: '3', ini: 0, act: 25000000 },
-          { codigo: '400-00-000', desc: 'INGRESOS OPERACIONALES', tipo: '4', ini: 0, act: 18500000 },
-          { codigo: '500-00-000', desc: 'COSTO DE VENTAS', tipo: '5', ini: 0, act: 9800000 },
-          { codigo: '600-00-000', desc: 'GASTOS ADMINISTRATIVOS', tipo: '6', ini: 0, act: 4500000 },
-          { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 4200000, especial: true }
-        ]
-      },
-      asientos: {
-        19: [
-          {
-            num: 'AS-2026-0801',
-            fecha: '05/08/2026',
-            concepto: 'Apertura de operaciones del mes de agosto',
-            debitos: 14250000,
-            creditos: 14250000,
-            lineas: [
-              { cuenta: '101-02-001', desc: 'Banco BAC', deb: 14250000, cre: 0 },
-              { cuenta: '301-01-001', desc: 'Capital Social', deb: 0, cre: 14250000 }
-            ]
-          }
-        ]
-      },
-      sesiones: [
-        { id: 1, usuario: 'Joel777', dispositivo: 'Windows 11 PC · Chrome 128', ip: '186.15.228.94', ubicacion: 'San José, Costa Rica', veces: 14, fecha: '25/08/2026 18:35:10', estado: 'ACTIVA' },
-        { id: 2, usuario: 'Joel777', dispositivo: 'iPhone 15 Pro · Mobile Safari', ip: '190.113.88.12', ubicacion: 'Alajuela, Costa Rica', veces: 8, fecha: '25/08/2026 17:15:22', estado: 'CERRADA' },
-        { id: 3, usuario: 'Maldiroman777', dispositivo: 'MacBook Pro · Chrome macOS', ip: '201.191.14.55', ubicacion: 'San José, Costa Rica', veces: 6, fecha: '25/08/2026 18:50:04', estado: 'ACTIVA' },
-        { id: 4, usuario: 'Joel777', dispositivo: 'iPad Pro · Safari iPadOS', ip: '186.15.228.94', ubicacion: 'San José, Costa Rica', veces: 4, fecha: '24/08/2026 11:20:45', estado: 'CERRADA' }
-      ],
-      logsAuditoria: [
-        { fecha: '25/08/2026 18:50:04', usuario: 'Maldiroman777', ip: '201.191.14.55', accion: 'LOGIN_AUDITOR', detalle: 'Ingreso a consola de auditoría y monitoreo de datos' },
-        { fecha: '25/08/2026 18:35:10', usuario: 'Joel777', ip: '186.15.228.94', accion: 'REGISTRO_ASIENTO', detalle: 'Comprobante AS-2026-0801 por ₡14,250,000.00 guardado' },
-        { fecha: '25/08/2026 18:20:15', usuario: 'Joel777', ip: '186.15.228.94', accion: 'MAYORIZACION', detalle: 'Mayorización del período 08/2026 ejecutada' },
-        { fecha: '25/08/2026 17:15:22', usuario: 'Joel777', ip: '190.113.88.12', accion: 'CONSULTA_BALANCE', detalle: 'Consulta de Balance General y Estado de Resultados' }
-      ]
+      companiaActiva: null,
+      companias: [],
+      catalogos: {},
+      asientos: {},
+      sesiones: [],
+      logsAuditoria: []
     };
 
     // Incrementar contador de uso
@@ -1644,32 +1616,47 @@
     function renderTablaCompanias() {
       const tbody = document.getElementById('tbody-companias');
       tbody.innerHTML = '';
-      DB_DEMO.companias.forEach(c => {
-        const esActiva = (c.id === DB_DEMO.companiaActiva);
-        const tr = document.createElement('tr');
-        if (esActiva) tr.style.background = 'rgba(56, 189, 248, 0.12)';
-        tr.innerHTML = `
-          <td><strong style="color:var(--cyan); font-family:var(--mono); font-size:14px;">${c.id}</strong></td>
-          <td><strong>${c.nombre}</strong> ${esActiva ? '<span class="pill pill-green" style="font-size:10px; padding:1px 6px;">ACTIVA</span>' : ''}</td>
-          <td style="font-family:var(--mono); color:var(--text-muted);">${c.cedula}</td>
-          <td style="font-family:var(--mono);">${c.periodo}</td>
-          <td>
-            <button class="btn btn-secondary btn-sm btn-sel-comp" data-id="${c.id}" style="padding:4px 8px; font-size:11px;">
-              ${esActiva ? '✓ Seleccionada' : 'Abrir Empresa'}
-            </button>
-          </td>
+
+      if (DB_DEMO.companias.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
+              <div style="font-size:32px; margin-bottom:8px;">🏢</div>
+              <strong style="color:#ffffff; font-size:15px;">No hay compañías inscritas en el sistema.</strong>
+              <p style="font-size:12.5px; margin-top:6px;">Utilice el panel de la izquierda para digitar el código de su primera empresa (ej. <strong>001</strong>) e incluirla.</p>
+            </td>
+          </tr>
         `;
-        tbody.appendChild(tr);
-      });
+      } else {
+        DB_DEMO.companias.forEach(c => {
+          const esActiva = (c.id === DB_DEMO.companiaActiva);
+          const tr = document.createElement('tr');
+          if (esActiva) tr.style.background = 'rgba(56, 189, 248, 0.12)';
+          tr.innerHTML = `
+            <td><strong style="color:var(--cyan); font-family:var(--mono); font-size:14px;">${c.id}</strong></td>
+            <td><strong>${c.nombre}</strong> ${esActiva ? '<span class="pill pill-green" style="font-size:10px; padding:1px 6px;">ACTIVA</span>' : ''}</td>
+            <td style="font-family:var(--mono); color:var(--text-muted);">${c.cedula}</td>
+            <td style="font-family:var(--mono);">${c.periodo}</td>
+            <td>
+              <button class="btn btn-secondary btn-sm btn-sel-comp" data-id="${c.id}" style="padding:4px 8px; font-size:11px;">
+                ${esActiva ? '✓ Seleccionada' : 'Abrir Empresa'}
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
 
       const selOrigen = document.getElementById('sel-comp-origen');
-      selOrigen.innerHTML = '';
-      DB_DEMO.companias.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.textContent = `${c.id} - ${c.nombre}`;
-        selOrigen.appendChild(opt);
-      });
+      if (selOrigen) {
+        selOrigen.innerHTML = '';
+        DB_DEMO.companias.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = `${c.id} - ${c.nombre}`;
+          selOrigen.appendChild(opt);
+        });
+      }
 
       tbody.querySelectorAll('.btn-sel-comp').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1776,10 +1763,10 @@
         ];
       } else if (optCat === '2') {
         const idOrigen = parseInt(document.getElementById('sel-comp-origen').value, 10);
-        const catOrigen = DB_DEMO.catalogos[idOrigen] || DB_DEMO.catalogos[19] || [];
+        const catOrigen = DB_DEMO.catalogos[idOrigen] || CATALOGO_MAESTRO_BASE;
         DB_DEMO.catalogos[numId] = JSON.parse(JSON.stringify(catOrigen)).map(c => ({ ...c, ini: 0, act: 0 }));
       } else {
-        DB_DEMO.catalogos[numId] = JSON.parse(JSON.stringify(DB_DEMO.catalogos[19])).map(c => ({ ...c, ini: 0, act: 0 }));
+        DB_DEMO.catalogos[numId] = JSON.parse(JSON.stringify(CATALOGO_MAESTRO_BASE)).map(c => ({ ...c, ini: 0, act: 0 }));
       }
 
       DB_DEMO.companiaActiva = numId;
@@ -1802,12 +1789,25 @@
     // LÓGICA MÓDULO 2: CATÁLOGO DE CUENTAS
     // =========================================================================
     function renderTablaCatalogo() {
-      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || DB_DEMO.catalogos[19] || [];
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
       const tbody = document.getElementById('tbody-catalogo');
-      const filtro = document.getElementById('buscar-catalogo').value.toLowerCase().trim();
+      const filtro = (document.getElementById('buscar-catalogo')?.value || '').toLowerCase().trim();
       tbody.innerHTML = '';
 
       document.getElementById('lbl-cat-total-cuentas').textContent = cat.length;
+
+      if (cat.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
+              <div style="font-size:32px; margin-bottom:8px;">📂</div>
+              <strong style="color:#ffffff; font-size:15px;">0 cuentas inscritas.</strong>
+              <p style="font-size:12.5px; margin-top:6px;">${DB_DEMO.companiaActiva ? 'Agregue las cuentas de su catálogo usando el formulario superior.' : 'Seleccione o incluya una compañía primero.'}</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
 
       const filtradas = cat.filter(c => c.codigo.toLowerCase().includes(filtro) || c.desc.toLowerCase().includes(filtro));
 
@@ -2000,9 +2000,22 @@
     });
 
     function renderTablaHistorialAsientos() {
-      const asts = DB_DEMO.asientos[DB_DEMO.companiaActiva] || [];
+      const asts = (DB_DEMO.companiaActiva && DB_DEMO.asientos[DB_DEMO.companiaActiva]) ? DB_DEMO.asientos[DB_DEMO.companiaActiva] : [];
       const tbody = document.getElementById('tbody-historial-asientos');
       tbody.innerHTML = '';
+
+      if (asts.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
+              <div style="font-size:32px; margin-bottom:8px;">📝</div>
+              <strong style="color:#ffffff; font-size:15px;">0 comprobantes de diario registrados.</strong>
+              <p style="font-size:12.5px; margin-top:6px;">Utilice el formulario de la izquierda para registrar su primer asiento contable.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
 
       const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
 
@@ -2024,8 +2037,8 @@
     // LÓGICA MÓDULO 4: PROCESOS SELECTOS (MAYORIZACIÓN EN CASCADA)
     // =========================================================================
     document.getElementById('btn-ejecutar-mayorizacion').addEventListener('click', () => {
-      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || [];
-      const asts = DB_DEMO.asientos[DB_DEMO.companiaActiva] || [];
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
+      const asts = (DB_DEMO.companiaActiva && DB_DEMO.asientos[DB_DEMO.companiaActiva]) ? DB_DEMO.asientos[DB_DEMO.companiaActiva] : [];
       const mes = document.getElementById('sel-mes-mayorizar').value;
       const ano = document.getElementById('sel-ano-mayorizar').value;
 
@@ -2037,12 +2050,16 @@
       resBox.textContent = `⏳ Procesando mayorización en cascada para el período ${mes.padStart(2,'0')}/${ano}...`;
 
       let logHTML = `<strong>--- INICIO DE MAYORIZACIÓN EN CASCADA ---</strong><br>`;
-      logHTML += `Compañía: ${DB_DEMO.companiaActiva} · Período: ${mes}/${ano}<br>`;
+      logHTML += `Compañía: ${DB_DEMO.companiaActiva || 'N/A'} · Período: ${mes}/${ano}<br>`;
       logHTML += `Asientos analizados: ${asts.length}<br><br>`;
 
-      cat.forEach(c => {
-        logHTML += `> Mayorizando cuenta ${c.codigo} [${c.desc}] ... Saldo: ₡${Number(c.act).toLocaleString('es-CR')}<br>`;
-      });
+      if (cat.length === 0) {
+        logHTML += `> No hay cuentas registradas para mayorizar.<br>`;
+      } else {
+        cat.forEach(c => {
+          logHTML += `> Mayorizando cuenta ${c.codigo} [${c.desc}] ... Saldo: ₡${Number(c.act).toLocaleString('es-CR')}<br>`;
+        });
+      }
 
       logHTML += `<br><strong style="color:var(--ok);">✅ Mayorización completada: ${cat.length} cuentas balanceadas.</strong>`;
       logBox.innerHTML = logHTML;
@@ -2056,7 +2073,7 @@
     // LÓGICA MÓDULO 5: REPORTES MENSUALES (BALANCE GENERAL, RESULTADOS & BALANZA)
     // =========================================================================
     function calcularCifrasContables() {
-      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || DB_DEMO.catalogos[19] || [];
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
       let totActivos = 0;
       let totPasivos = 0;
       let totPatrimonio = 0;
@@ -2106,7 +2123,7 @@
     function renderBalanceGeneral() {
       const k = calcularCifrasContables();
       const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
-      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || DB_DEMO.companias[0];
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || { id: '--', nombre: 'Sin Empresa Seleccionada', periodo: '08/2026' };
 
       const area = document.getElementById('reporte-render-area');
       area.innerHTML = `
@@ -2199,7 +2216,7 @@
     function renderEstadoResultados() {
       const k = calcularCifrasContables();
       const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
-      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || DB_DEMO.companias[0];
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || { id: '--', nombre: 'Sin Empresa Seleccionada', periodo: '08/2026' };
       const utilidadBruta = k.totIngresos - k.totCostos;
 
       const area = document.getElementById('reporte-render-area');
@@ -2292,9 +2309,9 @@
     }
 
     function renderBalanzaComprobacion() {
-      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || DB_DEMO.catalogos[19] || [];
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
       const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
-      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || DB_DEMO.companias[0];
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || { id: '--', nombre: 'Sin Empresa Seleccionada', periodo: '08/2026' };
 
       let sumDeb = 0;
       let sumCre = 0;
@@ -2501,20 +2518,24 @@
       const sesiones = DB_DEMO.sesiones || [];
 
       let filas = '';
-      sesiones.forEach((s, idx) => {
-        filas += `
-          <tr>
-            <td><strong style="color:var(--cyan); font-family:var(--mono);">#${s.id || idx+1}</strong></td>
-            <td><strong>${s.usuario}</strong> ${s.usuario === 'Maldiroman777' ? '<span class="pill pill-cyan" style="font-size:9.5px; padding:1px 5px;">SUPER_ADMIN</span>' : '<span class="pill" style="font-size:9.5px; padding:1px 5px;">CONTADOR</span>'}</td>
-            <td><span style="font-size:13px;">💻 ${s.dispositivo}</span></td>
-            <td><span class="pill pill-green" style="font-size:11px; font-weight:700;">${s.veces} accesos</span></td>
-            <td style="font-family:var(--mono); color:var(--text-muted);">${s.ip}</td>
-            <td>📍 ${s.ubicacion}</td>
-            <td style="font-family:var(--mono);">${s.fecha}</td>
-            <td><span class="pill ${s.estado === 'ACTIVA' ? 'pill-green' : ''}" style="font-size:10px; padding:2px 6px;">${s.estado}</span></td>
-          </tr>
-        `;
-      });
+      if (sesiones.length === 0) {
+        filas = `<tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-muted);">Sin sesiones previas registradas. Terminal lista en 0.</td></tr>`;
+      } else {
+        sesiones.forEach((s, idx) => {
+          filas += `
+            <tr>
+              <td><strong style="color:var(--cyan); font-family:var(--mono);">#${s.id || idx+1}</strong></td>
+              <td><strong>${s.usuario}</strong> ${s.usuario === 'Maldiroman777' ? '<span class="pill pill-cyan" style="font-size:9.5px; padding:1px 5px;">SUPER_ADMIN</span>' : '<span class="pill" style="font-size:9.5px; padding:1px 5px;">CONTADOR</span>'}</td>
+              <td><span style="font-size:13px;">💻 ${s.dispositivo}</span></td>
+              <td><span class="pill pill-green" style="font-size:11px; font-weight:700;">${s.veces} accesos</span></td>
+              <td style="font-family:var(--mono); color:var(--text-muted);">${s.ip}</td>
+              <td>📍 ${s.ubicacion}</td>
+              <td style="font-family:var(--mono);">${s.fecha}</td>
+              <td><span class="pill ${s.estado === 'ACTIVA' ? 'pill-green' : ''}" style="font-size:10px; padding:2px 6px;">${s.estado}</span></td>
+            </tr>
+          `;
+        });
+      }
 
       area.innerHTML = `
         <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:15px;">📱 CONTROL Y AUDITORÍA DE DISPOSITIVOS E INICIOS DE SESIÓN</h3>
