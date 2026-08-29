@@ -675,6 +675,9 @@ function configurarLogin() {
     btn.disabled = true;
     btn.textContent = 'Verificando...';
 
+    try {
+      let autenticado = false;
+      let userData = null;
       const uLow = u.toLowerCase();
       const pass = p.trim();
 
