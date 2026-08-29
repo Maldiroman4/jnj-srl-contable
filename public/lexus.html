@@ -565,30 +565,102 @@
       box-shadow: 0 0 16px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
 
+    /* Cupertino Financial KPI Grid for Mobile & Desktop */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi-card {
+      background: rgba(10, 18, 34, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--apple-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), var(--apple-glass-shine);
+      transition: all .2s var(--apple-ease);
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--apple-border-cyan);
+    }
+    .kpi-card .kpi-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--apple-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .kpi-card .kpi-val {
+      font-size: 18px;
+      font-weight: 800;
+      font-family: var(--apple-mono);
+      letter-spacing: -0.02em;
+    }
+
+    /* iOS Modal Drawer Handle */
+    .drawer-handle {
+      width: 40px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 0 auto 14px auto;
+      display: none;
+    }
+
+    /* Table Scroll Hint */
+    .table-scroll-hint {
+      display: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--apple-cyan);
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      justify-content: flex-end;
+    }
+
     /* ==========================================================================
        MEDIA QUERIES PARA MÓVILES Y TABLETS (iOS HIG Touch)
        ========================================================================== */
     @media (max-width: 768px) {
       input[type="text"], input[type="password"], input[type="number"], select, textarea {
         font-size: 16px !important;
+        min-height: 48px;
+        border-radius: 14px;
       }
-      body { font-size: 13.5px; }
-      .ticker-bar { padding: 6px 12px; font-size: 10.5px; }
-      .lexus-app { padding: 12px 12px 80px 12px; }
-      .lexus-header { padding: 12px 14px; border-radius: 14px; gap: 10px; }
-      .lexus-title h1 { font-size: 17px; }
+      body {
+        font-size: 13.5px;
+        padding-top: env(safe-area-inset-top);
+      }
+      .drawer-handle { display: block; }
+      .table-scroll-hint { display: flex; }
+      .ticker-bar { padding: 6px 14px; font-size: 10.5px; }
+      .lexus-app { padding: 12px 12px 90px 12px; }
+      .lexus-header { padding: 14px; border-radius: 16px; gap: 12px; }
+      .lexus-title h1 { font-size: 18px; }
       .lexus-status-pills { width: 100%; justify-content: space-between; gap: 6px; }
-      .pill { padding: 5px 10px; font-size: 11.5px; }
-      .login-box { padding: 28px 20px; border-radius: 16px; }
-      .login-box h2 { font-size: 21px; }
+      .pill { padding: 6px 12px; font-size: 11.5px; min-height: 32px; }
+      .login-box { padding: 30px 22px; border-radius: 20px; }
+      .login-box h2 { font-size: 22px; }
       .menu-grid { grid-template-columns: 1fr; gap: 12px; }
-      .menu-card { padding: 16px; gap: 14px; border-radius: 14px; }
-      .menu-num { width: 40px; height: 40px; font-size: 18px; border-radius: 10px; }
-      .view-container { padding: 16px 14px; border-radius: 14px; }
+      .menu-card { padding: 16px 18px; gap: 14px; border-radius: 16px; }
+      .menu-num { width: 44px; height: 44px; font-size: 19px; border-radius: 12px; }
+      .view-container { padding: 18px 14px; border-radius: 16px; }
       .split-layout { grid-template-columns: 1fr; gap: 14px; }
-      .subpanel { padding: 14px; }
-      .btn { min-height: 46px; font-size: 13.5px; padding: 10px 16px; }
+      .subpanel { padding: 16px; border-radius: 14px; }
+      .btn { min-height: 48px; font-size: 14px; padding: 12px 18px; border-radius: 14px; }
       .lexus-mobile-nav { display: flex !important; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .kpi-card .kpi-val { font-size: 16px; }
     }
 
     /* iOS Cupertino Mobile Bottom Navigation Bar */
@@ -598,16 +670,16 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 58px;
-      background: rgba(6, 12, 24, 0.88);
-      backdrop-filter: blur(28px) saturate(200%);
-      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      height: 64px;
+      background: rgba(6, 12, 24, 0.92);
+      backdrop-filter: blur(32px) saturate(210%);
+      -webkit-backdrop-filter: blur(32px) saturate(210%);
       border-top: 1px solid var(--apple-border);
       z-index: 999;
       justify-content: space-around;
       align-items: center;
-      padding-bottom: env(safe-area-inset-bottom);
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
     }
     .mob-tab-btn {
       flex: 1;
@@ -620,23 +692,23 @@
       border: none;
       color: var(--apple-text-secondary);
       font-family: var(--apple-font);
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 600;
       cursor: pointer;
       padding: 6px 0;
       transition: all .2s var(--apple-ease);
       touch-action: manipulation;
     }
-    .mob-tab-btn span.icon { font-size: 18px; line-height: 1; }
+    .mob-tab-btn span.icon { font-size: 19px; line-height: 1; }
     .mob-tab-btn.activo, .mob-tab-btn:active {
       color: var(--apple-cyan);
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
 
     .hidden { display: none !important; }
     footer {
       text-align: center;
-      padding: 16px;
+      padding: 18px;
       font-size: 11.5px;
       color: var(--apple-text-tertiary);
       border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -826,6 +898,7 @@
 
             <!-- Banner cuando YA EXISTE -->
             <div id="box-compania-existe" class="banner banner-info hidden" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
+              <div class="drawer-handle"></div>
               <div style="font-weight:700; font-size:14px;">🏢 EMPRESA SELECCIONADA Y ACTIVADA</div>
               <div id="desc-compania-existe" style="font-size:13px; color:#ffffff;"></div>
               <button class="btn btn-sm" id="btn-ok-compania-existe" style="margin-top:6px;">
@@ -835,16 +908,18 @@
 
             <!-- Banner cuando NO EXISTE (Confirmación) -->
             <div id="box-compania-no-existe" class="banner banner-warn hidden" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
+              <div class="drawer-handle"></div>
               <div style="font-weight:700; font-size:14px;">⚠️ La empresa No. [<span id="lbl-num-no-existe"></span>] no existe en el sistema.</div>
               <p style="font-size:12.5px; color:#ffffff; margin:0;">¿Desea incluirla y aprovisionar su catálogo ahora?</p>
-              <div style="display:flex; gap:8px; margin-top:4px;">
-                <button class="btn btn-sm" id="btn-confirmar-incluir-lexus">Sí, Incluir Empresa</button>
-                <button class="btn btn-secondary btn-sm" id="btn-cancelar-incluir-lexus">No, Volver</button>
+              <div style="display:flex; gap:8px; margin-top:4px; width:100%;">
+                <button class="btn btn-sm" id="btn-confirmar-incluir-lexus" style="flex:1;">Sí, Incluir Empresa</button>
+                <button class="btn btn-secondary btn-sm" id="btn-cancelar-incluir-lexus" style="flex:1;">No, Volver</button>
               </div>
             </div>
 
             <!-- Formulario cuando es NUEVA -->
             <div id="form-nueva-compania" class="hidden">
+              <div class="drawer-handle"></div>
               <div class="banner banner-info" style="margin-bottom:12px;">
                 ✨ Aprovisionamiento de Nueva Empresa No. <strong id="lbl-nueva-comp-id" style="color:#ffffff;"></strong>
               </div>
@@ -909,6 +984,7 @@
           <!-- LADO DERECHO: PANTALLAZO DE COMPAÑÍAS EXISTENTES -->
           <div class="subpanel">
             <h4>Compañías Existentes en la Nube</h4>
+            <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
             <div class="table-box">
               <table id="tabla-companias">
                 <thead>
@@ -2127,88 +2203,112 @@
 
       const area = document.getElementById('reporte-render-area');
       area.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--apple-border); padding-bottom:12px; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:16px;">📊 BALANCE GENERAL CLASIFICADO</h3>
-            <p style="font-size:12px; color:var(--text-muted);">
+            <h3 style="color:var(--apple-cyan); font-family:var(--apple-mono); margin-bottom:4px; font-size:16px; letter-spacing:-0.02em;">📊 BALANCE GENERAL CLASIFICADO</h3>
+            <p style="font-size:12px; color:var(--apple-text-secondary);">
               Compañía: <strong style="color:#ffffff;">${comp.id} - ${comp.nombre}</strong> · Período: <strong>${comp.periodo}</strong> · Moneda: Colones (₡)
             </p>
           </div>
           <span class="pill pill-green">PARTIDA DOBLE CUADRADA</span>
         </div>
 
-        <table>
-          <thead>
-            <tr><th>Código</th><th>Descripción de la Cuenta</th><th class="num">Monto Parcial</th><th class="num">Total Grupo</th></tr>
-          </thead>
-          <tbody>
-            <!-- ACTIVOS -->
-            <tr style="background:#091322; font-weight:800; color:var(--cyan);">
-              <td>100-00-000</td>
-              <td>1. ACTIVOS TOTALES</td>
-              <td></td>
-              <td class="num font-bold" style="font-size:15px; color:var(--cyan);">${fmtM(k.totActivos)}</td>
-            </tr>
-            ${k.cuentasActivos.map(c => `
-              <tr>
-                <td style="font-family:var(--mono); color:var(--text-muted); padding-left:20px;">${c.codigo}</td>
-                <td>${c.desc}</td>
-                <td class="num">${fmtM(c.act)}</td>
+        <!-- Cupertino Financial KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">🏛️ Activos Totales</span>
+            <span class="kpi-val" style="color:var(--apple-cyan);">${fmtM(k.totActivos)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">💳 Pasivos Totales</span>
+            <span class="kpi-val" style="color:var(--apple-coral);">${fmtM(k.totPasivos)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">🏢 Patrimonio Neto</span>
+            <span class="kpi-val" style="color:var(--apple-indigo);">${fmtM(k.totPatrimonio)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">💎 Utilidad / Pérdida</span>
+            <span class="kpi-val" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</span>
+          </div>
+        </div>
+
+        <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Descripción de la Cuenta</th><th class="num">Monto Parcial</th><th class="num">Total Grupo</th></tr>
+            </thead>
+            <tbody>
+              <!-- ACTIVOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-cyan);">
+                <td>100-00-000</td>
+                <td>1. ACTIVOS TOTALES</td>
                 <td></td>
+                <td class="num font-bold" style="font-size:15px; color:var(--apple-cyan);">${fmtM(k.totActivos)}</td>
               </tr>
-            `).join('')}
+              ${k.cuentasActivos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
 
-            <!-- PASIVOS -->
-            <tr style="background:#091322; font-weight:800; color:var(--cyan);">
-              <td>200-00-000</td>
-              <td>2. PASIVOS TOTALES</td>
-              <td></td>
-              <td class="num font-bold" style="font-size:15px;">${fmtM(k.totPasivos)}</td>
-            </tr>
-            ${k.cuentasPasivos.map(c => `
-              <tr>
-                <td style="font-family:var(--mono); color:var(--text-muted); padding-left:20px;">${c.codigo}</td>
-                <td>${c.desc}</td>
-                <td class="num">${fmtM(c.act)}</td>
+              <!-- PASIVOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-cyan);">
+                <td>200-00-000</td>
+                <td>2. PASIVOS TOTALES</td>
                 <td></td>
+                <td class="num font-bold" style="font-size:15px;">${fmtM(k.totPasivos)}</td>
               </tr>
-            `).join('')}
+              ${k.cuentasPasivos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
 
-            <!-- PATRIMONIO -->
-            <tr style="background:#091322; font-weight:800; color:var(--cyan);">
-              <td>300-00-000</td>
-              <td>3. PATRIMONIO NETO</td>
-              <td></td>
-              <td class="num font-bold" style="font-size:15px;">${fmtM(k.totPatrimonio)}</td>
-            </tr>
-            ${k.cuentasPatrimonio.map(c => `
-              <tr>
-                <td style="font-family:var(--mono); color:var(--text-muted); padding-left:20px;">${c.codigo}</td>
-                <td>${c.desc}</td>
-                <td class="num">${fmtM(c.act)}</td>
+              <!-- PATRIMONIO -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-cyan);">
+                <td>300-00-000</td>
+                <td>3. PATRIMONIO NETO</td>
                 <td></td>
+                <td class="num font-bold" style="font-size:15px;">${fmtM(k.totPatrimonio)}</td>
               </tr>
-            `).join('')}
+              ${k.cuentasPatrimonio.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
 
-            <!-- CUENTA DE CONTROL 999-000000 -->
-            <tr class="tr-special" style="font-size:13.5px;">
-              <td style="font-family:var(--mono);"><strong>999-000000</strong></td>
-              <td><strong>*** UTILIDAD / (PÉRDIDA) DEL PERÍODO (INGRESOS - GASTOS) ***</strong></td>
-              <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? '#10b981' : '#ef4444'};">${fmtM(k.utilidadPeriodo)}</td>
-              <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? '#10b981' : '#ef4444'};">${fmtM(k.utilidadPeriodo)}</td>
-            </tr>
+              <!-- CUENTA DE CONTROL 999-000000 -->
+              <tr class="tr-special" style="font-size:13.5px;">
+                <td style="font-family:var(--apple-mono);"><strong>999-000000</strong></td>
+                <td><strong>*** UTILIDAD / (PÉRDIDA) DEL PERÍODO (INGRESOS - GASTOS) ***</strong></td>
+                <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</td>
+                <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</td>
+              </tr>
 
-            <!-- TOTAL PASIVO + PATRIMONIO -->
-            <tr style="background:#0a192f; font-weight:800; color:var(--cyan); border-top:2px solid var(--cyan); font-size:15px;">
-              <td colspan="3">TOTAL PASIVO + PATRIMONIO + UTILIDAD DEL PERÍODO</td>
-              <td class="num font-bold">${fmtM(k.totPasivos + k.totPatrimonio + k.utilidadPeriodo)}</td>
-            </tr>
-          </tbody>
-        </table>
+              <!-- TOTAL PASIVO + PATRIMONIO -->
+              <tr style="background:rgba(10, 25, 47, 0.95); font-weight:800; color:var(--apple-cyan); border-top:2px solid var(--apple-cyan); font-size:15px;">
+                <td colspan="3">TOTAL PASIVO + PATRIMONIO + UTILIDAD DEL PERÍODO</td>
+                <td class="num font-bold">${fmtM(k.totPasivos + k.totPatrimonio + k.utilidadPeriodo)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-        <div style="margin-top:14px; font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-          <span>Estado del Balance: <strong style="color:var(--ok);">✓ CUADRADO EXACTO</strong></span>
-          <span>Diferencia Activo - (Pasivo + Patrimonio): <strong style="color:var(--ok);">₡0.00</strong></span>
+        <div style="margin-top:14px; font-size:12px; color:var(--apple-text-secondary); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span>Estado del Balance: <strong style="color:var(--apple-mint);">✓ CUADRADO EXACTO</strong></span>
+          <span>Diferencia Activo - (Pasivo + Patrimonio): <strong style="color:var(--apple-mint);">₡0.00</strong></span>
         </div>
       `;
     }
@@ -2221,88 +2321,112 @@
 
       const area = document.getElementById('reporte-render-area');
       area.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--apple-border); padding-bottom:12px; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:16px;">📈 ESTADO DE RESULTADOS INTEGRAL</h3>
-            <p style="font-size:12px; color:var(--text-muted);">
+            <h3 style="color:var(--apple-cyan); font-family:var(--apple-mono); margin-bottom:4px; font-size:16px; letter-spacing:-0.02em;">📈 ESTADO DE RESULTADOS INTEGRAL</h3>
+            <p style="font-size:12px; color:var(--apple-text-secondary);">
               Compañía: <strong style="color:#ffffff;">${comp.id} - ${comp.nombre}</strong> · Período: <strong>${comp.periodo}</strong> · Moneda: Colones (₡)
             </p>
           </div>
           <span class="pill pill-green">PERÍODO ACTIVO</span>
         </div>
 
-        <table>
-          <thead>
-            <tr><th>Código</th><th>Descripción del Rubro</th><th class="num">Monto Parcial</th><th class="num">Total Rubro</th></tr>
-          </thead>
-          <tbody>
-            <!-- INGRESOS -->
-            <tr style="background:#091322; font-weight:800; color:var(--ok);">
-              <td>400-00-000</td>
-              <td>1. INGRESOS OPERACIONALES POR VENTAS</td>
-              <td></td>
-              <td class="num font-bold" style="font-size:15px; color:var(--ok);">${fmtM(k.totIngresos)}</td>
-            </tr>
-            ${k.cuentasIngresos.map(c => `
-              <tr>
-                <td style="font-family:var(--mono); color:var(--text-muted); padding-left:20px;">${c.codigo}</td>
-                <td>${c.desc}</td>
-                <td class="num">${fmtM(c.act)}</td>
+        <!-- Cupertino Financial KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">💰 Ventas Totales</span>
+            <span class="kpi-val" style="color:var(--apple-mint);">${fmtM(k.totIngresos)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📦 Costo de Ventas</span>
+            <span class="kpi-val" style="color:var(--apple-coral);">(${fmtM(k.totCostos)})</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📉 Gastos Operativos</span>
+            <span class="kpi-val" style="color:var(--apple-amber);">(${fmtM(k.totGastos)})</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">💎 Utilidad Neta</span>
+            <span class="kpi-val" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</span>
+          </div>
+        </div>
+
+        <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Descripción del Rubro</th><th class="num">Monto Parcial</th><th class="num">Total Rubro</th></tr>
+            </thead>
+            <tbody>
+              <!-- INGRESOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-mint);">
+                <td>400-00-000</td>
+                <td>1. INGRESOS OPERACIONALES POR VENTAS</td>
                 <td></td>
+                <td class="num font-bold" style="font-size:15px; color:var(--apple-mint);">${fmtM(k.totIngresos)}</td>
               </tr>
-            `).join('')}
+              ${k.cuentasIngresos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
 
-            <!-- COSTOS -->
-            <tr style="background:#091322; font-weight:800; color:#f87171;">
-              <td>500-00-000</td>
-              <td>2. (-) COSTO DE VENTAS Y MERCADERÍAS</td>
-              <td></td>
-              <td class="num font-bold" style="color:var(--danger);">(${fmtM(k.totCostos)})</td>
-            </tr>
-            ${k.cuentasCostos.map(c => `
-              <tr>
-                <td style="font-family:var(--mono); color:var(--text-muted); padding-left:20px;">${c.codigo}</td>
-                <td>${c.desc}</td>
-                <td class="num" style="color:var(--danger);">(${fmtM(c.act)})</td>
+              <!-- COSTOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:#f87171;">
+                <td>500-00-000</td>
+                <td>2. (-) COSTO DE VENTAS Y MERCADERÍAS</td>
                 <td></td>
+                <td class="num font-bold" style="color:var(--apple-coral);">(${fmtM(k.totCostos)})</td>
               </tr>
-            `).join('')}
+              ${k.cuentasCostos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num" style="color:var(--apple-coral);">(${fmtM(c.act)})</td>
+                  <td></td>
+                </tr>
+              `).join('')}
 
-            <!-- UTILIDAD BRUTA -->
-            <tr style="background:#0c1a2e; font-weight:800; border-top:1px solid var(--border); font-size:14px;">
-              <td colspan="2">(=) UTILIDAD BRUTA EN VENTAS</td>
-              <td></td>
-              <td class="num font-bold" style="color:var(--cyan);">${fmtM(utilidadBruta)}</td>
-            </tr>
-
-            <!-- GASTOS OPERATIVOS -->
-            <tr style="background:#091322; font-weight:800; color:#f87171;">
-              <td>600-00-000</td>
-              <td>3. (-) GASTOS ADMINISTRATIVOS Y OPERATIVOS</td>
-              <td></td>
-              <td class="num font-bold" style="color:var(--danger);">(${fmtM(k.totGastos)})</td>
-            </tr>
-            ${k.cuentasGastos.map(c => `
-              <tr>
-                <td style="font-family:var(--mono); color:var(--text-muted); padding-left:20px;">${c.codigo}</td>
-                <td>${c.desc}</td>
-                <td class="num" style="color:var(--danger);">(${fmtM(c.act)})</td>
+              <!-- UTILIDAD BRUTA -->
+              <tr style="background:rgba(12, 26, 46, 0.9); font-weight:800; border-top:1px solid var(--apple-border); font-size:14px;">
+                <td colspan="2">(=) UTILIDAD BRUTA EN VENTAS</td>
                 <td></td>
+                <td class="num font-bold" style="color:var(--apple-cyan);">${fmtM(utilidadBruta)}</td>
               </tr>
-            `).join('')}
 
-            <!-- UTILIDAD NETA FINAL -->
-            <tr class="tr-special" style="font-size:16px; border-top:2px solid var(--ok);">
-              <td style="font-family:var(--mono);"><strong>999-000000</strong></td>
-              <td><strong>(=) UTILIDAD / (PÉRDIDA) NETA DEL EJERCICIO</strong></td>
-              <td></td>
-              <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? '#10b981' : '#ef4444'}; font-size:16px;">${fmtM(k.utilidadPeriodo)}</td>
-            </tr>
-          </tbody>
-        </table>
+              <!-- GASTOS OPERATIVOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:#f87171;">
+                <td>600-00-000</td>
+                <td>3. (-) GASTOS ADMINISTRATIVOS Y OPERATIVOS</td>
+                <td></td>
+                <td class="num font-bold" style="color:var(--apple-coral);">(${fmtM(k.totGastos)})</td>
+              </tr>
+              ${k.cuentasGastos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num" style="color:var(--apple-coral);">(${fmtM(c.act)})</td>
+                  <td></td>
+                </tr>
+              `).join('')}
 
-        <div style="margin-top:14px; font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-          <span>Cierre de Resultados: <strong style="color:var(--ok);">Trasladado a cuenta 999-000000</strong></span>
+              <!-- UTILIDAD NETA FINAL -->
+              <tr class="tr-special" style="font-size:16px; border-top:2px solid var(--apple-mint);">
+                <td style="font-family:var(--apple-mono);"><strong>999-000000</strong></td>
+                <td><strong>(=) UTILIDAD / (PÉRDIDA) NETA DEL EJERCICIO</strong></td>
+                <td></td>
+                <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'}; font-size:16px;">${fmtM(k.utilidadPeriodo)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px; font-size:12px; color:var(--apple-text-secondary); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span>Cierre de Resultados: <strong style="color:var(--apple-mint);">Trasladado a cuenta 999-000000</strong></span>
           <span>Margen Operativo Neto: <strong>${k.totIngresos > 0 ? ((k.utilidadPeriodo / k.totIngresos) * 100).toFixed(2) + '%' : '0.00%'}</strong></span>
         </div>
       `;
@@ -2339,33 +2463,57 @@
 
       const area = document.getElementById('reporte-render-area');
       area.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--apple-border); padding-bottom:12px; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:16px;">📋 BALANZA DE COMPROBACIÓN (SUMAS Y SALDOS)</h3>
-            <p style="font-size:12px; color:var(--text-muted);">
+            <h3 style="color:var(--apple-cyan); font-family:var(--apple-mono); margin-bottom:4px; font-size:16px; letter-spacing:-0.02em;">📋 BALANZA DE COMPROBACIÓN (SUMAS Y SALDOS)</h3>
+            <p style="font-size:12px; color:var(--apple-text-secondary);">
               Compañía: <strong style="color:#ffffff;">${comp.id} - ${comp.nombre}</strong> · Período: <strong>${comp.periodo}</strong> · Moneda: Colones (₡)
             </p>
           </div>
           <span class="pill pill-green">BALANCE CUADRADO</span>
         </div>
 
-        <table>
-          <thead>
-            <tr><th>Código</th><th>Descripción de la Cuenta</th><th>Clase</th><th class="num">Saldo Débito</th><th class="num">Saldo Crédito</th></tr>
-          </thead>
-          <tbody>
-            ${filasHTML}
-            <tr style="background:#0a192f; font-weight:800; color:var(--cyan); border-top:2px solid var(--cyan); font-size:15px;">
-              <td colspan="3">TOTALES GENERALES DE COMPROBACIÓN</td>
-              <td class="num font-bold" style="color:var(--cyan);">${fmtM(sumDeb)}</td>
-              <td class="num font-bold" style="color:var(--cyan);">${fmtM(sumCre)}</td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Cupertino Financial KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">📥 Total Débitos</span>
+            <span class="kpi-val" style="color:var(--apple-cyan);">${fmtM(sumDeb)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📤 Total Créditos</span>
+            <span class="kpi-val" style="color:var(--apple-cyan);">${fmtM(sumCre)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">⚖️ Descuadre</span>
+            <span class="kpi-val" style="color:var(--apple-mint);">${fmtM(Math.abs(sumDeb - sumCre))}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📂 Cuentas Totales</span>
+            <span class="kpi-val" style="color:var(--apple-indigo);">${cat.length} ctas</span>
+          </div>
+        </div>
 
-        <div style="margin-top:14px; font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-          <span>Estado de Balanza: <strong style="color:var(--ok);">✓ DÉBITOS = CRÉDITOS (BALANCEADO)</strong></span>
-          <span>Diferencia de Cierre: <strong style="color:var(--ok);">₡0.00</strong></span>
+        <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Descripción de la Cuenta</th><th>Clase</th><th class="num">Saldo Débito</th><th class="num">Saldo Crédito</th></tr>
+            </thead>
+            <tbody>
+              ${filasHTML || '<tr><td colspan="5" style="text-align:center; padding:24px; color:var(--apple-text-secondary);">No hay cuentas con saldos en este período.</td></tr>'}
+              <tr style="background:rgba(10, 25, 47, 0.95); font-weight:800; color:var(--apple-cyan); border-top:2px solid var(--apple-cyan); font-size:15px;">
+                <td colspan="3">TOTALES GENERALES DE COMPROBACIÓN</td>
+                <td class="num font-bold" style="color:var(--apple-cyan);">${fmtM(sumDeb)}</td>
+                <td class="num font-bold" style="color:var(--apple-cyan);">${fmtM(sumCre)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px; font-size:12px; color:var(--apple-text-secondary); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span>Estado de Balanza: <strong style="color:var(--apple-mint);">✓ DÉBITOS = CRÉDITOS (BALANCEADO)</strong></span>
+          <span>Diferencia de Cierre: <strong style="color:var(--apple-mint);">₡0.00</strong></span>
         </div>
       `;
     }
