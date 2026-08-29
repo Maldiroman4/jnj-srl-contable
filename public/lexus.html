@@ -419,7 +419,7 @@
     }
 
     /* ==========================================================================
-       MAIN 7 SQUIRCLE MENU GRID (APPLE GRID SYSTEM)
+       MAIN 7 SQUIRCLE MENU GRID WITH COLORFUL MINIMALIST ICONS (APPLE STYLE)
        ========================================================================== */
     .menu-grid {
       display: grid;
@@ -433,7 +433,7 @@
       -webkit-backdrop-filter: blur(28px) saturate(190%);
       border: 1px solid var(--apple-border);
       border-radius: 16px;
-      padding: 18px 18px;
+      padding: 16px 18px;
       cursor: pointer;
       transition: all .25s var(--apple-ease);
       display: flex;
@@ -449,25 +449,64 @@
       transform: translateY(-3px);
       border-color: var(--apple-border-cyan);
       background: var(--apple-surface-hover);
-      box-shadow: var(--apple-shadow-md), 0 0 20px var(--apple-cyan-glow);
+      box-shadow: var(--apple-shadow-md), 0 0 22px var(--apple-cyan-glow);
     }
     .menu-card:active {
       transform: scale(0.98);
     }
-    .menu-num {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.1) 100%);
-      border: 1px solid var(--apple-cyan);
-      border-radius: 12px;
+
+    /* Colorful Minimalist Modern App Icon Badges */
+    .menu-icon-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
       display: grid;
       place-items: center;
-      font-size: 19px;
-      font-weight: 800;
-      font-family: var(--apple-mono);
-      color: var(--apple-cyan);
       flex-shrink: 0;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      position: relative;
+      transition: transform .2s var(--apple-ease);
+    }
+    .menu-card:hover .menu-icon-badge {
+      transform: scale(1.08);
+    }
+    .menu-icon-badge svg {
+      width: 23px;
+      height: 23px;
+      stroke: #ffffff;
+      stroke-width: 2.2;
+      fill: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    .menu-badge-1 { background: linear-gradient(135deg, #007AFF 0%, #00C7FF 100%); box-shadow: 0 6px 18px rgba(0, 122, 255, 0.45); }
+    .menu-badge-2 { background: linear-gradient(135deg, #FF9500 0%, #FFCC00 100%); box-shadow: 0 6px 18px rgba(255, 149, 0, 0.45); }
+    .menu-badge-3 { background: linear-gradient(135deg, #34C759 0%, #30D158 100%); box-shadow: 0 6px 18px rgba(52, 199, 89, 0.45); }
+    .menu-badge-4 { background: linear-gradient(135deg, #5856D6 0%, #AF52DE 100%); box-shadow: 0 6px 18px rgba(175, 82, 222, 0.45); }
+    .menu-badge-5 { background: linear-gradient(135deg, #FF2D55 0%, #FF375F 100%); box-shadow: 0 6px 18px rgba(255, 45, 85, 0.45); }
+    .menu-badge-6 { background: linear-gradient(135deg, #30B0C7 0%, #38BDF8 100%); box-shadow: 0 6px 18px rgba(56, 189, 248, 0.45); }
+    .menu-badge-7 { background: linear-gradient(135deg, #FF453A 0%, #D70015 100%); box-shadow: 0 6px 18px rgba(255, 69, 58, 0.45); }
+
+    .menu-key-pill {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(10, 16, 28, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #FFFFFF;
+      font-family: var(--apple-mono);
+      font-size: 10px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
+    .menu-info {
+      flex: 1;
+      min-width: 0;
     }
     .menu-info h3 {
       font-size: 15.5px;
@@ -475,11 +514,73 @@
       letter-spacing: -0.015em;
       color: #FFFFFF;
       margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .menu-info p {
       font-size: 12px;
       color: var(--apple-text-secondary);
       line-height: 1.35;
+    }
+
+    /* ==========================================================================
+       APPLE FROSTED GLASS BLUR BACKDROP MODAL (COMPANY VERIFICATION)
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn .3s var(--apple-ease);
+    }
+    .modal-card {
+      background: linear-gradient(145deg, rgba(16, 25, 46, 0.97) 0%, rgba(10, 18, 36, 0.95) 100%);
+      border: 1px solid var(--apple-border-cyan);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 480px;
+      padding: 28px 24px;
+      box-shadow: var(--apple-shadow-lg), 0 0 36px rgba(56, 189, 248, 0.25), var(--apple-glass-shine);
+      position: relative;
+      animation: modalPop .35s var(--apple-ease);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.93) translateY(16px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-cia-card {
+      background: rgba(12, 20, 36, 0.85);
+      border: 1px solid var(--apple-border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all .2s var(--apple-ease);
+      box-sizing: border-box;
+    }
+    .modal-cia-card:hover {
+      border-color: var(--apple-cyan);
+      background: rgba(20, 34, 60, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.2);
+    }
+    .modal-cia-card.active-cia {
+      border-color: var(--apple-cyan);
+      background: rgba(2, 132, 199, 0.22);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
     }
 
     /* ==========================================================================
@@ -928,7 +1029,10 @@
         <div class="menu-grid">
           
           <div class="menu-card" data-ir="companias">
-            <div class="menu-num">1</div>
+            <div class="menu-icon-badge menu-badge-1">
+              <svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path><path d="M14 8h1"></path><path d="M14 12h1"></path><path d="M14 16h1"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+              <span class="menu-key-pill">1</span>
+            </div>
             <div class="menu-info">
               <h3>Compañías</h3>
               <p>Inclusión, consulta, selección de empresas y catálogo inicial.</p>
@@ -936,7 +1040,10 @@
           </div>
 
           <div class="menu-card" data-ir="catalogo">
-            <div class="menu-num">2</div>
+            <div class="menu-icon-badge menu-badge-2">
+              <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+              <span class="menu-key-pill">2</span>
+            </div>
             <div class="menu-info">
               <h3>Catálogo de Cuentas</h3>
               <p>Estructura de cuentas, descripciones y cuenta de resultados.</p>
@@ -944,7 +1051,10 @@
           </div>
 
           <div class="menu-card" data-ir="documentos">
-            <div class="menu-num">3</div>
+            <div class="menu-icon-badge menu-badge-3">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span class="menu-key-pill">3</span>
+            </div>
             <div class="menu-info">
               <h3>Documentos (Asientos)</h3>
               <p>Registro de comprobantes de diario y balance cuadrado.</p>
@@ -952,7 +1062,10 @@
           </div>
 
           <div class="menu-card" data-ir="procesos">
-            <div class="menu-num">4</div>
+            <div class="menu-icon-badge menu-badge-4">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span class="menu-key-pill">4</span>
+            </div>
             <div class="menu-info">
               <h3>Procesos Selectos</h3>
               <p>Mayorización en cascada del período y recálculo general.</p>
@@ -960,7 +1073,10 @@
           </div>
 
           <div class="menu-card" data-ir="reportes-mensuales">
-            <div class="menu-num">5</div>
+            <div class="menu-icon-badge menu-badge-5">
+              <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              <span class="menu-key-pill">5</span>
+            </div>
             <div class="menu-info">
               <h3>Reportes Mensuales</h3>
               <p>Balance General, Estado de Resultados y Balanza de Comprobación.</p>
@@ -968,7 +1084,10 @@
           </div>
 
           <div class="menu-card" data-ir="reportes-historicos">
-            <div class="menu-num">6</div>
+            <div class="menu-icon-badge menu-badge-6">
+              <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="9" y1="7" x2="16" y2="7"></line><line x1="9" y1="11" x2="14" y2="11"></line></svg>
+              <span class="menu-key-pill">6</span>
+            </div>
             <div class="menu-info">
               <h3>Reportes Históricos</h3>
               <p>Libro Mayor histórico, Libro Diario acumulado y auxiliares.</p>
@@ -976,13 +1095,59 @@
           </div>
 
           <div class="menu-card" data-ir="cierres">
-            <div class="menu-num">7</div>
+            <div class="menu-icon-badge menu-badge-7">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span class="menu-key-pill">7</span>
+            </div>
             <div class="menu-info">
               <h3>Cierres de Período</h3>
               <p>Cierre mensual automático y cierre fiscal definitivo.</p>
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- ==========================================================================
+           MODAL FROSTED GLASS: VERIFICACIÓN Y SELECCIÓN DE EMPRESA
+           ========================================================================== -->
+      <div id="modal-seleccion-empresa" class="modal-overlay hidden">
+        <div class="modal-card">
+          <div class="drawer-handle"></div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+            <div class="menu-icon-badge menu-badge-1" style="width:42px; height:42px;">
+              <svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path><path d="M14 8h1"></path><path d="M14 12h1"></path><path d="M14 16h1"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+            </div>
+            <div>
+              <h3 style="font-size:16.5px; font-weight:700; color:#FFFFFF; margin:0; letter-spacing:-0.01em;">Verificación de Empresa</h3>
+              <p style="font-size:11.5px; color:var(--apple-text-secondary); margin:2px 0 0 0;">Seleccione la compañía activa para trabajar o incluya una nueva.</p>
+            </div>
+          </div>
+
+          <!-- LISTA DE EMPRESAS REGISTRADAS -->
+          <div id="modal-lista-companias" style="max-height:210px; overflow-y:auto; margin-bottom:14px;">
+            <!-- Tarjetas dinámicas de empresas -->
+          </div>
+
+          <!-- CAPTURA / INCLUSIÓN RÁPIDA -->
+          <div style="background:rgba(8, 14, 26, 0.7); border:1px solid var(--apple-border); border-radius:14px; padding:14px; margin-bottom:14px;">
+            <label style="font-size:11px; font-weight:700; color:var(--apple-cyan); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">
+              O Digite el Código de Empresa:
+            </label>
+            <div style="display:flex; gap:8px; align-items:stretch;">
+              <input type="text" id="modal-input-cia" placeholder="001" inputmode="numeric" maxlength="4" style="font-family:var(--apple-mono); font-size:18px; font-weight:800; text-align:center; width:95px; color:var(--apple-cyan); border-radius:12px;" autocomplete="off">
+              <button class="btn" id="modal-btn-confirmar-cia" style="flex:1;">
+                <span>Continuar ➔</span>
+              </button>
+            </div>
+            <small style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-top:6px;">
+              * Si la empresa no existe, se abrirá el módulo para aprovisionarla de inmediato.
+            </small>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary btn-sm" id="modal-btn-cerrar">Cerrar [ESC]</button>
+          </div>
         </div>
       </div>
 
@@ -1688,9 +1853,13 @@
         } else {
           DB_DEMO.usuarioActivo = 'Joel777';
           DB_DEMO.rolActivo = 'CONTADOR';
-          DB_DEMO.companiaActiva = 19;
+          if (DB_DEMO.companias.length > 0 && !DB_DEMO.companiaActiva) {
+            DB_DEMO.companiaActiva = DB_DEMO.companias[0].id;
+          }
           actualizarInfoCompania();
           mostrarVista('vista-menu');
+          // Desplegar modal de verificación de empresa de entrada con fondo desenfocado
+          abrirModalSeleccionEmpresa();
         }
       } else {
         DB_DEMO.intentosFallidos += 1;
@@ -1712,6 +1881,7 @@
 
     // Cerrar sesión
     document.getElementById('btn-cerrar-sesion').addEventListener('click', () => {
+      cerrarModalSeleccionEmpresa();
       document.getElementById('pantalla-sistema').classList.add('hidden');
       document.getElementById('lexus-mob-nav').classList.add('hidden');
       document.getElementById('pantalla-login').classList.remove('hidden');
@@ -1720,10 +1890,102 @@
 
     // Botón Cambiar Empresa en el Header
     document.getElementById('btn-cambiar-cia-lexus')?.addEventListener('click', () => {
-      mostrarVista('vista-companias');
-      renderTablaCompanias();
-      document.getElementById('input-num-compania')?.focus();
-      document.getElementById('input-num-compania')?.select();
+      abrirModalSeleccionEmpresa();
+    });
+
+    // =========================================================================
+    // MODAL FROSTED GLASS: VERIFICACIÓN Y SELECCIÓN DE EMPRESA
+    // =========================================================================
+    function abrirModalSeleccionEmpresa() {
+      const modal = document.getElementById('modal-seleccion-empresa');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      renderModalCompanias();
+      const inputCia = document.getElementById('modal-input-cia');
+      if (inputCia) {
+        inputCia.value = DB_DEMO.companiaActiva ? String(DB_DEMO.companiaActiva).padStart(3, '0') : '001';
+        setTimeout(() => { inputCia.focus(); inputCia.select(); }, 120);
+      }
+    }
+
+    function cerrarModalSeleccionEmpresa() {
+      const modal = document.getElementById('modal-seleccion-empresa');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function renderModalCompanias() {
+      const contenedor = document.getElementById('modal-lista-companias');
+      if (!contenedor) return;
+      contenedor.innerHTML = '';
+
+      if (DB_DEMO.companias.length === 0) {
+        contenedor.innerHTML = `
+          <div style="background:rgba(255, 255, 255, 0.04); border:1px dashed var(--apple-border); border-radius:14px; padding:18px; text-align:center; color:var(--apple-text-secondary); margin-bottom:12px;">
+            <div style="font-size:32px; margin-bottom:6px;">🏢</div>
+            <strong style="color:#ffffff; font-size:14px; display:block; margin-bottom:4px;">No hay compañías registradas</strong>
+            <span style="font-size:11.5px;">Ingrese el código de su primera empresa abajo (ej. <strong>001</strong>) para incluirla.</span>
+          </div>
+        `;
+      } else {
+        DB_DEMO.companias.forEach(c => {
+          const esActiva = (c.id === DB_DEMO.companiaActiva);
+          const card = document.createElement('div');
+          card.className = `modal-cia-card ${esActiva ? 'active-cia' : ''}`;
+          card.innerHTML = `
+            <div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <strong style="color:var(--apple-cyan); font-family:var(--apple-mono); font-size:14px;">${String(c.id).padStart(3, '0')}</strong>
+                <strong style="color:#ffffff; font-size:13px;">${c.nombre}</strong>
+                ${esActiva ? '<span class="pill pill-green" style="font-size:9px; padding:1px 6px;">ACTIVA</span>' : ''}
+              </div>
+              <div style="font-size:11px; color:var(--apple-text-secondary); font-family:var(--apple-mono); margin-top:2px;">
+                Céd: ${c.cedula || 'N/D'} · Período: ${c.periodo || '08/2026'}
+              </div>
+            </div>
+            <button class="btn btn-sm ${esActiva ? 'btn-secondary' : ''}" style="padding:4px 10px; font-size:11px;">
+              ${esActiva ? '✓ Seleccionada' : 'Seleccionar ➔'}
+            </button>
+          `;
+          card.addEventListener('click', () => {
+            DB_DEMO.companiaActiva = c.id;
+            actualizarInfoCompania();
+            cerrarModalSeleccionEmpresa();
+            mostrarVista('vista-menu');
+          });
+          contenedor.appendChild(card);
+        });
+      }
+    }
+
+    document.getElementById('modal-btn-confirmar-cia')?.addEventListener('click', () => {
+      const val = (document.getElementById('modal-input-cia')?.value || '').trim();
+      const num = parseInt(val, 10);
+      if (isNaN(num) || num <= 0) {
+        alert('Por favor digite un número válido de compañía (ej. 001).');
+        return;
+      }
+
+      const existe = DB_DEMO.companias.find(x => x.id === num);
+      if (existe) {
+        DB_DEMO.companiaActiva = existe.id;
+        actualizarInfoCompania();
+        cerrarModalSeleccionEmpresa();
+        mostrarVista('vista-menu');
+      } else {
+        cerrarModalSeleccionEmpresa();
+        mostrarVista('vista-companias');
+        document.getElementById('input-num-compania').value = String(num).padStart(3, '0');
+        document.getElementById('btn-consultar-compania').click();
+      }
+    });
+
+    document.getElementById('modal-btn-cerrar')?.addEventListener('click', cerrarModalSeleccionEmpresa);
+
+    document.getElementById('modal-input-cia')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('modal-btn-confirmar-cia')?.click();
+      }
     });
 
     // Botones del Menú Principal
@@ -1766,6 +2028,11 @@
       const isInput = ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName);
 
       if (e.key === 'Escape') {
+        const modal = document.getElementById('modal-seleccion-empresa');
+        if (modal && !modal.classList.contains('hidden')) {
+          cerrarModalSeleccionEmpresa();
+          return;
+        }
         mostrarVista('vista-menu');
         return;
       }
