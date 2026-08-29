@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: jnj-srl-contable
+    name: lexus-contable
     env: node
     plan: free
     buildCommand: npm install
