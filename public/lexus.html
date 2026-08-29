@@ -271,6 +271,9 @@
     /* ==========================================================================
        APPLE CUPERTINO LOGIN SCREEN & FUSED HERO CARD
        ========================================================================== */
+    /* ==========================================================================
+       APPLE CUPERTINO LOGIN SCREEN & FUSED HERO CARD (EXACT REPLICA)
+       ========================================================================== */
     .login-wrapper {
       flex: 1;
       display: grid;
@@ -285,63 +288,46 @@
     .login-box {
       width: 100%;
       max-width: 430px;
-      background: linear-gradient(180deg, rgba(14, 22, 38, 0.96) 0%, rgba(6, 11, 20, 0.98) 100%);
+      background: linear-gradient(180deg, #101624 0%, #101322 65%, #07223f 100%);
       backdrop-filter: blur(36px) saturate(210%);
       -webkit-backdrop-filter: blur(36px) saturate(210%);
-      border: 1px solid rgba(56, 189, 248, 0.22);
+      border: 1px solid rgba(56, 189, 248, 0.28);
       border-radius: 26px;
-      padding: 26px 28px 34px 28px;
-      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 45px rgba(2, 132, 199, 0.2), var(--apple-glass-shine);
+      padding: 0 28px 32px 28px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(2, 132, 199, 0.25), var(--apple-glass-shine);
       text-align: center;
       position: relative;
       overflow: hidden;
       box-sizing: border-box;
     }
-    .login-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 150px;
-      background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.28) 0%, rgba(0, 0, 0, 0) 70%);
-      pointer-events: none;
-    }
-    .login-logo-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: -6px auto 10px auto;
-      width: 100%;
+    .login-hero-circuit {
+      width: calc(100% + 56px);
+      margin: 0 -28px 4px -28px;
+      display: block;
       position: relative;
+      overflow: hidden;
     }
-    .logo-fused {
+    .login-hero-circuit img {
       width: 100%;
-      max-width: 320px;
       height: auto;
       display: block;
-      object-fit: contain;
-      background: transparent;
-      mix-blend-mode: screen;
-      -webkit-mask-image: radial-gradient(ellipse 90% 82% at 50% 50%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
-      mask-image: radial-gradient(ellipse 90% 82% at 50% 50%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
-      filter: drop-shadow(0 0 26px rgba(56, 189, 248, 0.65));
-      transition: all .3s var(--apple-ease);
+      object-fit: cover;
+      border-radius: 26px 26px 0 0;
+      transition: transform 0.3s ease;
     }
-    .logo-fused:hover {
-      transform: scale(1.025);
-      filter: drop-shadow(0 0 38px rgba(56, 189, 248, 0.9));
+    .login-hero-circuit img:hover {
+      transform: scale(1.015);
     }
     .login-box h2 {
       font-size: 24px;
       font-weight: 800;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
       color: #FFFFFF;
-      margin: 4px 0 2px 0;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      margin: 2px 0 2px 0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
     }
     .login-box p.sub {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--apple-text-secondary);
       margin-bottom: 22px;
       font-weight: 500;
@@ -1020,8 +1006,8 @@
          ========================================================================== -->
     <div id="pantalla-login" class="login-wrapper">
       <div class="login-box">
-        <div class="login-logo-container">
-          <img src="img/logo-lexus.jpg" alt="Logo Lexus" class="logo-fused">
+        <div class="login-hero-circuit">
+          <img src="img/lexus-circuit-fused.png" alt="Logo Lexus Fused">
         </div>
         <h2>LEXUS</h2>
         <p class="sub">Mi Sistema Contable Integrado · 30 Años de Experiencia</p>
