@@ -5,17 +5,48 @@
 
 const { db, tx } = require('../db');
 
-// Pilar 1: validar que exista la cuenta mayor al crear/editar una cuenta.
-// Plantilla de códigos: nivel1-level2-level3 -> ej. 110-01-001
+// Pilar 1: jerarquía estricta (no hijos huérfanos)
+// Plantilla de códigos:
+// Nivel 1 (Mayor / Madre):   ej. 105 o 105-00-000 -> nivel1='105', nivel2='00', nivel3='000'
+// Nivel 2 (Subcuenta / Hija): ej. 105-01 o 105-01-000 -> nivel1='105', nivel2='01', nivel3='000'
+// Nivel 3 (Auxiliar / Nieta): ej. 105-01-001 -> nivel1='105', nivel2='01', nivel3='001'
 function parseCodigo(codigo) {
   const limpio = String(codigo || '').replace(/[^0-9]/g, '');
-  if (limpio.length !== 8) return null;
-  return {
-    id_cuenta: limpio,
-    nivel1: limpio.slice(0, 3),
-    nivel2: limpio.slice(3, 5),
-    nivel3: limpio.slice(5, 8),
-  };
+  if (limpio.length === 3) {
+    return {
+      id_cuenta: limpio + '00000',
+      nivel1: limpio,
+      nivel2: '00',
+      nivel3: '000',
+      nivel: 1,
+      formato: `${limpio}-00-000`
+    };
+  }
+  if (limpio.length === 5) {
+    return {
+      id_cuenta: limpio + '000',
+      nivel1: limpio.slice(0, 3),
+      nivel2: limpio.slice(3, 5),
+      nivel3: '000',
+      nivel: 2,
+      formato: `${limpio.slice(0, 3)}-${limpio.slice(3, 5)}-000`
+    };
+  }
+  if (limpio.length === 8) {
+    const n1 = limpio.slice(0, 3);
+    const n2 = limpio.slice(3, 5);
+    const n3 = limpio.slice(5, 8);
+    const nivel = (n2 === '00' && n3 === '000') ? 1 : (n3 === '000' ? 2 : 3);
+    return {
+      id_cuenta: limpio,
+      nivel1: n1,
+      nivel2: n2,
+      nivel3: n3,
+      nivel,
+      formato: `${n1}-${n2}-${n3}`
+    };
+  }
+  return null;
 }
 
 function obtenerMayor(compania, nivel1) {
@@ -25,28 +56,69 @@ function obtenerMayor(compania, nivel1) {
   ).get(compania, nivel1);
 }
 
+function obtenerSubcuenta(compania, nivel1, nivel2) {
+  return db.prepare(
+    `SELECT * FROM catalogo_cuentas
+     WHERE id_compania = ? AND nivel1 = ? AND nivel2 = ? AND nivel3 = '000'`
+  ).get(compania, nivel1, nivel2);
+}
+
 function esMayor(nivel2, nivel3) {
   return nivel2 === '00' && nivel3 === '000';
 }
 
-// Pilar 2: clase SOLO se define en la cuenta mayor.
-// El parámetro claseCuentaId se ignora si la cuenta no es mayor y se toma del padre.
+// Pilar 1 & 2: Validación jerárquica estricta y herencia de rubro/clase
 function claseValidaPara({ id_compania, codigo, claseCuentaId }) {
   const pars = parseCodigo(codigo);
-  if (!pars) return { ok: false, error: 'Código de cuenta inválido. Formato: XXX-XX-XXX' };
+  if (!pars) {
+    return {
+      ok: false,
+      error: 'Código de cuenta inválido. Formato requerido: XXX, XXX-XX o XXX-XX-XXX (ej. 105, 105-01, 105-01-001).'
+    };
+  }
 
-  if (esMayor(pars.nivel2, pars.nivel3)) {
+  // Nivel 1: Cuenta Mayor / Madre
+  if (pars.nivel === 1) {
     if (claseCuentaId == null) {
       return { ok: false, error: 'Debe indicar la clase de cuenta para la cuenta mayor.' };
     }
     return { ok: true, pars, clase: claseCuentaId };
   }
 
-  const mayor = obtenerMayor(id_compania, pars.nivel1);
-  if (!mayor) {
-    return { ok: false, error: 'NO Posee Cuenta Mayor ... Presione Una Tecla' };
+  // Nivel 2: Subcuenta / Hija -> DEBE existir previamente el Nivel 1 (Mayor)
+  if (pars.nivel === 2) {
+    const mayor = obtenerMayor(id_compania, pars.nivel1);
+    if (!mayor) {
+      return {
+        ok: false,
+        error: `No se puede crear la subcuenta ${pars.nivel1}-${pars.nivel2} porque la cuenta mayor padre ${pars.nivel1} no existe en el catálogo de esta empresa.`
+      };
+    }
+    return { ok: true, pars, clase: mayor.clase_cuenta_id };
   }
-  return { ok: true, pars, clase: mayor.clase_cuenta_id };
+
+  // Nivel 3: Cuenta Auxiliar / Nieta -> DEBE existir Nivel 1 y Nivel 2 (Subcuenta)
+  if (pars.nivel === 3) {
+    const mayor = obtenerMayor(id_compania, pars.nivel1);
+    if (!mayor) {
+      return {
+        ok: false,
+        error: `No se puede crear la cuenta auxiliar ${pars.nivel1}-${pars.nivel2}-${pars.nivel3} porque la cuenta mayor padre ${pars.nivel1} no existe en el catálogo de esta empresa.`
+      };
+    }
+
+    const subcuenta = obtenerSubcuenta(id_compania, pars.nivel1, pars.nivel2);
+    if (!subcuenta) {
+      return {
+        ok: false,
+        error: `No se puede crear la cuenta auxiliar ${pars.nivel1}-${pars.nivel2}-${pars.nivel3} porque la subcuenta padre ${pars.nivel1}-${pars.nivel2} no existe en el catálogo de esta empresa.`
+      };
+    }
+
+    return { ok: true, pars, clase: subcuenta.clase_cuenta_id };
+  }
+
+  return { ok: false, error: 'Estructura de niveles contables no admitida.' };
 }
 
 function cuentaTieneMovimiento(id_cuenta) {
@@ -151,6 +223,7 @@ module.exports = {
   parseCodigo,
   esMayor,
   obtenerMayor,
+  obtenerSubcuenta,
   claseValidaPara,
   marcarDesglose,
   propagarClase,

@@ -28,13 +28,15 @@ INSERT OR IGNORE INTO clases_cuenta (id_clase, nombre, tipo_rubro) VALUES
   (19, 'Cuentas de Orden',         'ORDEN');
 
 -- ============================================================
--- COMPAÑÍAS (Base limpia en 0)
+-- COMPAÑÍAS (Multi-empresa, períodos y lotes)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS companias (
   id_compania       INTEGER PRIMARY KEY,
   razon_social      TEXT    NOT NULL,
   cedula_juridica   TEXT,
-  mes_activo        INTEGER NOT NULL DEFAULT 8 CHECK (mes_activo BETWEEN 1 AND 12),
+  mes_inicio        INTEGER NOT NULL DEFAULT 1 CHECK (mes_inicio BETWEEN 1 AND 12),
+  anio_inicio       INTEGER NOT NULL DEFAULT 2026 CHECK (anio_inicio BETWEEN 1900 AND 2100),
+  mes_activo        INTEGER NOT NULL DEFAULT 1 CHECK (mes_activo BETWEEN 1 AND 12),
   ano_activo        INTEGER NOT NULL DEFAULT 2026
 );
 

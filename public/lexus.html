@@ -1354,6 +1354,31 @@
                 <input type="text" id="nueva-comp-cedula" placeholder="3-101-998877">
               </div>
 
+              <!-- CAMPOS OBLIGATORIOS: MES Y AÑO DE INICIO CONTABLE -->
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div class="form-group">
+                  <label>Mes de Inicio Fiscal *</label>
+                  <select id="nueva-comp-mes-inicio" required>
+                    <option value="1">01 - Enero</option>
+                    <option value="2">02 - Febrero</option>
+                    <option value="3">03 - Marzo</option>
+                    <option value="4">04 - Abril</option>
+                    <option value="5">05 - Mayo</option>
+                    <option value="6">06 - Junio</option>
+                    <option value="7">07 - Julio</option>
+                    <option value="8" selected>08 - Agosto</option>
+                    <option value="9">09 - Setiembre</option>
+                    <option value="10">10 - Octubre</option>
+                    <option value="11">11 - Noviembre</option>
+                    <option value="12">12 - Diciembre</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Año de Inicio Fiscal *</label>
+                  <input type="number" id="nueva-comp-anio-inicio" value="2026" min="1900" max="2100" placeholder="2026" required>
+                </div>
+              </div>
+
               <!-- LAS 3 OPCIONES DE CATÁLOGO PEDIDAS POR EL CLIENTE -->
               <div class="form-group">
                 <label>Desea la compañía:</label>
@@ -1412,7 +1437,8 @@
                     <th>No.</th>
                     <th>Razón Social</th>
                     <th>Cédula</th>
-                    <th>Período</th>
+                    <th>Inicio Fiscal</th>
+                    <th>Período Activo</th>
                     <th>Acción</th>
                   </tr>
                 </thead>
@@ -1840,22 +1866,57 @@
        JAVASCRIPT AUTOCONTENIDO TOTALMENTE OPERATIVO
        ========================================================================== -->
   <script>
-    // Catálogo Maestro Estándar de Referencia para Costa Rica (para cuando se elige Opción 3)
+    // Catálogo Maestro Estándar de Referencia para Costa Rica (Estructura Jerárquica Estricta de 3 Niveles)
     const CATALOGO_MAESTRO_BASE = [
-      { codigo: '100-00-000', desc: 'ACTIVO CORRIENTE', tipo: '1', ini: 0, act: 0 },
-      { codigo: '101-01-001', desc: 'Caja General', tipo: '1', ini: 0, act: 0 },
-      { codigo: '101-02-001', desc: 'Bancos Moneda Nacional', tipo: '1', ini: 0, act: 0 },
-      { codigo: '105-01-001', desc: 'Cuentas por Cobrar Clientes', tipo: '1', ini: 0, act: 0 },
-      { codigo: '110-01-001', desc: 'Inventario de Mercaderías', tipo: '1', ini: 0, act: 0 },
-      { codigo: '200-00-000', desc: 'PASIVO CORRIENTE', tipo: '2', ini: 0, act: 0 },
-      { codigo: '201-01-001', desc: 'Cuentas por Pagar Proveedores', tipo: '2', ini: 0, act: 0 },
-      { codigo: '205-01-001', desc: 'Impuestos por Pagar (IVA 13%)', tipo: '2', ini: 0, act: 0 },
-      { codigo: '300-00-000', desc: 'PATRIMONIO', tipo: '3', ini: 0, act: 0 },
-      { codigo: '301-01-001', desc: 'Capital Social', tipo: '3', ini: 0, act: 0 },
-      { codigo: '400-00-000', desc: 'INGRESOS POR VENTAS', tipo: '4', ini: 0, act: 0 },
-      { codigo: '500-00-000', desc: 'COSTO DE VENTAS', tipo: '5', ini: 0, act: 0 },
-      { codigo: '600-00-000', desc: 'GASTOS DE OPERACIÓN', tipo: '6', ini: 0, act: 0 },
-      { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 0, especial: true }
+      // ACTIVO
+      { codigo: '100-00-000', desc: 'ACTIVO CORRIENTE', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '101-00-000', desc: 'EFECTIVO Y EQUIVALENTES DE EFECTIVO', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '101-01-000', desc: 'Cajas', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '101-01-001', desc: 'Caja General', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      { codigo: '101-02-000', desc: 'Bancos e Instituciones Financieras', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '101-02-001', desc: 'Bancos Moneda Nacional (Colones)', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      { codigo: '105-00-000', desc: 'CUENTAS Y DOCUMENTOS POR COBRAR', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '105-01-000', desc: 'Clientes Locales', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '105-01-001', desc: 'Cuentas por Cobrar Clientes', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      { codigo: '110-00-000', desc: 'INVENTARIOS COMERCIALES', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '110-01-000', desc: 'Mercaderías para la Venta', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '110-01-001', desc: 'Inventario de Mercaderías', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      
+      // PASIVO
+      { codigo: '200-00-000', desc: 'PASIVO CORRIENTE', tipo: '2', ini: 0, act: 0, nivel: 1 },
+      { codigo: '201-00-000', desc: 'CUENTAS POR PAGAR COMERCIALES', tipo: '2', ini: 0, act: 0, nivel: 1 },
+      { codigo: '201-01-000', desc: 'Proveedores Nacionales', tipo: '2', ini: 0, act: 0, nivel: 2 },
+      { codigo: '201-01-001', desc: 'Cuentas por Pagar Proveedores', tipo: '2', ini: 0, act: 0, nivel: 3 },
+      { codigo: '205-00-000', desc: 'OBLIGACIONES TRIBUTARIAS', tipo: '2', ini: 0, act: 0, nivel: 1 },
+      { codigo: '205-01-000', desc: 'Impuesto al Valor Agregado', tipo: '2', ini: 0, act: 0, nivel: 2 },
+      { codigo: '205-01-001', desc: 'Impuestos por Pagar (IVA 13%)', tipo: '2', ini: 0, act: 0, nivel: 3 },
+
+      // PATRIMONIO
+      { codigo: '300-00-000', desc: 'PATRIMONIO NETO', tipo: '3', ini: 0, act: 0, nivel: 1 },
+      { codigo: '301-00-000', desc: 'CAPITAL SOCIAL', tipo: '3', ini: 0, act: 0, nivel: 1 },
+      { codigo: '301-01-000', desc: 'Capital Accionario', tipo: '3', ini: 0, act: 0, nivel: 2 },
+      { codigo: '301-01-001', desc: 'Capital Social Suscrito y Pagado', tipo: '3', ini: 0, act: 0, nivel: 3 },
+
+      // INGRESOS
+      { codigo: '400-00-000', desc: 'INGRESOS OPERACIONALES', tipo: '4', ini: 0, act: 0, nivel: 1 },
+      { codigo: '401-00-000', desc: 'VENTAS DE BIENES Y SERVICIOS', tipo: '4', ini: 0, act: 0, nivel: 1 },
+      { codigo: '401-01-000', desc: 'Ventas Gravadas', tipo: '4', ini: 0, act: 0, nivel: 2 },
+      { codigo: '401-01-001', desc: 'Ventas de Mercaderías al 13%', tipo: '4', ini: 0, act: 0, nivel: 3 },
+
+      // COSTOS
+      { codigo: '500-00-000', desc: 'COSTO DE VENTAS', tipo: '5', ini: 0, act: 0, nivel: 1 },
+      { codigo: '501-00-000', desc: 'COSTO DE MERCADERÍAS VENDIDAS', tipo: '5', ini: 0, act: 0, nivel: 1 },
+      { codigo: '501-01-000', desc: 'Costo Directo de Mercaderías', tipo: '5', ini: 0, act: 0, nivel: 2 },
+      { codigo: '501-01-001', desc: 'Costo de Ventas Mercaderías', tipo: '5', ini: 0, act: 0, nivel: 3 },
+
+      // GASTOS
+      { codigo: '600-00-000', desc: 'GASTOS DE OPERACIÓN', tipo: '6', ini: 0, act: 0, nivel: 1 },
+      { codigo: '601-00-000', desc: 'GASTOS DE ADMINISTRACIÓN', tipo: '6', ini: 0, act: 0, nivel: 1 },
+      { codigo: '601-01-000', desc: 'Remuneraciones y Salarios', tipo: '6', ini: 0, act: 0, nivel: 2 },
+      { codigo: '601-01-001', desc: 'Sueldos y Cargas Sociales', tipo: '6', ini: 0, act: 0, nivel: 3 },
+
+      // CUENTA TÉCNICA DE CONTROL INTERNO (OCULTA AL USUARIO FINAL)
+      { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 0, especial: true, nivel: 1 }
     ];
 
     // --- ESTADO Y MOTOR CONTABLE LIMPIO EN CERO ---
@@ -2224,7 +2285,7 @@
       if (DB_DEMO.companias.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" style="text-align:center; padding:36px 16px; color:var(--apple-text-secondary);">
+            <td colspan="6" style="text-align:center; padding:36px 16px; color:var(--apple-text-secondary);">
               <div style="font-size:36px; margin-bottom:8px;">🏢</div>
               <strong style="color:#ffffff; font-size:15px; display:block; margin-bottom:6px;">No hay compañías inscritas</strong>
               <p style="font-size:12px; color:var(--apple-text-secondary); max-width:280px; margin:0 auto; line-height:1.4;">
@@ -2238,11 +2299,16 @@
           const esActiva = (c.id === DB_DEMO.companiaActiva);
           const tr = document.createElement('tr');
           if (esActiva) tr.style.background = 'rgba(56, 189, 248, 0.12)';
+          const mIniStr = String(c.mes_inicio || c.mes || 1).padStart(2, '0');
+          const aIniStr = c.anio_inicio || c.ano || 2026;
+          const periodoStr = c.periodo || `${String(c.mes || 8).padStart(2, '0')}/${c.ano || 2026}`;
+
           tr.innerHTML = `
             <td><strong style="color:var(--apple-cyan); font-family:var(--apple-mono); font-size:14px;">${c.id}</strong></td>
             <td><strong>${c.nombre}</strong> ${esActiva ? '<span class="pill pill-green" style="font-size:10px; padding:2px 7px;">ACTIVA</span>' : ''}</td>
             <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary);">${c.cedula}</td>
-            <td style="font-family:var(--apple-mono);">${c.periodo}</td>
+            <td style="font-family:var(--apple-mono); color:var(--apple-cyan);">${mIniStr}/${aIniStr}</td>
+            <td style="font-family:var(--apple-mono);">${periodoStr}</td>
             <td>
               <button class="btn btn-secondary btn-sm btn-sel-comp" data-id="${c.id}" style="padding:4px 10px; font-size:11.5px;">
                 ${esActiva ? '✓ Activa' : 'Abrir Empresa'}
@@ -2300,7 +2366,7 @@
         DB_DEMO.companiaActiva = existe.id;
         actualizarInfoCompania();
         renderTablaCompanias();
-        descExiste.innerHTML = `<strong>${existe.id} - ${existe.nombre}</strong> (Cédula: ${existe.cedula} · Período: ${existe.periodo})`;
+        descExiste.innerHTML = `<strong>${existe.id} - ${existe.nombre}</strong> (Cédula: ${existe.cedula} · Inicio Fiscal: ${String(existe.mes_inicio||existe.mes).padStart(2,'0')}/${existe.anio_inicio||existe.ano} · Período: ${existe.periodo})`;
         document.getElementById('btn-ok-compania-existe').focus();
       } else {
         boxExiste.classList.add('hidden');
@@ -2331,6 +2397,8 @@
       document.getElementById('lbl-nueva-comp-id').textContent = numId;
       document.getElementById('nueva-comp-nombre').value = '';
       document.getElementById('nueva-comp-cedula').value = '';
+      document.getElementById('nueva-comp-mes-inicio').value = '1';
+      document.getElementById('nueva-comp-anio-inicio').value = '2026';
       document.getElementById('nueva-comp-nombre').focus();
     });
 
@@ -2353,19 +2421,39 @@
       const numId = parseInt(document.getElementById('lbl-nueva-comp-id').textContent, 10);
       const nombre = document.getElementById('nueva-comp-nombre').value.trim();
       const cedula = document.getElementById('nueva-comp-cedula').value.trim();
+      const mesInicio = parseInt(document.getElementById('nueva-comp-mes-inicio').value, 10);
+      const anioInicio = parseInt(document.getElementById('nueva-comp-anio-inicio').value, 10);
       const optCat = document.querySelector('input[name="opt-catalogo"]:checked').value;
 
       if (!nombre) {
         alert('Por favor digite la razón social de la compañía.');
         return;
       }
+      if (!mesInicio || isNaN(mesInicio) || mesInicio < 1 || mesInicio > 12) {
+        alert('Por favor seleccione un mes de inicio contable válido (1 a 12).');
+        return;
+      }
+      if (!anioInicio || isNaN(anioInicio) || anioInicio < 1900 || anioInicio > 2100) {
+        alert('Por favor digite un año de inicio contable válido (ej. 2026).');
+        return;
+      }
 
-      const nueva = { id: numId, nombre, cedula: cedula || '3-101-000000', periodo: '08/2026', mes: 8, ano: 2026 };
+      const periodoStr = `${String(mesInicio).padStart(2, '0')}/${anioInicio}`;
+      const nueva = {
+        id: numId,
+        nombre,
+        cedula: cedula || '3-101-000000',
+        mes_inicio: mesInicio,
+        anio_inicio: anioInicio,
+        mes: mesInicio,
+        ano: anioInicio,
+        periodo: periodoStr
+      };
       DB_DEMO.companias.push(nueva);
 
       if (optCat === '1') {
         DB_DEMO.catalogos[numId] = [
-          { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 0, especial: true }
+          { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 0, especial: true, nivel: 1 }
         ];
       } else if (optCat === '2') {
         const idOrigen = parseInt(document.getElementById('sel-comp-origen').value, 10);
@@ -2381,7 +2469,7 @@
 
       formNueva.classList.add('hidden');
       inputNumComp.value = '000';
-      alert(`✅ Empresa [${numId} - ${nombre}] creada y activada exitosamente.`);
+      alert(`✅ Empresa [${numId} - ${nombre}] aprovisionada exitosamente con inicio en ${periodoStr}.`);
       mostrarVista('vista-menu');
     });
 
@@ -2392,22 +2480,109 @@
     });
 
     // =========================================================================
-    // LÓGICA MÓDULO 2: CATÁLOGO DE CUENTAS
+    // LÓGICA MÓDULO 2: CATÁLOGO DE CUENTAS & JERARQUÍA ESTRICTA (NIVEL 1 -> 2 -> 3)
     // =========================================================================
+
+    // Función universal de máscara con guiones
+    function formatearCodigoContable(codigo) {
+      const limpio = String(codigo || '').replace(/[^0-9]/g, '');
+      if (limpio.length === 0) return '';
+      if (limpio.length <= 3) return limpio;
+      if (limpio.length <= 5) return `${limpio.slice(0, 3)}-${limpio.slice(3)}`;
+      return `${limpio.slice(0, 3)}-${limpio.slice(3, 5)}-${limpio.slice(5, 8)}`;
+    }
+
+    // Validación estricta de ancestros en catálogo
+    function validarJerarquiaFront(codigoRaw, catalogo) {
+      const limpio = String(codigoRaw || '').replace(/[^0-9]/g, '');
+      if (limpio.length !== 3 && limpio.length !== 5 && limpio.length !== 8) {
+        return {
+          ok: false,
+          error: 'Estructura de cuenta inválida. Debe tener 3 dígitos (Nivel 1 Mayor ej. 105), 5 dígitos (Nivel 2 Subcuenta ej. 105-01) u 8 dígitos (Nivel 3 Auxiliar ej. 105-01-001).'
+        };
+      }
+
+      const n1 = limpio.slice(0, 3);
+      const n2 = limpio.length >= 5 ? limpio.slice(3, 5) : '00';
+      const n3 = limpio.length === 8 ? limpio.slice(5, 8) : '000';
+
+      let nivel = 1;
+      if (limpio.length === 5 || (limpio.length === 8 && n2 !== '00' && n3 === '000')) {
+        nivel = 2;
+      } else if (limpio.length === 8 && n3 !== '000') {
+        nivel = 3;
+      }
+
+      const codigoFmt = (nivel === 1) ? `${n1}-00-000` : (nivel === 2 ? `${n1}-${n2}-000` : `${n1}-${n2}-${n3}`);
+
+      // Comprobar si ya existe
+      const yaExiste = catalogo.some(c => {
+        const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+        return cLimpio === limpio || c.codigo === codigoFmt || cLimpio === String(codigoFmt).replace(/[^0-9]/g, '');
+      });
+      if (yaExiste) {
+        return { ok: false, error: `La cuenta ${codigoFmt} ya existe en el catálogo de esta empresa.` };
+      }
+
+      // Regla Nivel 2: DEBE existir Nivel 1 (Mayor)
+      if (nivel === 2) {
+        const existeMayor = catalogo.some(c => {
+          const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+          return (cLimpio === n1 || cLimpio === `${n1}00000` || c.codigo === `${n1}-00-000`);
+        });
+        if (!existeMayor) {
+          return {
+            ok: false,
+            error: `No se puede crear la subcuenta ${n1}-${n2} porque la cuenta mayor padre ${n1} no existe en el catálogo de esta empresa.`
+          };
+        }
+      }
+
+      // Regla Nivel 3: DEBE existir Nivel 1 y Nivel 2 (Subcuenta)
+      if (nivel === 3) {
+        const existeMayor = catalogo.some(c => {
+          const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+          return (cLimpio === n1 || cLimpio === `${n1}00000` || c.codigo === `${n1}-00-000`);
+        });
+        if (!existeMayor) {
+          return {
+            ok: false,
+            error: `No se puede crear la cuenta auxiliar ${n1}-${n2}-${n3} porque la cuenta mayor padre ${n1} no existe en el catálogo de esta empresa.`
+          };
+        }
+
+        const existeSubcuenta = catalogo.some(c => {
+          const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+          return (cLimpio === `${n1}${n2}` || cLimpio === `${n1}${n2}000` || c.codigo === `${n1}-${n2}-000`);
+        });
+        if (!existeSubcuenta) {
+          return {
+            ok: false,
+            error: `No se puede crear la cuenta auxiliar ${n1}-${n2}-${n3} porque la subcuenta padre ${n1}-${n2} no existe en el catálogo de esta empresa.`
+          };
+        }
+      }
+
+      return { ok: true, codigoFmt, nivel, n1, n2, n3 };
+    }
+
     function renderTablaCatalogo() {
       const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
       const tbody = document.getElementById('tbody-catalogo');
       const filtro = (document.getElementById('buscar-catalogo')?.value || '').toLowerCase().trim();
       tbody.innerHTML = '';
 
-      document.getElementById('lbl-cat-total-cuentas').textContent = cat.length;
+      // Ocultar datos técnicos internos (como la cuenta 999) de la vista pública
+      const cuentasVisibles = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
 
-      if (cat.length === 0) {
+      document.getElementById('lbl-cat-total-cuentas').textContent = cuentasVisibles.length;
+
+      if (cuentasVisibles.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="6" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
               <div style="font-size:32px; margin-bottom:8px;">📂</div>
-              <strong style="color:#ffffff; font-size:15px;">0 cuentas inscritas.</strong>
+              <strong style="color:#ffffff; font-size:15px;">0 cuentas registradas.</strong>
               <p style="font-size:12.5px; margin-top:6px;">${DB_DEMO.companiaActiva ? 'Agregue las cuentas de su catálogo usando el formulario superior.' : 'Seleccione o incluya una compañía primero.'}</p>
             </td>
           </tr>
@@ -2415,23 +2590,39 @@
         return;
       }
 
-      const filtradas = cat.filter(c => c.codigo.toLowerCase().includes(filtro) || c.desc.toLowerCase().includes(filtro));
+      const filtradas = cuentasVisibles.filter(c => {
+        const codFmt = formatearCodigoContable(c.codigo);
+        return codFmt.toLowerCase().includes(filtro) || c.codigo.toLowerCase().includes(filtro) || c.desc.toLowerCase().includes(filtro);
+      });
 
       filtradas.forEach((c, idx) => {
         const tr = document.createElement('tr');
-        if (c.especial || c.codigo.startsWith('999')) tr.classList.add('tr-special');
-        
         const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
         const nombresTipo = { '1': '1 - Activo', '2': '2 - Pasivo', '3': '3 - Patrimonio', '4': '4 - Ingresos', '5': '5 - Costos', '6': '6 - Gastos' };
+        const codigoVisual = formatearCodigoContable(c.codigo);
+
+        // Estilo de indentación según nivel
+        const limpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+        const esNivel1 = (c.nivel === 1 || limpio.endsWith('00000') || limpio.length === 3);
+        const esNivel2 = (c.nivel === 2 || (limpio.endsWith('000') && !esNivel1) || limpio.length === 5);
+
+        let descIndent = c.desc;
+        if (esNivel1) {
+          descIndent = `<strong style="color:#FFFFFF; text-transform:uppercase;">${c.desc}</strong>`;
+        } else if (esNivel2) {
+          descIndent = `<span style="padding-left:14px; color:var(--apple-cyan); font-weight:600;">↳ ${c.desc}</span>`;
+        } else {
+          descIndent = `<span style="padding-left:28px; color:var(--apple-text-primary);">• ${c.desc}</span>`;
+        }
 
         tr.innerHTML = `
-          <td><strong style="font-family:var(--mono); color:${c.especial ? '#10b981' : 'var(--cyan)'};">${c.codigo}</strong></td>
-          <td>${c.desc}</td>
+          <td><strong style="font-family:var(--apple-mono); color:${esNivel1 ? 'var(--apple-cyan)' : 'var(--apple-text-primary)'};">${codigoVisual}</strong></td>
+          <td>${descIndent}</td>
           <td><span class="pill" style="font-size:10.5px; padding:2px 8px;">${nombresTipo[c.tipo] || c.tipo}</span></td>
           <td class="num">${fmtM(c.ini)}</td>
           <td class="num"><strong>${fmtM(c.act)}</strong></td>
           <td>
-            ${!c.especial ? `<button class="btn btn-secondary btn-sm btn-del-cta" data-idx="${idx}" style="padding:2px 6px; font-size:10.5px; color:var(--danger); border-color:rgba(239,68,68,0.3);">Eliminar</button>` : '<span style="font-size:11px; color:var(--ok);">Protegida</span>'}
+            <button class="btn btn-secondary btn-sm btn-del-cta" data-codigo="${c.codigo}" style="padding:2px 6px; font-size:10.5px; color:var(--apple-crimson); border-color:rgba(239,68,68,0.3);">Eliminar</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -2439,9 +2630,10 @@
 
       tbody.querySelectorAll('.btn-del-cta').forEach(btn => {
         btn.addEventListener('click', () => {
-          const idx = parseInt(btn.dataset.idx, 10);
-          if (confirm(`¿Desea eliminar la cuenta seleccionada?`)) {
-            cat.splice(idx, 1);
+          const codTarget = btn.dataset.codigo;
+          const idxTarget = cat.findIndex(x => x.codigo === codTarget);
+          if (idxTarget !== -1 && confirm(`¿Desea eliminar la cuenta ${codTarget}?`)) {
+            cat.splice(idxTarget, 1);
             renderTablaCatalogo();
           }
         });
@@ -2450,7 +2642,15 @@
 
     document.getElementById('buscar-catalogo').addEventListener('input', renderTablaCatalogo);
 
-    document.getElementById('cat-cuenta').addEventListener('keydown', (e) => {
+    // Máscara interactiva al escribir cuenta
+    const inputCatCuenta = document.getElementById('cat-cuenta');
+    inputCatCuenta.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (val === '000000' || val === '000' || val === '0') return;
+      e.target.value = formatearCodigoContable(val);
+    });
+
+    inputCatCuenta.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const val = e.target.value.trim();
         if (val === '000000' || val === '000' || val === '0') {
@@ -2463,11 +2663,11 @@
     });
 
     document.getElementById('btn-incluir-cuenta').addEventListener('click', () => {
-      const codigo = document.getElementById('cat-cuenta').value.trim();
+      const codigoRaw = document.getElementById('cat-cuenta').value.trim();
       const desc = document.getElementById('cat-desc').value.trim();
       const tipo = document.getElementById('cat-tipo').value;
 
-      if (!codigo || codigo === '000000' || codigo === '000') {
+      if (!codigoRaw || codigoRaw === '000000' || codigoRaw === '000') {
         mostrarVista('vista-menu');
         return;
       }
@@ -2476,17 +2676,34 @@
         return;
       }
 
+      if (!DB_DEMO.companiaActiva) {
+        alert('Por favor seleccione una empresa activa antes de agregar cuentas.');
+        return;
+      }
+
       if (!DB_DEMO.catalogos[DB_DEMO.companiaActiva]) {
         DB_DEMO.catalogos[DB_DEMO.companiaActiva] = [];
       }
 
-      DB_DEMO.catalogos[DB_DEMO.companiaActiva].push({
-        codigo,
+      const catalogoActual = DB_DEMO.catalogos[DB_DEMO.companiaActiva];
+      const validacion = validarJerarquiaFront(codigoRaw, catalogoActual);
+
+      if (!validacion.ok) {
+        alert(validacion.error);
+        return;
+      }
+
+      catalogoActual.push({
+        codigo: validacion.codigoFmt,
         desc,
         tipo,
+        nivel: validacion.nivel,
         ini: 0,
         act: 0
       });
+
+      // Ordenar catálogo por código
+      catalogoActual.sort((a, b) => a.codigo.localeCompare(b.codigo));
 
       renderTablaCatalogo();
 
@@ -2501,12 +2718,15 @@
     // =========================================================================
     function poblarCuentasEnAsiento() {
       const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || DB_DEMO.catalogos[19] || [];
+      // Ocultar cuenta técnica 999 del selector de comprobantes de diario
+      const cuentasOperativas = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
+
       document.querySelectorAll('.asiento-linea-cuenta').forEach(sel => {
         sel.innerHTML = '';
-        cat.forEach(c => {
+        cuentasOperativas.forEach(c => {
           const opt = document.createElement('option');
           opt.value = c.codigo;
-          opt.textContent = `${c.codigo} - ${c.desc}`;
+          opt.textContent = `${formatearCodigoContable(c.codigo)} - ${c.desc}`;
           sel.appendChild(opt);
         });
       });

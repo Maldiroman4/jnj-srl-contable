@@ -67,6 +67,21 @@ function inicializar() {
     console.log('Base de datos inicializada con el esquema contable base.');
   }
 
+  // Migración de columnas mes_inicio y anio_inicio en companias
+  try {
+    const cols = db.prepare("PRAGMA table_info(companias)").all();
+    const hasMesInicio = cols.some(c => c.name === 'mes_inicio');
+    const hasAnioInicio = cols.some(c => c.name === 'anio_inicio');
+    if (!hasMesInicio) {
+      db.exec("ALTER TABLE companias ADD COLUMN mes_inicio INTEGER NOT NULL DEFAULT 1");
+    }
+    if (!hasAnioInicio) {
+      db.exec("ALTER TABLE companias ADD COLUMN anio_inicio INTEGER NOT NULL DEFAULT 2026");
+    }
+  } catch (err) {
+    console.error('Error al verificar columnas de companias:', err.message);
+  }
+
   // Inicializar Módulos de MONICA (Clientes, Proveedores, Inventario, Facturación, CxC, CxP, Bancos)
   db.exec(`
     CREATE TABLE IF NOT EXISTS clientes (

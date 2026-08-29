@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const { db, tx } = require('../db');
 const {
   parseCodigo, esMayor, claseValidaPara, marcarDesglose, propagarClase,
@@ -14,13 +14,28 @@ const REC = db.prepare(
 
 router.get('/', (req, res) => {
   const compania = Number(req.query.compania);
-  const rows = db.prepare(
-    `SELECT c.*, cl.nombre AS clase_nombre, cl.tipo_rubro,
-            (SELECT COUNT(*) FROM asientos_detalle a WHERE a.id_cuenta = c.id_cuenta) AS movimientos
-     FROM catalogo_cuentas c JOIN clases_cuenta cl ON cl.id_clase = c.clase_cuenta_id
-     WHERE c.id_compania = ? ORDER BY c.id_cuenta`
-  ).all(compania);
-  res.json(rows);
+  const includeInternals = req.query.include_internals === 'true' || req.query.include_internals === '1';
+
+  let sql = `
+    SELECT c.*, cl.nombre AS clase_nombre, cl.tipo_rubro,
+           (SELECT COUNT(*) FROM asientos_detalle a WHERE a.id_cuenta = c.id_cuenta) AS movimientos
+    FROM catalogo_cuentas c JOIN clases_cuenta cl ON cl.id_clase = c.clase_cuenta_id
+    WHERE c.id_compania = ?
+  `;
+
+  if (!includeInternals) {
+    sql += ` AND c.nivel1 != '999' `;
+  }
+
+  sql += ` ORDER BY c.id_cuenta `;
+
+  const rows = db.prepare(sql).all(compania);
+  const formatted = rows.map(r => ({
+    ...r,
+    codigo_formateado: `${r.nivel1}-${r.nivel2}-${r.nivel3}`
+  }));
+
+  res.json(formatted);
 });
 
 router.get('/clases', (req, res) => {
@@ -33,13 +48,19 @@ router.post('/', (req, res) => {
   const { id_compania, codigo, descripcion, descripcion_ingles, clase_cuenta_id,
           detalle1, detalle2, codigo_cabys, codigo_barras, presupuesta, monto_presupuestado } = b || {};
 
-  const v = claseValidaPara({ id_compania, codigo, claseCuentaId: clase_cuenta_id });
+  if (!id_compania) {
+    return res.status(400).json({ error: 'Debe especificar la compañía activa.' });
+  }
+
+  const v = claseValidaPara({ id_compania: Number(id_compania), codigo, claseCuentaId: clase_cuenta_id });
   if (!v.ok) return res.status(400).json({ error: v.error });
   if (!descripcion) return res.status(400).json({ error: 'Debe indicar la descripción de la cuenta.' });
 
   const existe = db.prepare('SELECT id_cuenta FROM catalogo_cuentas WHERE id_cuenta = ? AND id_compania = ?')
-    .get(v.pars.id_cuenta, id_compania);
-  if (existe) return res.status(400).json({ error: `La cuenta ${v.pars.id_cuenta} ya existe.` });
+    .get(v.pars.id_cuenta, Number(id_compania));
+  if (existe) {
+    return res.status(400).json({ error: `La cuenta ${v.pars.formato || v.pars.id_cuenta} ya existe en el catálogo de esta empresa.` });
+  }
 
   const esMayorBool = esMayor(v.pars.nivel2, v.pars.nivel3) ? 1 : 0;
   tx(() => {
@@ -49,14 +70,18 @@ router.post('/', (req, res) => {
           clase_cuenta_id, es_cuenta_mayor, es_desglose, detalle1, detalle2,
           codigo_cabys, codigo_barras, presupuesta, monto_presupuestado)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?)`
-    ).run(v.pars.id_cuenta, id_compania, v.pars.nivel1, v.pars.nivel2, v.pars.nivel3,
+    ).run(v.pars.id_cuenta, Number(id_compania), v.pars.nivel1, v.pars.nivel2, v.pars.nivel3,
           descripcion, descripcion_ingles || null, v.clase,
           esMayorBool, detalle1 || null, detalle2 || null,
           codigo_cabys || null, codigo_barras || null, presupuesta ? 1 : 0, monto_presupuestado || 0);
     marcarDesglose();
   });
 
-  res.status(201).json(REC.get(v.pars.id_cuenta));
+  const creada = REC.get(v.pars.id_cuenta);
+  res.status(201).json({
+    ...creada,
+    codigo_formateado: `${creada.nivel1}-${creada.nivel2}-${creada.nivel3}`
+  });
 });
 
 router.put('/:id', (req, res) => {
