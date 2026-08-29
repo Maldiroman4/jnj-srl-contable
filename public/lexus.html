@@ -84,24 +84,27 @@
        APPLE TERMINAL STATUS TICKER (CAPSULE VIBRANCY)
        ========================================================================== */
     .ticker-bar {
-      background: rgba(4, 8, 16, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--apple-border);
-      padding: 7px 18px;
+      background: rgba(4, 8, 16, 0.95);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-family: var(--apple-mono);
-      font-size: 11.5px;
+      font-size: 11px;
       letter-spacing: 0.02em;
       color: var(--apple-text-secondary);
       z-index: 100;
+      width: 100%;
+      box-sizing: border-box;
     }
     .ticker-live {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      white-space: nowrap;
     }
     .ticker-dot {
       width: 7px;
@@ -115,6 +118,10 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.6; transform: scale(1.15); }
     }
+    #ticker-time {
+      white-space: nowrap;
+      font-size: 11px;
+    }
 
     /* App Shell Container */
     .lexus-app {
@@ -124,54 +131,76 @@
       max-width: 1320px;
       width: 100%;
       margin: 0 auto;
-      padding: 18px 20px 80px;
+      padding: 14px 16px 80px;
+      box-sizing: border-box;
     }
 
     /* ==========================================================================
        APPLE FLOATING HEADER BAR (CUPERTINO FROSTED GLASS)
        ========================================================================== */
     .lexus-header {
-      background: linear-gradient(135deg, rgba(14, 23, 42, 0.85) 0%, rgba(15, 35, 63, 0.8) 50%, rgba(30, 64, 175, 0.4) 100%);
+      background: linear-gradient(135deg, rgba(14, 23, 42, 0.92) 0%, rgba(15, 30, 56, 0.88) 100%);
       backdrop-filter: blur(28px) saturate(190%);
       -webkit-backdrop-filter: blur(28px) saturate(190%);
       border: 1px solid var(--apple-border);
       border-radius: 16px;
-      padding: 14px 20px;
+      padding: 12px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 18px;
+      gap: 12px;
+      margin-bottom: 16px;
       box-shadow: var(--apple-shadow-md), var(--apple-glass-shine);
       transition: all .3s var(--apple-ease);
+      width: 100%;
+      box-sizing: border-box;
     }
     .lexus-brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
+      min-width: 0;
+    }
+    .lexus-brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+      flex-shrink: 0;
+    }
+    .lexus-title {
+      min-width: 0;
     }
     .lexus-title h1 {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.025em;
       color: #FFFFFF;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      margin: 0;
+      line-height: 1.2;
     }
     .lexus-title p {
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--apple-cyan);
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .lexus-status-pills {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     /* Cupertino Status Pills & Badges */
@@ -180,16 +209,17 @@
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--apple-border);
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 9999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--apple-text);
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       transition: all .2s var(--apple-ease);
       box-shadow: 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+      white-space: nowrap;
     }
     .pill-cyan {
       border-color: var(--apple-border-cyan);
@@ -205,6 +235,39 @@
       color: var(--apple-mint);
     }
 
+    /* Modern iOS Back Button */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--apple-border);
+      color: var(--apple-cyan);
+      font-family: var(--apple-font);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all .2s var(--apple-ease);
+      touch-action: manipulation;
+    }
+    .btn-back:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--apple-border-cyan);
+      transform: translateX(-2px);
+    }
+    .btn-back:active {
+      transform: scale(0.96);
+    }
+    .btn-back .chevron {
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
     /* ==========================================================================
        APPLE CUPERTINO LOGIN SCREEN & CARD
        ========================================================================== */
@@ -212,7 +275,7 @@
       flex: 1;
       display: grid;
       place-items: center;
-      padding: 24px;
+      padding: 16px;
       animation: fadeIn .4s var(--apple-ease);
     }
     @keyframes fadeIn {
@@ -221,42 +284,43 @@
     }
     .login-box {
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       background: var(--apple-surface);
       backdrop-filter: blur(32px) saturate(200%);
       -webkit-backdrop-filter: blur(32px) saturate(200%);
       border: 1px solid var(--apple-border);
       border-radius: 20px;
-      padding: 38px 34px;
+      padding: 34px 28px;
       box-shadow: var(--apple-shadow-lg), var(--apple-glass-shine);
       text-align: center;
       position: relative;
+      box-sizing: border-box;
     }
     .login-box h2 {
-      font-size: 24px;
+      font-size: 23px;
       font-weight: 800;
       letter-spacing: -0.03em;
       color: #FFFFFF;
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .login-box p.sub {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--apple-text-secondary);
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       font-weight: 500;
     }
 
     .form-group {
       text-align: left;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .form-group label {
       display: block;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--apple-cyan);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       margin-bottom: 6px;
     }
     .input-wrap {
@@ -274,11 +338,12 @@
       font-family: var(--apple-font);
       font-size: 14px;
       font-weight: 500;
-      padding: 12px 14px;
+      padding: 11px 14px;
       border-radius: 12px;
       transition: all .2s var(--apple-ease);
       outline: none;
       box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+      box-sizing: border-box;
     }
     input:focus, select:focus, textarea:focus {
       border-color: var(--apple-cyan);
@@ -305,20 +370,21 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 7px;
       background: linear-gradient(180deg, #0A84FF 0%, #0066D6 100%);
       color: #FFFFFF;
       border: 1px solid rgba(255, 255, 255, 0.2);
       font-weight: 700;
       font-size: 13.5px;
       letter-spacing: -0.01em;
-      padding: 11px 20px;
+      padding: 10px 18px;
       border-radius: 12px;
       cursor: pointer;
       transition: all .2s var(--apple-ease);
       font-family: var(--apple-font);
       box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
       touch-action: manipulation;
+      box-sizing: border-box;
     }
     .btn:hover {
       background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
@@ -330,7 +396,7 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     }
     .btn-block { width: 100%; }
-    .btn-sm { padding: 6px 14px; font-size: 12px; border-radius: 9999px; }
+    .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 9999px; }
     
     .btn-secondary {
       background: rgba(255, 255, 255, 0.08);
@@ -358,8 +424,8 @@
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-top: 10px;
+      gap: 14px;
+      margin-top: 6px;
     }
     .menu-card {
       background: var(--apple-surface);
@@ -367,46 +433,36 @@
       -webkit-backdrop-filter: blur(28px) saturate(190%);
       border: 1px solid var(--apple-border);
       border-radius: 16px;
-      padding: 22px 20px;
+      padding: 18px 18px;
       cursor: pointer;
       transition: all .25s var(--apple-ease);
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       position: relative;
       overflow: hidden;
       box-shadow: var(--apple-shadow-sm), var(--apple-glass-shine);
       touch-action: manipulation;
-    }
-    .menu-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 40%, rgba(56, 189, 248, 0.08) 50%, transparent 60%);
-      opacity: 0;
-      transition: opacity .3s ease;
+      box-sizing: border-box;
     }
     .menu-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-3px);
       border-color: var(--apple-border-cyan);
       background: var(--apple-surface-hover);
-      box-shadow: var(--apple-shadow-md), 0 0 24px var(--apple-cyan-glow);
-    }
-    .menu-card:hover::after {
-      opacity: 1;
+      box-shadow: var(--apple-shadow-md), 0 0 20px var(--apple-cyan-glow);
     }
     .menu-card:active {
-      transform: scale(0.98) translateY(-2px);
+      transform: scale(0.98);
     }
     .menu-num {
-      width: 46px;
-      height: 46px;
+      width: 44px;
+      height: 44px;
       background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.1) 100%);
       border: 1px solid var(--apple-cyan);
       border-radius: 12px;
       display: grid;
       place-items: center;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       font-family: var(--apple-mono);
       color: var(--apple-cyan);
@@ -414,11 +470,11 @@
       box-shadow: 0 0 14px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
     .menu-info h3 {
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 700;
       letter-spacing: -0.015em;
       color: #FFFFFF;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .menu-info p {
       font-size: 12px;
@@ -435,70 +491,81 @@
       -webkit-backdrop-filter: blur(32px) saturate(200%);
       border: 1px solid var(--apple-border);
       border-radius: 18px;
-      padding: 24px;
+      padding: 20px;
       box-shadow: var(--apple-shadow-md), var(--apple-glass-shine);
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       animation: fadeIn .3s var(--apple-ease);
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     .view-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--apple-border);
-      padding-bottom: 14px;
+      padding-bottom: 12px;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
     }
     .view-header h2 {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #FFFFFF;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      margin: 0;
     }
 
     .split-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 16px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .subpanel {
       background: rgba(8, 14, 26, 0.85);
       border: 1px solid var(--apple-border);
       border-radius: 14px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      box-sizing: border-box;
+      width: 100%;
     }
     .subpanel h4 {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--apple-cyan);
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding-bottom: 8px;
     }
 
-    /* Glass Tables */
+    /* Glass Tables & Mobile Table Box */
     .table-box {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border: 1px solid var(--apple-border);
       border-radius: 12px;
-      -webkit-overflow-scrolling: touch;
       background: rgba(4, 8, 16, 0.6);
+      width: 100%;
+      box-sizing: border-box;
     }
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 13px;
       text-align: left;
+      min-width: 100%;
     }
     th {
       background: rgba(6, 12, 22, 0.95);
@@ -508,12 +575,12 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      padding: 11px 14px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--apple-border);
       white-space: nowrap;
     }
     td {
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       color: var(--apple-text);
       transition: background .15s ease;
@@ -530,16 +597,18 @@
 
     /* Cupertino Alerts */
     .banner {
-      padding: 12px 18px;
+      padding: 12px 16px;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 500;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      width: 100%;
     }
     .banner-warn { background: rgba(255, 159, 10, 0.15); border: 1px solid var(--apple-amber); color: #FDE68A; }
     .banner-ok { background: rgba(48, 209, 88, 0.15); border: 1px solid var(--apple-mint); color: #A7F3D0; }
@@ -550,13 +619,14 @@
       background: rgba(12, 20, 36, 0.7);
       border: 1px solid var(--apple-border);
       border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
       cursor: pointer;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
+      gap: 10px;
       transition: all .2s var(--apple-ease);
+      box-sizing: border-box;
     }
     .radio-card:hover { border-color: var(--apple-cyan); background: rgba(20, 32, 54, 0.85); }
     .radio-card.selected {
@@ -568,39 +638,42 @@
     /* Cupertino Financial KPI Grid for Mobile & Desktop */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .kpi-card {
       background: rgba(10, 18, 34, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--apple-border);
-      border-radius: 14px;
-      padding: 14px 16px;
+      border-radius: 12px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), var(--apple-glass-shine);
       transition: all .2s var(--apple-ease);
+      box-sizing: border-box;
     }
     .kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--apple-border-cyan);
     }
     .kpi-card .kpi-label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--apple-text-secondary);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
     .kpi-card .kpi-val {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       font-family: var(--apple-mono);
       letter-spacing: -0.02em;
@@ -608,22 +681,22 @@
 
     /* iOS Modal Drawer Handle */
     .drawer-handle {
-      width: 40px;
-      height: 5px;
-      border-radius: 3px;
-      background: rgba(255, 255, 255, 0.3);
-      margin: 0 auto 14px auto;
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.25);
+      margin: 0 auto 10px auto;
       display: none;
     }
 
     /* Table Scroll Hint */
     .table-scroll-hint {
       display: none;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--apple-cyan);
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       margin-bottom: 6px;
       justify-content: flex-end;
     }
@@ -634,33 +707,69 @@
     @media (max-width: 768px) {
       input[type="text"], input[type="password"], input[type="number"], select, textarea {
         font-size: 16px !important;
-        min-height: 48px;
-        border-radius: 14px;
+        min-height: 44px;
+        border-radius: 12px;
       }
       body {
-        font-size: 13.5px;
+        font-size: 13px;
         padding-top: env(safe-area-inset-top);
       }
       .drawer-handle { display: block; }
       .table-scroll-hint { display: flex; }
-      .ticker-bar { padding: 6px 14px; font-size: 10.5px; }
-      .lexus-app { padding: 12px 12px 90px 12px; }
-      .lexus-header { padding: 14px; border-radius: 16px; gap: 12px; }
-      .lexus-title h1 { font-size: 18px; }
-      .lexus-status-pills { width: 100%; justify-content: space-between; gap: 6px; }
-      .pill { padding: 6px 12px; font-size: 11.5px; min-height: 32px; }
-      .login-box { padding: 30px 22px; border-radius: 20px; }
-      .login-box h2 { font-size: 22px; }
-      .menu-grid { grid-template-columns: 1fr; gap: 12px; }
-      .menu-card { padding: 16px 18px; gap: 14px; border-radius: 16px; }
-      .menu-num { width: 44px; height: 44px; font-size: 19px; border-radius: 12px; }
-      .view-container { padding: 18px 14px; border-radius: 16px; }
-      .split-layout { grid-template-columns: 1fr; gap: 14px; }
-      .subpanel { padding: 16px; border-radius: 14px; }
-      .btn { min-height: 48px; font-size: 14px; padding: 12px 18px; border-radius: 14px; }
+      .ticker-bar { padding: 5px 12px; font-size: 10px; }
+      .lexus-app { padding: 8px 10px 84px 10px; }
+      .lexus-header {
+        padding: 10px 12px;
+        border-radius: 14px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .lexus-brand {
+        justify-content: space-between;
+        width: 100%;
+      }
+      .lexus-brand img { width: 34px; height: 34px; border-radius: 8px; }
+      .lexus-title h1 { font-size: 16px; }
+      .lexus-title p { font-size: 10px; }
+      .lexus-status-pills {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 6px;
+      }
+      .lexus-status-pills .btn-cambiar-cia-header {
+        grid-column: 1 / 2;
+        width: 100%;
+        justify-content: flex-start;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .lexus-status-pills #pill-periodo-lexus {
+        display: none;
+      }
+      .lexus-status-pills #btn-cerrar-sesion {
+        grid-column: 2 / 3;
+        padding: 5px 10px;
+      }
+      .pill { padding: 5px 10px; font-size: 11px; min-height: 30px; }
+      .login-box { padding: 26px 18px; border-radius: 18px; }
+      .login-box h2 { font-size: 20px; }
+      .menu-grid { grid-template-columns: 1fr; gap: 10px; }
+      .menu-card { padding: 14px 14px; gap: 12px; border-radius: 14px; }
+      .menu-num { width: 38px; height: 38px; font-size: 17px; border-radius: 10px; }
+      .view-container { padding: 14px 12px; border-radius: 14px; gap: 12px; }
+      .view-header { padding-bottom: 10px; }
+      .view-header h2 { font-size: 15px; }
+      .split-layout { display: flex; flex-direction: column; gap: 12px; }
+      .subpanel { padding: 14px 12px; border-radius: 12px; }
+      .subpanel h4 { font-size: 12px; margin-bottom: 10px; }
+      .btn { min-height: 44px; font-size: 13.5px; padding: 10px 16px; border-radius: 12px; }
+      .btn-back { font-size: 12px; padding: 4px 10px; }
       .lexus-mobile-nav { display: flex !important; }
-      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .kpi-card .kpi-val { font-size: 16px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .kpi-card { padding: 10px 12px; }
+      .kpi-card .kpi-val { font-size: 15px; }
     }
 
     /* iOS Cupertino Mobile Bottom Navigation Bar */
@@ -670,15 +779,15 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 64px;
-      background: rgba(6, 12, 24, 0.92);
+      height: 60px;
+      background: rgba(6, 12, 24, 0.94);
       backdrop-filter: blur(32px) saturate(210%);
       -webkit-backdrop-filter: blur(32px) saturate(210%);
       border-top: 1px solid var(--apple-border);
       z-index: 999;
       justify-content: space-around;
       align-items: center;
-      padding-bottom: max(10px, env(safe-area-inset-bottom));
+      padding-bottom: max(6px, env(safe-area-inset-bottom));
       box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
     }
     .mob-tab-btn {
@@ -687,32 +796,41 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       background: transparent;
       border: none;
       color: var(--apple-text-secondary);
       font-family: var(--apple-font);
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 600;
       cursor: pointer;
       padding: 6px 0;
       transition: all .2s var(--apple-ease);
       touch-action: manipulation;
     }
-    .mob-tab-btn span.icon { font-size: 19px; line-height: 1; }
+    .mob-tab-btn svg {
+      width: 19px;
+      height: 19px;
+      stroke: var(--apple-text-secondary);
+      transition: all .2s var(--apple-ease);
+    }
     .mob-tab-btn.activo, .mob-tab-btn:active {
       color: var(--apple-cyan);
-      transform: scale(1.06);
+      transform: scale(1.05);
+    }
+    .mob-tab-btn.activo svg {
+      stroke: var(--apple-cyan);
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
     }
 
     .hidden { display: none !important; }
     footer {
       text-align: center;
-      padding: 18px;
-      font-size: 11.5px;
+      padding: 16px;
+      font-size: 11px;
       color: var(--apple-text-tertiary);
       border-top: 1px solid rgba(255, 255, 255, 0.06);
-      margin-top: 24px;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -775,26 +893,24 @@
       <!-- HEADER CON COMPAÑÍA ACTIVA & STATUS BAR -->
       <header class="lexus-header">
         <div class="lexus-brand">
-          <img src="img/logo-lexus.jpg" alt="Logo Lexus" style="width:46px; height:46px; object-fit:contain; border-radius:8px; box-shadow:0 0 14px rgba(56,189,248,0.4); border:1px solid rgba(56,189,248,0.3);">
+          <img src="img/logo-lexus.jpg" alt="Logo Lexus">
           <div class="lexus-title">
-            <h1>LEXUS <span style="font-size:13px; font-weight:600; color:var(--cyan);">· SISTEMA CONTABLE INTEGRADO</span></h1>
-            <p>Plan de Cuentas · Mayorización Automática · Cierre de Período</p>
+            <h1>LEXUS <span style="font-size:11px; font-weight:700; color:var(--apple-cyan); background:rgba(56,189,248,0.15); padding:2px 7px; border-radius:6px; border:1px solid rgba(56,189,248,0.3);">CLOUD</span></h1>
+            <p>Sistema Contable Integral</p>
           </div>
         </div>
 
         <div class="lexus-status-pills">
-          <button class="pill pill-cyan btn-cambiar-cia-header" id="btn-cambiar-cia-lexus" title="Cambiar Empresa Activa" style="cursor:pointer; background:#0a1424; transition:all .2s ease; border:1px solid var(--cyan); color:var(--cyan); font-family:var(--mono);">
-            <span>🏢 Empresa:</span>
+          <button class="pill pill-cyan btn-cambiar-cia-header" id="btn-cambiar-cia-lexus" title="Cambiar Empresa Activa" style="cursor:pointer; font-family:var(--apple-mono);">
+            <span>🏢</span>
             <strong id="hdr-comp-nombre">Seleccionar Empresa</strong>
-            <span style="font-size:10px; color:var(--text-muted);">▼</span>
+            <span style="font-size:9px; color:var(--apple-text-secondary); margin-left:2px;">▼</span>
           </button>
           <div class="pill pill-green" id="pill-periodo-lexus">
-            <span>Mes en proceso:</span>
-            <strong id="hdr-mes-lexus">08</strong>
-            <span>| Año:</span>
-            <strong id="hdr-ano-lexus">2026</strong>
+            <span>🗓️ Período:</span>
+            <strong id="hdr-mes-lexus">08</strong>/<strong id="hdr-ano-lexus">2026</strong>
           </div>
-          <button class="btn btn-secondary btn-sm" id="btn-cerrar-sesion" style="padding:6px 12px; font-size:12px;">
+          <button class="btn btn-secondary btn-sm" id="btn-cerrar-sesion" title="Cerrar Sesión">
             ⏻ Salir
           </button>
         </div>
@@ -805,8 +921,8 @@
            ========================================================================== -->
       <div id="vista-menu" class="view-container">
         <div class="view-header">
-          <h2><span>📋 Menú Principal</span> <small style="font-size:13px; color:var(--text-muted); font-weight:normal;">Seleccione con el mouse o presione la tecla del número [1 - 7]</small></h2>
-          <div class="pill">Empresa Activa: <strong id="lbl-menu-empresa">19</strong></div>
+          <h2><span>📋 Menú Principal</span> <small style="font-size:12px; color:var(--apple-text-secondary); font-weight:normal;">Seleccione o presione [1 - 7]</small></h2>
+          <div class="pill">Cía Activa: <strong id="lbl-menu-empresa">--</strong></div>
         </div>
 
         <div class="menu-grid">
@@ -876,7 +992,7 @@
       <div id="vista-companias" class="view-container hidden">
         <div class="view-header">
           <h2><span>🏢 Módulo de Compañías</span></h2>
-          <button class="btn btn-secondary btn-sm" id="btn-volver-menu-1">← Regresar al Menú Principal [000 / ESC]</button>
+          <button class="btn-back" id="btn-volver-menu-1"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
         <div class="split-layout">
@@ -886,13 +1002,13 @@
             <h4>Captura de Compañía</h4>
             
             <div class="form-group" style="margin-bottom:12px;">
-              <label>Número de Compañía que deseo incluir</label>
-              <div style="display:flex; gap:10px;">
-                <input type="text" id="input-num-compania" value="000" maxlength="4" style="font-family:var(--mono); font-size:18px; font-weight:800; text-align:center; width:120px; color:var(--cyan);" autocomplete="off">
-                <button class="btn btn-secondary" id="btn-consultar-compania">Consultar / Crear</button>
+              <label>Código de Empresa:</label>
+              <div style="display:flex; gap:8px; align-items:stretch;">
+                <input type="text" id="input-num-compania" value="000" inputmode="numeric" maxlength="4" style="font-family:var(--apple-mono); font-size:20px; font-weight:800; text-align:center; width:100px; color:var(--apple-cyan); border-radius:12px;" autocomplete="off">
+                <button class="btn" id="btn-consultar-compania" style="flex:1;">Consultar / Crear ➔</button>
               </div>
-              <small style="color:var(--text-muted); font-size:11.5px; display:block; margin-top:4px;">
-                * Digite el código deseado (ej. <strong>19</strong> o <strong>25</strong>). Digite <strong>000</strong> para salir.
+              <small style="color:var(--apple-text-secondary); font-size:11.5px; display:block; margin-top:6px; line-height:1.4;">
+                * Digite el código deseado (ej. <strong>001</strong>). Digite <strong>000</strong> para regresar al menú.
               </small>
             </div>
 
@@ -1012,7 +1128,7 @@
       <div id="vista-catalogo" class="view-container hidden">
         <div class="view-header">
           <h2><span>📂 Catálogo de Cuentas</span></h2>
-          <button class="btn btn-secondary btn-sm" id="btn-volver-menu-2">← Regresar [000000 / ESC]</button>
+          <button class="btn-back" id="btn-volver-menu-2"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
         <!-- FORMULARIO DE ENTRADA RÁPIDA -->
@@ -1022,7 +1138,7 @@
             
             <div class="form-group" style="margin-bottom:0;">
               <label>Digite Cuenta</label>
-              <input type="text" id="cat-cuenta" placeholder="Ej. 101-01-002" style="font-family:var(--mono); font-weight:700; color:var(--cyan);" autocomplete="off">
+              <input type="text" id="cat-cuenta" placeholder="Ej. 101-01-002" style="font-family:var(--apple-mono); font-weight:700; color:var(--apple-cyan);" autocomplete="off">
             </div>
 
             <div class="form-group" style="margin-bottom:0; grid-column: span 2;">
@@ -1060,7 +1176,7 @@
             </button>
 
           </div>
-          <small style="color:var(--text-muted); font-size:11px; display:block; margin-top:8px;">
+          <small style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-top:8px;">
             * Digite <strong>000000</strong> en el campo Cuenta y presione Enter para regresar al Menú Principal.
           </small>
         </div>
@@ -1072,6 +1188,7 @@
             <input type="text" id="buscar-catalogo" placeholder="🔍 Filtrar cuenta o descripción..." style="max-width:280px; padding:6px 12px; font-size:12.5px;">
           </div>
 
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
           <div class="table-box" style="max-height:420px; overflow-y:auto;">
             <table>
               <thead>
@@ -1099,7 +1216,7 @@
       <div id="vista-documentos" class="view-container hidden">
         <div class="view-header">
           <h2><span>📝 Documentos · Comprobantes de Diario</span></h2>
-          <button class="btn btn-secondary btn-sm" id="btn-volver-menu-3">← Regresar [ESC]</button>
+          <button class="btn-back" id="btn-volver-menu-3"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
         <!-- REGISTRO INTERACTIVO DE ASIENTO -->
@@ -1108,11 +1225,11 @@
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:14px;">
             <div class="form-group" style="margin-bottom:0;">
               <label>Número de Asiento</label>
-              <input type="text" id="asiento-num" value="AS-2026-0801" style="font-family:var(--mono); font-weight:700; color:var(--cyan);">
+              <input type="text" id="asiento-num" value="AS-2026-0801" style="font-family:var(--apple-mono); font-weight:700; color:var(--apple-cyan);">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Fecha Contable</label>
-              <input type="text" id="asiento-fecha" value="15/08/2026" style="font-family:var(--mono);">
+              <input type="text" id="asiento-fecha" value="15/08/2026" style="font-family:var(--apple-mono);">
             </div>
             <div class="form-group" style="margin-bottom:0; grid-column:span 2;">
               <label>Concepto General del Asiento</label>
@@ -1121,6 +1238,7 @@
           </div>
 
           <!-- LÍNEAS DEL ASIENTO -->
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
           <div class="table-box" style="margin-bottom:12px;">
             <table>
               <thead>
@@ -1135,34 +1253,34 @@
                 <!-- Líneas editables del asiento -->
                 <tr>
                   <td>
-                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--mono);">
+                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--apple-mono);">
                       <!-- Opciones dinámicas -->
                     </select>
                   </td>
                   <td><input type="text" class="asiento-linea-desc" value="Depósito en banco" style="padding:6px; font-size:13px;"></td>
-                  <td><input type="number" class="asiento-linea-deb num" value="500000" style="padding:6px; font-size:13px; font-family:var(--mono); font-weight:700;"></td>
-                  <td><input type="number" class="asiento-linea-cre num" value="0" style="padding:6px; font-size:13px; font-family:var(--mono);"></td>
+                  <td><input type="number" class="asiento-linea-deb num" value="500000" style="padding:6px; font-size:13px; font-family:var(--apple-mono); font-weight:700;"></td>
+                  <td><input type="number" class="asiento-linea-cre num" value="0" style="padding:6px; font-size:13px; font-family:var(--apple-mono);"></td>
                 </tr>
                 <tr>
                   <td>
-                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--mono);">
+                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--apple-mono);">
                       <!-- Opciones dinámicas -->
                     </select>
                   </td>
                   <td><input type="text" class="asiento-linea-desc" value="Venta de servicios contado" style="padding:6px; font-size:13px;"></td>
-                  <td><input type="number" class="asiento-linea-deb num" value="0" style="padding:6px; font-size:13px; font-family:var(--mono);"></td>
-                  <td><input type="number" class="asiento-linea-cre num" value="500000" style="padding:6px; font-size:13px; font-family:var(--mono); font-weight:700;"></td>
+                  <td><input type="number" class="asiento-linea-deb num" value="0" style="padding:6px; font-size:13px; font-family:var(--apple-mono);"></td>
+                  <td><input type="number" class="asiento-linea-cre num" value="500000" style="padding:6px; font-size:13px; font-family:var(--apple-mono); font-weight:700;"></td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           <!-- TOTALES Y PARTIDA DOBLE -->
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; background:#050b14; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
-            <div style="font-family:var(--mono); font-size:13px;">
-              <span>Total Débitos: <strong id="lbl-total-debitos" style="color:var(--cyan);">₡500,000.00</strong></span> | 
-              <span>Total Créditos: <strong id="lbl-total-creditos" style="color:var(--cyan);">₡500,000.00</strong></span> | 
-              <span>Diferencia: <strong id="lbl-total-dif" style="color:var(--ok);">₡0.00</strong></span>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; background:rgba(4, 8, 16, 0.85); padding:12px 16px; border-radius:12px; border:1px solid var(--apple-border);">
+            <div style="font-family:var(--apple-mono); font-size:13px;">
+              <span>Total Débitos: <strong id="lbl-total-debitos" style="color:var(--apple-cyan);">₡500,000.00</strong></span> | 
+              <span>Total Créditos: <strong id="lbl-total-creditos" style="color:var(--apple-cyan);">₡500,000.00</strong></span> | 
+              <span>Diferencia: <strong id="lbl-total-dif" style="color:var(--apple-mint);">₡0.00</strong></span>
             </div>
             <div style="display:flex; gap:10px;">
               <button class="btn btn-secondary btn-sm" id="btn-agregar-linea-asiento">+ Agregar Partida</button>
@@ -1176,6 +1294,7 @@
         <!-- LISTA DE ASIENTOS GUARDADOS -->
         <div class="subpanel">
           <h4>Historial de Comprobantes de Diario en el Período</h4>
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
           <div class="table-box">
             <table>
               <thead>
@@ -1203,18 +1322,18 @@
       <div id="vista-procesos" class="view-container hidden">
         <div class="view-header">
           <h2><span>⚙️ Procesos Selectos · Mayorización en Cascada</span></h2>
-          <button class="btn btn-secondary btn-sm" id="btn-volver-menu-4">← Regresar [ESC]</button>
+          <button class="btn-back" id="btn-volver-menu-4"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
         <div class="subpanel">
           <h4>Parámetros de Mayorización</h4>
-          <p style="color:var(--text-muted); margin-bottom:16px;">
+          <p style="color:var(--apple-text-secondary); margin-bottom:16px;">
             El proceso de mayorización toma todos los comprobantes de diario del período y recalcula automáticamente los saldos de cada una de las cuentas auxiliares y de mayor en el catálogo.
           </p>
 
           <div style="display:flex; gap:14px; align-items:center; margin-bottom:18px; flex-wrap:wrap;">
             <div style="display:flex; align-items:center; gap:8px;">
-              <label style="margin:0; font-size:12px; color:var(--cyan); font-weight:700;">Mes:</label>
+              <label style="margin:0; font-size:12px; color:var(--apple-cyan); font-weight:700;">Mes:</label>
               <select id="sel-mes-mayorizar" style="width:90px; padding:8px;">
                 <option value="8" selected>08 (Agosto)</option>
                 <option value="9">09 (Setiembre)</option>
@@ -1223,7 +1342,7 @@
             </div>
 
             <div style="display:flex; align-items:center; gap:8px;">
-              <label style="margin:0; font-size:12px; color:var(--cyan); font-weight:700;">Año:</label>
+              <label style="margin:0; font-size:12px; color:var(--apple-cyan); font-weight:700;">Año:</label>
               <input type="number" id="sel-ano-mayorizar" value="2026" style="width:100px; padding:8px;">
             </div>
 
@@ -1235,7 +1354,7 @@
           <div id="res-mayorizacion" class="banner banner-ok hidden" style="margin-bottom:14px;"></div>
 
           <!-- LOG DE MAYORIZACIÓN -->
-          <div id="box-log-mayorizacion" class="table-box hidden" style="background:#040810; padding:14px; font-family:var(--mono); font-size:12px; color:var(--text-muted); max-height:220px; overflow-y:auto;">
+          <div id="box-log-mayorizacion" class="table-box hidden" style="background:#040810; padding:14px; font-family:var(--apple-mono); font-size:12px; color:var(--apple-text-secondary); max-height:220px; overflow-y:auto;">
             <!-- Detalle de cuentas procesadas -->
           </div>
         </div>
@@ -1247,12 +1366,12 @@
       <div id="vista-reportes-mensuales" class="view-container hidden">
         <div class="view-header">
           <h2><span>📈 Reportes Mensuales</span></h2>
-          <button class="btn btn-secondary btn-sm" id="btn-volver-menu-5">← Regresar [ESC]</button>
+          <button class="btn-back" id="btn-volver-menu-5"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
         <div class="subpanel">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <button class="btn" id="btn-tab-balance">📊 Balance General</button>
               <button class="btn btn-secondary" id="btn-tab-resultados">📈 Estado de Resultados</button>
               <button class="btn btn-secondary" id="btn-tab-comprobacion">📋 Balanza de Comprobación</button>
@@ -1261,7 +1380,7 @@
           </div>
 
           <!-- CONTENEDOR DINÁMICO DE REPORTES -->
-          <div id="reporte-render-area" class="table-box" style="padding:20px; background:#050b14; border-radius:8px;">
+          <div id="reporte-render-area" class="table-box" style="padding:16px; background:rgba(4, 8, 16, 0.7); border-radius:12px;">
             <!-- Contenido generado por JavaScript -->
           </div>
         </div>
@@ -1273,21 +1392,22 @@
       <div id="vista-reportes-historicos" class="view-container hidden">
         <div class="view-header">
           <h2><span>📚 Reportes Históricos · Libro Mayor y Diario</span></h2>
-          <button class="btn btn-secondary btn-sm" id="btn-volver-menu-6">← Regresar [ESC]</button>
+          <button class="btn-back" id="btn-volver-menu-6"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
         <div class="subpanel">
           <div style="display:flex; gap:12px; align-items:flex-end; margin-bottom:16px; flex-wrap:wrap;">
             <div class="form-group" style="margin-bottom:0; flex:1; min-width:240px;">
               <label>Seleccionar Cuenta para Ficha de Libro Mayor</label>
-              <select id="sel-cuenta-mayor" style="font-family:var(--mono);">
+              <select id="sel-cuenta-mayor" style="font-family:var(--apple-mono);">
                 <!-- Cuentas -->
               </select>
             </div>
             <button class="btn" id="btn-consultar-mayor">🔍 Consultar Mayor</button>
           </div>
 
-          <div id="contenedor-mayor-historico" class="table-box" style="padding:16px; background:#050b14;">
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div id="contenedor-mayor-historico" class="table-box" style="padding:16px; background:rgba(4, 8, 16, 0.7);">
             <!-- Ficha de Mayor -->
           </div>
         </div>
@@ -1299,22 +1419,22 @@
       <div id="vista-cierres" class="view-container hidden">
         <div class="view-header">
           <h2><span>🔒 Cierres de Período</span></h2>
-          <button class="btn btn-secondary btn-sm" id="btn-volver-menu-7">← Regresar [ESC]</button>
+          <button class="btn-back" id="btn-volver-menu-7"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
         <div class="subpanel">
           <h4>Cierre Mensual de Operaciones</h4>
-          <p style="color:var(--text-muted); margin-bottom:16px;">
+          <p style="color:var(--apple-text-secondary); margin-bottom:16px;">
             El cierre mensual bloquea el período actual, traslada los saldos acumulados e incrementa el período activo de la compañía al mes siguiente (ej. de <strong>08/2026</strong> a <strong>09/2026</strong>).
           </p>
           <button class="btn" id="btn-ejecutar-cierre-mensual" style="margin-bottom:20px;">
             🔒 Ejecutar Cierre Mensual
           </button>
 
-          <h4 style="border-top:1px solid var(--border); padding-top:16px;">Cierre Fiscal Anual</h4>
-          <p style="color:var(--text-muted); margin-bottom:16px;">
+          <h4 style="border-top:1px solid rgba(255, 255, 255, 0.08); padding-top:16px;">Cierre Fiscal Anual</h4>
+          <p style="color:var(--apple-text-secondary); margin-bottom:16px;">
             Liquida automáticamente las cuentas nominales de Ingresos (4), Costos (5) y Gastos (6) trasladando el resultado neto a la cuenta de patrimonio 
-            <code style="color:var(--ok); font-family:var(--mono);">999-000000 (Utilidades o Pérdidas del Período)</code> e iniciando el nuevo ejercicio fiscal en <strong>01/2027</strong>.
+            <code style="color:var(--apple-mint); font-family:var(--apple-mono);">999-000000 (Utilidades o Pérdidas del Período)</code> e iniciando el nuevo ejercicio fiscal en <strong>01/2027</strong>.
           </p>
           <button class="btn btn-danger" id="btn-ejecutar-cierre-anual">
             🏛️ Ejecutar Cierre Fiscal Anual
@@ -1336,26 +1456,26 @@
         </div>
 
         <!-- TARJETAS DE RESUMEN DE SEGURIDAD -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
           
           <div class="subpanel" style="padding:14px; text-align:center;">
-            <div style="font-size:24px; font-weight:800; color:var(--cyan); font-family:var(--mono);" id="lbl-audit-total-sesiones">12</div>
-            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Inicios de Sesión Registrados</div>
+            <div style="font-size:22px; font-weight:800; color:var(--apple-cyan); font-family:var(--apple-mono);" id="lbl-audit-total-sesiones">0</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Inicios de Sesión Registrados</div>
           </div>
 
           <div class="subpanel" style="padding:14px; text-align:center;">
-            <div style="font-size:24px; font-weight:800; color:var(--ok); font-family:var(--mono);" id="lbl-audit-total-dispositivos">3</div>
-            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Dispositivos / Terminales</div>
+            <div style="font-size:22px; font-weight:800; color:var(--apple-mint); font-family:var(--apple-mono);" id="lbl-audit-total-dispositivos">0</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Dispositivos / Terminales</div>
           </div>
 
           <div class="subpanel" style="padding:14px; text-align:center;">
-            <div style="font-size:24px; font-weight:800; color:#fbbf24; font-family:var(--mono);" id="lbl-audit-total-cuentas">49</div>
-            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Cuentas Monitoreadas en BD</div>
+            <div style="font-size:22px; font-weight:800; color:var(--apple-amber); font-family:var(--apple-mono);" id="lbl-audit-total-cuentas">0</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Cuentas Monitoreadas en BD</div>
           </div>
 
           <div class="subpanel" style="padding:14px; text-align:center;">
-            <div style="font-size:24px; font-weight:800; color:var(--ok); font-family:var(--mono);">100% ÓPTIMA</div>
-            <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">Salud Base de Datos SQLite</div>
+            <div style="font-size:22px; font-weight:800; color:var(--apple-mint); font-family:var(--apple-mono);">100% ÓPTIMA</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Salud Base de Datos SQLite</div>
           </div>
 
         </div>
@@ -1363,7 +1483,7 @@
         <!-- PESTAÑAS DE LA CONSOLA DE AUDITORÍA -->
         <div class="subpanel">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <button class="btn" id="btn-audit-tab-sesiones">📱 Inicios de Sesión & Dispositivos</button>
               <button class="btn btn-secondary" id="btn-audit-tab-datos">📊 Informe de Datos en Base de Datos</button>
               <button class="btn btn-secondary" id="btn-audit-tab-logs">📋 Trazabilidad & Eventos</button>
@@ -1371,7 +1491,8 @@
             <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Exportar Auditoría</button>
           </div>
 
-          <div id="audit-render-area" class="table-box" style="padding:18px; background:#050b14; border-radius:8px;">
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div id="audit-render-area" class="table-box" style="padding:16px; background:rgba(4, 8, 16, 0.7); border-radius:12px;">
             <!-- Contenido dinámico de auditoría -->
           </div>
         </div>
@@ -1380,26 +1501,26 @@
 
     </div>
 
-    <!-- MOBILE BOTTOM NAVIGATION (iOS / Android Cupertino Style) -->
+    <!-- MOBILE BOTTOM NAVIGATION (iOS Cupertino SF Style) -->
     <nav class="lexus-mobile-nav hidden" id="lexus-mob-nav">
       <button class="mob-tab-btn activo" data-ir="vista-menu">
-        <span class="icon">📋</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
         <span>Menú</span>
       </button>
       <button class="mob-tab-btn" data-ir="vista-companias">
-        <span class="icon">🏢</span>
-        <span>Cías</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path><path d="M14 8h1"></path><path d="M14 12h1"></path><path d="M14 16h1"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+        <span>Empresas</span>
       </button>
       <button class="mob-tab-btn" data-ir="vista-catalogo">
-        <span class="icon">📂</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
         <span>Catálogo</span>
       </button>
       <button class="mob-tab-btn" data-ir="vista-documentos">
-        <span class="icon">📝</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         <span>Asientos</span>
       </button>
       <button class="mob-tab-btn" data-ir="vista-reportes-mensuales">
-        <span class="icon">📈</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
         <span>Reportes</span>
       </button>
     </nav>
@@ -1696,10 +1817,12 @@
       if (DB_DEMO.companias.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
-              <div style="font-size:32px; margin-bottom:8px;">🏢</div>
-              <strong style="color:#ffffff; font-size:15px;">No hay compañías inscritas en el sistema.</strong>
-              <p style="font-size:12.5px; margin-top:6px;">Utilice el panel de la izquierda para digitar el código de su primera empresa (ej. <strong>001</strong>) e incluirla.</p>
+            <td colspan="5" style="text-align:center; padding:36px 16px; color:var(--apple-text-secondary);">
+              <div style="font-size:36px; margin-bottom:8px;">🏢</div>
+              <strong style="color:#ffffff; font-size:15px; display:block; margin-bottom:6px;">No hay compañías inscritas</strong>
+              <p style="font-size:12px; color:var(--apple-text-secondary); max-width:280px; margin:0 auto; line-height:1.4;">
+                Digite un código en el panel superior (ej. <strong>001</strong>) para incluir su primera empresa.
+              </p>
             </td>
           </tr>
         `;
@@ -1709,13 +1832,13 @@
           const tr = document.createElement('tr');
           if (esActiva) tr.style.background = 'rgba(56, 189, 248, 0.12)';
           tr.innerHTML = `
-            <td><strong style="color:var(--cyan); font-family:var(--mono); font-size:14px;">${c.id}</strong></td>
-            <td><strong>${c.nombre}</strong> ${esActiva ? '<span class="pill pill-green" style="font-size:10px; padding:1px 6px;">ACTIVA</span>' : ''}</td>
-            <td style="font-family:var(--mono); color:var(--text-muted);">${c.cedula}</td>
-            <td style="font-family:var(--mono);">${c.periodo}</td>
+            <td><strong style="color:var(--apple-cyan); font-family:var(--apple-mono); font-size:14px;">${c.id}</strong></td>
+            <td><strong>${c.nombre}</strong> ${esActiva ? '<span class="pill pill-green" style="font-size:10px; padding:2px 7px;">ACTIVA</span>' : ''}</td>
+            <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary);">${c.cedula}</td>
+            <td style="font-family:var(--apple-mono);">${c.periodo}</td>
             <td>
-              <button class="btn btn-secondary btn-sm btn-sel-comp" data-id="${c.id}" style="padding:4px 8px; font-size:11px;">
-                ${esActiva ? '✓ Seleccionada' : 'Abrir Empresa'}
+              <button class="btn btn-secondary btn-sm btn-sel-comp" data-id="${c.id}" style="padding:4px 10px; font-size:11.5px;">
+                ${esActiva ? '✓ Activa' : 'Abrir Empresa'}
               </button>
             </td>
           `;
