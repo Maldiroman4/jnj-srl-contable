@@ -83,14 +83,13 @@
     /* ==========================================================================
        APPLE TERMINAL STATUS TICKER (CAPSULE VIBRANCY)
        ========================================================================== */
+    /* TOP LIVE STATUS TICKER BAR (CENTERED) */
     .ticker-bar {
-      background: rgba(4, 8, 16, 0.95);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: rgba(4, 8, 16, 0.96);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding: 6px 16px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       font-family: var(--apple-mono);
       font-size: 11px;
@@ -99,12 +98,15 @@
       z-index: 100;
       width: 100%;
       box-sizing: border-box;
+      text-align: center;
     }
-    .ticker-live {
-      display: flex;
+    .ticker-content {
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      white-space: nowrap;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      text-align: center;
     }
     .ticker-dot {
       width: 7px;
@@ -113,14 +115,24 @@
       background: var(--apple-mint);
       box-shadow: 0 0 10px var(--apple-mint);
       animation: pulse 2s infinite ease-in-out;
+      flex-shrink: 0;
+    }
+    .ticker-engine-txt {
+      color: var(--apple-mint);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .ticker-sep {
+      color: rgba(255, 255, 255, 0.2);
+    }
+    #ticker-time {
+      color: #E2E8F0;
+      font-weight: 600;
+      white-space: nowrap;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.6; transform: scale(1.15); }
-    }
-    #ticker-time {
-      white-space: nowrap;
-      font-size: 11px;
     }
 
     /* App Shell Container */
@@ -870,32 +882,46 @@
       }
       .drawer-handle { display: block; }
       .table-scroll-hint { display: flex; }
-      .ticker-bar { padding: 5px 12px; font-size: 10px; }
+      .ticker-bar { padding: 4px 8px; font-size: 10px; }
       .lexus-app { padding: 8px 10px 84px 10px; }
       .lexus-header {
-        padding: 10px 12px;
-        border-radius: 14px;
+        padding: 12px 14px;
+        border-radius: 16px;
         flex-direction: column;
-        align-items: stretch;
+        align-items: center;
+        justify-content: center;
         gap: 10px;
+        text-align: center;
       }
       .lexus-brand {
-        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
         width: 100%;
+        text-align: center;
       }
-      .lexus-brand img { width: 34px; height: 34px; border-radius: 8px; }
-      .lexus-title h1 { font-size: 16px; }
-      .lexus-title p { font-size: 10px; }
+      .lexus-brand .header-logo-fused { width: 38px; height: 38px; border-radius: 10px; }
+      .lexus-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .lexus-title h1 { font-size: 16px; justify-content: center; }
+      .lexus-title p { font-size: 10.5px; text-align: center; }
       .lexus-status-pills {
         width: 100%;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
       }
       .lexus-status-pills .btn-cambiar-cia-header {
-        grid-column: 1 / 2;
-        width: 100%;
-        justify-content: flex-start;
+        flex: 1;
+        max-width: 240px;
+        justify-content: center;
         overflow: hidden;
         text-overflow: ellipsis;
       }
@@ -903,11 +929,22 @@
         display: none;
       }
       .lexus-status-pills #btn-cerrar-sesion {
-        grid-column: 2 / 3;
-        padding: 5px 10px;
+        padding: 6px 14px;
+        flex-shrink: 0;
       }
       .pill { padding: 5px 10px; font-size: 11px; min-height: 30px; }
-      .login-box { padding: 26px 18px; border-radius: 18px; }
+      .login-box {
+        padding: 0 18px 26px 18px !important;
+        border-radius: 24px;
+      }
+      .login-hero-circuit {
+        width: calc(100% + 36px);
+        margin: 0 -18px 2px -18px;
+        border-radius: 24px 24px 0 0;
+      }
+      .login-hero-circuit img {
+        border-radius: 24px 24px 0 0;
+      }
       .login-box h2 { font-size: 20px; }
       .menu-grid { grid-template-columns: 1fr; gap: 10px; }
       .menu-card { padding: 14px 14px; gap: 12px; border-radius: 14px; }
@@ -990,13 +1027,14 @@
 </head>
 <body>
 
-  <!-- TOP STATUS TICKER -->
+  <!-- TOP STATUS TICKER (CENTERED & STREAMLINED) -->
   <div class="ticker-bar">
-    <div class="ticker-live">
+    <div class="ticker-content">
       <span class="ticker-dot"></span>
-      <span>LEXUS ENGINE V2.6 · EN LÍNEA</span>
+      <span class="ticker-engine-txt">LEXUS ENGINE V2.6 · EN LÍNEA</span>
+      <span class="ticker-sep">·</span>
+      <span id="ticker-time">🕒 --:--:-- · 📅 --/--/----</span>
     </div>
-    <div id="ticker-time">📅 --/--/---- · 🕒 --:--:--</div>
   </div>
 
   <div class="lexus-app">
@@ -1797,7 +1835,8 @@
       const pad = (n) => String(n).padStart(2, '0');
       const f = `${pad(ahora.getDate())}/${pad(ahora.getMonth()+1)}/${ahora.getFullYear()}`;
       const h = `${pad(ahora.getHours())}:${pad(ahora.getMinutes())}:${pad(ahora.getSeconds())}`;
-      document.getElementById('ticker-time').textContent = `📅 ${f} · 🕒 ${h}`;
+      const el = document.getElementById('ticker-time');
+      if (el) el.textContent = `🕒 ${h} · 📅 ${f}`;
     }
     setInterval(actualizarReloj, 1000);
     actualizarReloj();
