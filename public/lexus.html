@@ -538,11 +538,11 @@
          ========================================================================== -->
     <div id="pantalla-login" class="login-wrapper">
       <div class="login-box">
-        <div style="display:grid; place-items:center; margin-bottom:12px;">
-          <div class="lexus-logo-badge">💎</div>
+        <div style="display:grid; place-items:center; margin-bottom:14px;">
+          <img src="img/logo-lexus.jpg" alt="Logo Lexus" style="width:100%; max-width:280px; height:auto; object-fit:contain; border-radius:12px; box-shadow:0 8px 30px rgba(2,132,199,0.4); border:1px solid rgba(56,189,248,0.3);">
         </div>
         <h2>LEXUS</h2>
-        <p class="sub">Su Sistema Contable · 30 Años de Experiencia</p>
+        <p class="sub">Mi Sistema Contable Integrado · 30 Años de Experiencia</p>
 
         <form id="form-login">
           <div class="form-group">
@@ -576,24 +576,27 @@
          ========================================================================== -->
     <div id="pantalla-sistema" class="hidden" style="display:flex; flex-direction:column; flex:1;">
       
-      <!-- HEADER CON COMPAÑÍA ACTIVA -->
+      <!-- HEADER CON COMPAÑÍA ACTIVA & STATUS BAR -->
       <header class="lexus-header">
         <div class="lexus-brand">
-          <div class="lexus-logo-badge">💎</div>
+          <img src="img/logo-lexus.jpg" alt="Logo Lexus" style="width:46px; height:46px; object-fit:contain; border-radius:8px; box-shadow:0 0 14px rgba(56,189,248,0.4); border:1px solid rgba(56,189,248,0.3);">
           <div class="lexus-title">
-            <h1>LEXUS <span style="font-size:13px; font-weight:600; color:var(--cyan);">· SISTEMA CONTABLE</span></h1>
-            <p>Partida Doble · Mayorización Automática · Cierre de Período</p>
+            <h1>LEXUS <span style="font-size:13px; font-weight:600; color:var(--cyan);">· SISTEMA CONTABLE INTEGRADO</span></h1>
+            <p>Plan de Cuentas · Mayorización Automática · Cierre de Período</p>
           </div>
         </div>
 
         <div class="lexus-status-pills">
-          <div class="pill pill-cyan">
-            <span>🏢 Compañía:</span>
-            <strong id="hdr-comp-nombre">19 - Distribuidora Automotriz S.A.</strong>
-          </div>
-          <div class="pill pill-green">
-            <span>Período:</span>
-            <strong id="hdr-periodo">08/2026</strong>
+          <button class="pill pill-cyan btn-cambiar-cia-header" id="btn-cambiar-cia-lexus" title="Cambiar Empresa Activa" style="cursor:pointer; background:#0a1424; transition:all .2s ease; border:1px solid var(--cyan); color:var(--cyan); font-family:var(--mono);">
+            <span>🏢 Empresa:</span>
+            <strong id="hdr-comp-nombre">Seleccionar Empresa</strong>
+            <span style="font-size:10px; color:var(--text-muted);">▼</span>
+          </button>
+          <div class="pill pill-green" id="pill-periodo-lexus">
+            <span>Mes en proceso:</span>
+            <strong id="hdr-mes-lexus">08</strong>
+            <span>| Año:</span>
+            <strong id="hdr-ano-lexus">2026</strong>
           </div>
           <button class="btn btn-secondary btn-sm" id="btn-cerrar-sesion" style="padding:6px 12px; font-size:12px;">
             ⏻ Salir
@@ -698,18 +701,28 @@
             </div>
 
             <!-- Banner cuando YA EXISTE -->
-            <div id="box-compania-existe" class="banner banner-warn hidden" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
-              <div style="font-weight:700; font-size:14px;">⚠️ ESTA COMPAÑÍA YA EXISTE EN EL SISTEMA</div>
+            <div id="box-compania-existe" class="banner banner-info hidden" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
+              <div style="font-weight:700; font-size:14px;">🏢 EMPRESA SELECCIONADA Y ACTIVADA</div>
               <div id="desc-compania-existe" style="font-size:13px; color:#ffffff;"></div>
-              <button class="btn btn-secondary btn-sm" id="btn-ok-compania-existe" style="margin-top:6px;">
-                ↵ Presione Enter para capturar otra en 000
+              <button class="btn btn-sm" id="btn-ok-compania-existe" style="margin-top:6px;">
+                ↵ Presione Enter para ir al Menú Principal
               </button>
+            </div>
+
+            <!-- Banner cuando NO EXISTE (Confirmación) -->
+            <div id="box-compania-no-existe" class="banner banner-warn hidden" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
+              <div style="font-weight:700; font-size:14px;">⚠️ La empresa No. [<span id="lbl-num-no-existe"></span>] no existe en el sistema.</div>
+              <p style="font-size:12.5px; color:#ffffff; margin:0;">¿Desea incluirla y aprovisionar su catálogo ahora?</p>
+              <div style="display:flex; gap:8px; margin-top:4px;">
+                <button class="btn btn-sm" id="btn-confirmar-incluir-lexus">Sí, Incluir Empresa</button>
+                <button class="btn btn-secondary btn-sm" id="btn-cancelar-incluir-lexus">No, Volver</button>
+              </div>
             </div>
 
             <!-- Formulario cuando es NUEVA -->
             <div id="form-nueva-compania" class="hidden">
               <div class="banner banner-info" style="margin-bottom:12px;">
-                ✨ Configuración de Nueva Compañía No. <strong id="lbl-nueva-comp-id" style="color:#ffffff;"></strong>
+                ✨ Aprovisionamiento de Nueva Empresa No. <strong id="lbl-nueva-comp-id" style="color:#ffffff;"></strong>
               </div>
 
               <div class="form-group">
@@ -1285,8 +1298,15 @@
       inputPass.type = inputPass.type === 'password' ? 'text' : 'password';
     });
 
-    // Control de Vistas
+    // Control de Vistas con Navigation Guard
     function mostrarVista(idVista) {
+      // Navigation Guard: si es contador y no hay empresa seleccionada, forzar módulo de compañías
+      if (DB_DEMO.rolActivo !== 'SUPER_ADMIN' && !DB_DEMO.companiaActiva && idVista !== 'vista-companias') {
+        alert('⚠️ Por favor seleccione o capture el código de la empresa a trabajar.');
+        idVista = 'vista-companias';
+        renderTablaCompanias();
+      }
+
       const vistas = [
         'vista-menu', 'vista-companias', 'vista-catalogo', 'vista-documentos',
         'vista-procesos', 'vista-reportes-mensuales', 'vista-reportes-historicos',
@@ -1372,7 +1392,6 @@
           });
 
           document.getElementById('hdr-comp-nombre').textContent = '🛡️ MODO AUDITORÍA & MONITOREO';
-          document.getElementById('hdr-periodo').textContent = 'SUPER_ADMIN';
           document.getElementById('lbl-menu-empresa').textContent = 'SUPER USUARIO';
 
           mostrarVista('vista-superadmin-auditoria');
@@ -1380,8 +1399,15 @@
         } else {
           DB_DEMO.usuarioActivo = 'Joel777';
           DB_DEMO.rolActivo = 'CONTADOR';
+          // REQUISITO: Desactivar empresa por defecto y forzar selección
+          DB_DEMO.companiaActiva = null;
           actualizarInfoCompania();
-          mostrarVista('vista-menu');
+          mostrarVista('vista-companias');
+          renderTablaCompanias();
+          setTimeout(() => {
+            document.getElementById('input-num-compania')?.focus();
+            document.getElementById('input-num-compania')?.select();
+          }, 150);
         }
       } else {
         DB_DEMO.intentosFallidos += 1;
@@ -1407,6 +1433,14 @@
       document.getElementById('lexus-mob-nav').classList.add('hidden');
       document.getElementById('pantalla-login').classList.remove('hidden');
       document.getElementById('login-pass').value = '';
+    });
+
+    // Botón Cambiar Empresa en el Header
+    document.getElementById('btn-cambiar-cia-lexus')?.addEventListener('click', () => {
+      mostrarVista('vista-companias');
+      renderTablaCompanias();
+      document.getElementById('input-num-compania')?.focus();
+      document.getElementById('input-num-compania')?.select();
     });
 
     // Botones del Menú Principal
@@ -1472,10 +1506,25 @@
     // LÓGICA MÓDULO 1: COMPAÑÍAS
     // =========================================================================
     function actualizarInfoCompania() {
-      const c = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || DB_DEMO.companias[0];
-      document.getElementById('hdr-comp-nombre').textContent = `${c.id} - ${c.nombre}`;
-      document.getElementById('hdr-periodo').textContent = c.periodo;
-      document.getElementById('lbl-menu-empresa').textContent = `${c.id} · ${c.nombre}`;
+      const hdrNombre = document.getElementById('hdr-comp-nombre');
+      const hdrMes = document.getElementById('hdr-mes-lexus');
+      const hdrAno = document.getElementById('hdr-ano-lexus');
+      const lblMenu = document.getElementById('lbl-menu-empresa');
+
+      if (DB_DEMO.companiaActiva) {
+        const c = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+        if (c) {
+          if (hdrNombre) hdrNombre.textContent = `${c.id} - ${c.nombre}`;
+          if (hdrMes) hdrMes.textContent = String(c.mes || 8).padStart(2, '0');
+          if (hdrAno) hdrAno.textContent = c.ano || 2026;
+          if (lblMenu) lblMenu.textContent = `${c.id} · ${c.nombre}`;
+        }
+      } else {
+        if (hdrNombre) hdrNombre.textContent = 'Seleccionar Empresa';
+        if (hdrMes) hdrMes.textContent = '--';
+        if (hdrAno) hdrAno.textContent = '----';
+        if (lblMenu) lblMenu.textContent = 'Sin Empresa Asignada';
+      }
     }
 
     function renderTablaCompanias() {
@@ -1492,7 +1541,7 @@
           <td style="font-family:var(--mono);">${c.periodo}</td>
           <td>
             <button class="btn btn-secondary btn-sm btn-sel-comp" data-id="${c.id}" style="padding:4px 8px; font-size:11px;">
-              ${esActiva ? '✓ Seleccionada' : 'Seleccionar'}
+              ${esActiva ? '✓ Seleccionada' : 'Abrir Empresa'}
             </button>
           </td>
         `;
@@ -1513,12 +1562,14 @@
           DB_DEMO.companiaActiva = parseInt(btn.dataset.id, 10);
           actualizarInfoCompania();
           renderTablaCompanias();
+          mostrarVista('vista-menu');
         });
       });
     }
 
     const inputNumComp = document.getElementById('input-num-compania');
     const boxExiste = document.getElementById('box-compania-existe');
+    const boxNoExiste = document.getElementById('box-compania-no-existe');
     const descExiste = document.getElementById('desc-compania-existe');
     const formNueva = document.getElementById('form-nueva-compania');
 
@@ -1526,6 +1577,7 @@
       const val = inputNumComp.value.trim();
       if (val === '000' || val === '00' || val === '0' || val === '') {
         boxExiste.classList.add('hidden');
+        boxNoExiste.classList.add('hidden');
         formNueva.classList.add('hidden');
         mostrarVista('vista-menu');
         return;
@@ -1536,16 +1588,19 @@
 
       if (existe) {
         formNueva.classList.add('hidden');
+        boxNoExiste.classList.add('hidden');
         boxExiste.classList.remove('hidden');
+        DB_DEMO.companiaActiva = existe.id;
+        actualizarInfoCompania();
+        renderTablaCompanias();
         descExiste.innerHTML = `<strong>${existe.id} - ${existe.nombre}</strong> (Cédula: ${existe.cedula} · Período: ${existe.periodo})`;
         document.getElementById('btn-ok-compania-existe').focus();
       } else {
         boxExiste.classList.add('hidden');
-        formNueva.classList.remove('hidden');
-        document.getElementById('lbl-nueva-comp-id').textContent = numId;
-        document.getElementById('nueva-comp-nombre').value = '';
-        document.getElementById('nueva-comp-cedula').value = '';
-        document.getElementById('nueva-comp-nombre').focus();
+        formNueva.classList.add('hidden');
+        document.getElementById('lbl-num-no-existe').textContent = numId;
+        boxNoExiste.classList.remove('hidden');
+        document.getElementById('btn-confirmar-incluir-lexus').focus();
       }
     }
 
@@ -1559,6 +1614,21 @@
 
     document.getElementById('btn-ok-compania-existe').addEventListener('click', () => {
       boxExiste.classList.add('hidden');
+      mostrarVista('vista-menu');
+    });
+
+    document.getElementById('btn-confirmar-incluir-lexus').addEventListener('click', () => {
+      const numId = parseInt(document.getElementById('lbl-num-no-existe').textContent, 10);
+      boxNoExiste.classList.add('hidden');
+      formNueva.classList.remove('hidden');
+      document.getElementById('lbl-nueva-comp-id').textContent = numId;
+      document.getElementById('nueva-comp-nombre').value = '';
+      document.getElementById('nueva-comp-cedula').value = '';
+      document.getElementById('nueva-comp-nombre').focus();
+    });
+
+    document.getElementById('btn-cancelar-incluir-lexus').addEventListener('click', () => {
+      boxNoExiste.classList.add('hidden');
       inputNumComp.value = '000';
       inputNumComp.focus();
       inputNumComp.select();
@@ -1604,15 +1674,14 @@
 
       formNueva.classList.add('hidden');
       inputNumComp.value = '000';
-      alert(`✅ Compañía [${numId} - ${nombre}] creada exitosamente.`);
+      alert(`✅ Empresa [${numId} - ${nombre}] creada y activada exitosamente.`);
+      mostrarVista('vista-menu');
     });
 
     document.getElementById('btn-cancelar-nueva-comp').addEventListener('click', () => {
       formNueva.classList.add('hidden');
       inputNumComp.value = '000';
       inputNumComp.focus();
-    });
-
     // =========================================================================
     // LÓGICA MÓDULO 2: CATÁLOGO DE CUENTAS
     // =========================================================================

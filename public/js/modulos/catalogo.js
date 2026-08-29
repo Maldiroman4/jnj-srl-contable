@@ -21,7 +21,7 @@ export function render() {
   contenido.innerHTML = '';
 
   contenido.appendChild(paginaHeader('Catálogo de Cuentas',
-    'Jerarquía estricta XXX-XX-XXX — la clase se hereda de la Cuenta Mayor.', `MÓDULO 2 · COMPAÑÍA ${e.compania}`));
+    'Plan contable clasificado por niveles y cuentas de mayor.', `COMPAÑÍA ${e.compania}`));
 
   const stats = el('<div class="stats-grid" id="stats-cuentas"></div>');
   contenido.appendChild(stats);
@@ -30,7 +30,6 @@ export function render() {
     <div class="panel">
       <div class="toolbar">
         <button class="btn" id="btn-nueva-cuenta">+ Nueva Cuenta</button>
-        <span class="msg-info" style="padding:7px 12px">Máscara XXX-XX-XXX · La clase se hereda de la Cuenta Mayor</span>
       </div>
       <div class="table-scroll" style="max-height:62vh">
         <table>

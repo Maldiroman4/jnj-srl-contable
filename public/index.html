@@ -6,9 +6,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0a192f">
-  <title>JNJ SRL — Sistema Administrativo y Contable</title>
-  <link rel="icon" type="image/png" href="img/logo.png">
-  <link rel="apple-touch-icon" href="img/logo.png">
+  <title>Lexus — Mi Sistema Contable Integrado</title>
+  <link rel="icon" type="image/jpeg" href="img/logo-lexus.jpg">
+  <link rel="apple-touch-icon" href="img/logo-lexus.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,10 +24,10 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div style="display:flex; align-items:center; gap:12px; flex:1;">
-          <img src="img/logo.png" alt="Logo JNJ SRL" style="width:38px; height:38px; object-fit:contain; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.25);">
+          <img src="img/logo-lexus.jpg" alt="Logo Lexus" style="width:42px; height:42px; object-fit:contain; border-radius:8px; box-shadow:0 0 12px rgba(56,189,248,0.35); border:1px solid rgba(56,189,248,0.3);">
           <div class="brand-text">
-            <span class="brand-name">JNJ SRL</span>
-            <span class="brand-sub">Software Integral 2026</span>
+            <span class="brand-name" style="font-size:16px; font-weight:800; letter-spacing:0.02em; color:#fff;">LEXUS</span>
+            <span class="brand-sub" style="font-size:10.5px; color:#38bdf8; font-weight:600;">Sistema Contable</span>
           </div>
         </div>
         <!-- Botón cerrar para vista móvil -->
@@ -35,27 +35,27 @@
       </div>
 
       <nav id="app-menu" class="sidebar-nav" aria-label="Módulos Contables">
-        <!-- SECCIÓN CONTABILIDAD PURA (CLIENTE REQUISITO) -->
+        <!-- SECCIÓN CONTABILIDAD PURA -->
         <div class="sidebar-section-title" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#38bdf8;">
           Contabilidad General
         </div>
 
-        <button data-modulo="companias" data-tooltip="Selección y gestión de empresas">
+        <button data-modulo="companias" data-tooltip="Selección y administración de empresas">
           <span class="nav-icon" aria-hidden="true">🏢</span>
           <span class="nav-label">Compañías</span>
           <span class="nav-key">1</span>
         </button>
-        <button data-modulo="catalogo" class="activo" data-tooltip="Plan de cuentas XXX-XX-XXX">
+        <button data-modulo="catalogo" class="activo" data-tooltip="Plan de cuentas contables">
           <span class="nav-icon" aria-hidden="true">📂</span>
           <span class="nav-label">Catálogo de Cuentas</span>
           <span class="nav-key">2</span>
         </button>
-        <button data-modulo="asientos" data-tooltip="Partida doble estricta y comprobantes de diario">
+        <button data-modulo="asientos" data-tooltip="Comprobantes y asientos de diario">
           <span class="nav-icon" aria-hidden="true">📝</span>
-          <span class="nav-label">Asientos Contables</span>
+          <span class="nav-label">Documentos (Asientos)</span>
           <span class="nav-key">3</span>
         </button>
-        <button data-modulo="procesos" data-tooltip="Mayorización en cascada y cierres de período">
+        <button data-modulo="procesos" data-tooltip="Mayorización de cuentas y cierres">
           <span class="nav-icon" aria-hidden="true">⚙️</span>
           <span class="nav-label">Procesos Selectos</span>
           <span class="nav-key">4</span>
@@ -68,7 +68,7 @@
 
         <div style="height:1px; background:rgba(255,255,255,0.1); margin:10px 12px 6px;"></div>
 
-        <!-- SECCIÓN MÓDULOS EXTRAS & COMERCIALES -->
+        <!-- SECCIÓN MÓDULOS ADICIONALES -->
         <div class="sidebar-section-title conta-only-section" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#94a3b8;">
           Módulos Adicionales
         </div>
@@ -80,7 +80,7 @@
         </button>
 
         <!-- SECCIÓN EXCLUSIVA SUPER USUARIO -->
-        <button data-modulo="seguridad" class="super-user-btn" id="btn-menu-seguridad" style="display:none;" data-tooltip="Auditoría de sesiones, IPs y base de datos">
+        <button data-modulo="seguridad" class="super-user-btn" id="btn-menu-seguridad" style="display:none;" data-tooltip="Auditoría de accesos y base de datos">
           <span class="nav-icon" aria-hidden="true">🛡️</span>
           <span class="nav-label">Seguridad & Auditoría</span>
           <span class="nav-key">S</span>
@@ -90,9 +90,9 @@
       <div class="sidebar-foot">
         <div class="sidebar-status">
           <span class="dot"></span>
-          <span>JNJ SRL Online</span>
+          <span>Lexus Engine Online</span>
         </div>
-        <span class="sidebar-version">v2.0 · Multi-Tenant</span>
+        <span class="sidebar-version">v2.6 · Multi-Tenant</span>
       </div>
     </aside>
 
@@ -123,11 +123,20 @@
         </div>
 
         <div class="topbar-right">
-          <div class="company-control">
-            <span class="company-label">Compañía</span>
-            <select id="sel-compania"></select>
+          <!-- STATUS BAR & TENANT SWITCHER REQUERIDO -->
+          <div class="header-status-bar" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <button class="btn-tenant-switcher" id="btn-tenant-switcher" title="Cambiar Empresa Activa" style="background:#0c182a; border:1px solid #1e3a5f; color:#38bdf8; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all .2s ease;">
+              <span>🏢</span>
+              <span id="tenant-nombre-header">Seleccionar Empresa</span>
+              <span style="font-size:10px; color:#94a3b8;">▼</span>
+            </button>
+            <div class="company-control" style="display:none;">
+              <select id="sel-compania"></select>
+            </div>
+            <span id="periodo-label" class="period-chip" style="font-family:'JetBrains Mono',monospace; font-size:12px; display:inline-flex; align-items:center; gap:6px;">
+              Mes en proceso: <strong id="hdr-mes-val" style="color:#38bdf8;">--</strong> | Año: <strong id="hdr-ano-val" style="color:#38bdf8;">----</strong>
+            </span>
           </div>
-          <span id="periodo-label" class="period-chip">Período: --/----</span>
 
           <div class="topbar-divider"></div>
 
@@ -152,14 +161,14 @@
               <span class="avatar">JO</span>
               <span class="profile-meta">
                 <span class="profile-name">Joel777</span>
-                <span class="profile-role">Super Usuario</span>
+                <span class="profile-role">Contador</span>
               </span>
               <svg class="profile-chevron" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m6 9 6 6 6-6"/>
               </svg>
             </button>
             <div id="panel-perfil" class="popover popover-right hidden" role="menu">
-              <div class="popover-head">Joel777 · Super Usuario</div>
+              <div class="popover-head">Joel777 · Contador</div>
               <button class="popover-item" data-ir="seguridad"><span class="pop-icon">🛡️</span> Auditoría de Sesiones</button>
               <button class="popover-item" data-ir="companias"><span class="pop-icon">🏢</span> Compañías</button>
               <button class="popover-item" data-ir="reportes"><span class="pop-icon">📈</span> Reportes</button>
@@ -174,13 +183,13 @@
       <main id="app-contenido" class="content"></main>
 
       <footer id="app-footer">
-        <span>JNJ SRL · Sistema Contable & Administrativo Multi-Tenant</span>
-        <span class="footer-extra">Partida Doble · NIC / NIIF · CAByS</span>
+        <span>LEXUS · Sistema Contable & Administrativo Multi-Tenant</span>
+        <span class="footer-extra">Catálogo de Cuentas · Mayorización Automática · Balances Clasificados</span>
       </footer>
     </div>
   </div>
 
-  <!-- ===================== CUPERTINO MOBILE TAB BAR (Apple iOS Vector Icons) ===================== -->
+  <!-- ===================== CUPERTINO MOBILE TAB BAR ===================== -->
   <nav id="mobile-tab-bar" class="mobile-tab-bar" aria-label="Navegación rápida móvil">
     <button data-modulo="companias" class="tab-item">
       <span class="tab-icon">
@@ -250,20 +259,20 @@
     </button>
   </nav>
 
-  <!-- ===================== LOGIN SCREEN ===================== -->
+  <!-- ===================== LOGIN SCREEN (LEXUS BRANDING) ===================== -->
   <div id="login-screen" class="login-screen">
-    <div class="login-card">
-      <div class="login-brand" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; margin-bottom:14px;">
-        <img src="img/logo.png" alt="Logo JNJ SRL" style="width:72px; height:72px; object-fit:contain; border-radius:14px; box-shadow:0 4px 16px rgba(2,132,199,0.3); border:2px solid rgba(56,189,248,0.3);">
+    <div class="login-card" style="max-width:440px; padding:32px 28px;">
+      <div class="login-brand" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:18px;">
+        <img src="img/logo-lexus.jpg" alt="Lexus - Mi Sistema Contable Integrado" style="width:100%; max-width:280px; height:auto; object-fit:contain; border-radius:12px; box-shadow:0 8px 30px rgba(2,132,199,0.4); border:1px solid rgba(56,189,248,0.3);">
         <div>
-          <div class="brand-name" style="font-size:22px; font-weight:800;">JNJ SRL</div>
-          <div class="brand-sub" style="font-size:12px; color:var(--muted);">Sistema Administrativo y Contable</div>
+          <div class="brand-name" style="font-size:24px; font-weight:800; color:#fff; margin-top:6px;">LEXUS</div>
+          <div class="brand-sub" style="font-size:12px; color:#38bdf8; font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Mi Sistema Contable Integrado</div>
         </div>
       </div>
-      <h1>Iniciar sesión</h1>
-      <p class="login-hint">Acceso seguro exclusivo para <b>Joel777</b></p>
+      <h1 style="font-size:18px; font-weight:700;">Acceso Autorizado</h1>
+      <p class="login-hint">Digite su llave de usuario y contraseña</p>
       <form id="login-form" novalidate>
-        <label for="login-user">Usuario</label>
+        <label for="login-user">Usuario / Llave</label>
         <input id="login-user" type="text" autocomplete="username" placeholder="Usuario autorizado">
         <label for="login-pass">Contraseña</label>
         <div class="pass-wrap">
@@ -279,8 +288,89 @@
         <button type="submit" class="btn btn-primary btn-block" id="login-btn" style="padding:12px; font-size:14px; font-weight:700; margin-top:8px;">Ingresar al sistema</button>
       </form>
       <div class="login-foot" style="color:var(--muted); font-size:12px; margin-top:20px;">
-        Acceso restringido y protegido &middot; <b>JNJ SRL Cloud 2026</b>
+        Acceso restringido y protegido &middot; <b>Lexus Cloud 2026</b>
       </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL SELECCIÓN FORZOSA DE EMPRESA ===================== -->
+  <div id="modal-seleccion-empresa" class="modal hidden" role="dialog" aria-modal="true" style="z-index: 10000; backdrop-filter: blur(12px);">
+    <div class="modal-box" style="max-width: 620px; border: 1px solid #1e3a5f; background: #0b1526; box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(56,189,248,0.15); border-radius: 16px; padding: 24px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid #1e3a5f; padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:22px;">🏢</span>
+          <div>
+            <h2 style="font-size:18px; font-weight:800; color:#ffffff; margin:0;">Selección de Empresa</h2>
+            <p style="font-size:12px; color:#94a3b8; margin:0;">Seleccione o capture el código de la empresa a trabajar</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAPTURA POR CÓDIGO -->
+      <div style="background:#060d19; border:1px solid #1e3a5f; border-radius:10px; padding:14px; margin-bottom:16px;">
+        <label style="display:block; font-size:11.5px; font-weight:700; color:#38bdf8; text-transform:uppercase; margin-bottom:6px;">
+          Digite Número / Código de Empresa
+        </label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="input-codigo-empresa-modal" placeholder="Ej. 019 o 028" maxlength="5" style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:#38bdf8; text-align:center; width:130px; background:#0c182a; border:1px solid #1e3a5f; border-radius:8px; padding:8px;" autofocus>
+          <button class="btn btn-primary" id="btn-buscar-codigo-empresa" style="padding:8px 16px; font-weight:700; font-size:13px;">
+            ⚡ Abrir Empresa [Enter]
+          </button>
+        </div>
+      </div>
+
+      <!-- DIÁLOGO DE CONFIRMACIÓN SI LA EMPRESA NO EXISTE -->
+      <div id="box-empresa-no-existe" class="msg msg-warn hidden" style="margin-bottom:14px; padding:12px; border-radius:8px; background:rgba(245,158,11,0.15); border:1px solid #f59e0b; color:#fde68a;">
+        <div style="font-weight:700; font-size:13.5px; margin-bottom:4px;" id="lbl-empresa-no-existe-txt">
+          ⚠️ La empresa No. [X] no existe en el sistema.
+        </div>
+        <p style="font-size:12px; margin-bottom:10px; color:#ffffff;">
+          ¿Desea incluirla y aprovisionar su catálogo ahora?
+        </p>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-primary btn-sm" id="btn-confirmar-incluir-empresa">Sí, Incluir Empresa</button>
+          <button class="btn btn-secondary btn-sm" id="btn-cancelar-incluir-empresa">No, Volver</button>
+        </div>
+      </div>
+
+      <!-- FORMULARIO DE APROVISIONAMIENTO SI SE DESEA INCLUIR -->
+      <div id="form-incluir-empresa-rapida" class="hidden" style="background:#071120; border:1px solid #38bdf8; border-radius:10px; padding:14px; margin-bottom:16px;">
+        <h4 style="color:#38bdf8; margin-bottom:8px; font-size:13px; font-weight:700; text-transform:uppercase;">
+          ✨ Aprovisionar Nueva Empresa No. <span id="lbl-nueva-empresa-num"></span>
+        </h4>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:4px;">Nombre / Razón Social</label>
+          <input type="text" id="input-nueva-empresa-nombre" placeholder="Ej. Corporación Comercial..." style="width:100%; background:#0c182a; border:1px solid #1e3a5f; color:#fff; padding:8px 10px; border-radius:6px;">
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:4px;">Cédula Jurídica</label>
+          <input type="text" id="input-nueva-empresa-cedula" placeholder="3-101-000000" style="width:100%; background:#0c182a; border:1px solid #1e3a5f; color:#fff; padding:8px 10px; border-radius:6px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:4px;">Estructura de Catálogo Inicial</label>
+          <select id="sel-nuevo-catalogo-modo" style="width:100%; background:#0c182a; border:1px solid #1e3a5f; color:#fff; padding:8px 10px; border-radius:6px;">
+            <option value="1">1. Sin catálogo (con cuenta de resultado 999-000000)</option>
+            <option value="2">2. Clonar catálogo de otra empresa existente</option>
+            <option value="3" selected>3. Catálogo Comercial General Estándar</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-primary btn-sm" id="btn-guardar-aprovisionar-empresa">💾 Crear y Abrir Empresa</button>
+          <button class="btn btn-secondary btn-sm" id="btn-cerrar-aprovisionar-empresa">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- LISTA / GRID DE EMPRESAS EXISTENTES -->
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#94a3b8; text-transform:uppercase; margin-bottom:8px; display:flex; justify-content:space-between;">
+          <span>Empresas Registradas en Base de Datos</span>
+          <span id="lbl-total-empresas-modal">0 disponibles</span>
+        </div>
+        <div id="grid-empresas-modal" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px; max-height:240px; overflow-y:auto; padding-right:4px;">
+          <!-- Tarjetas generadas dinámicamente -->
+        </div>
+      </div>
+
     </div>
   </div>
 

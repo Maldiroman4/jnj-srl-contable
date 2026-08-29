@@ -26,18 +26,53 @@ const estado = {
 export function getEstado() { return estado; }
 
 export function setCompania(c) {
+  if (!c) {
+    estado.compania = null;
+    estado.ano = null;
+    estado.mes = null;
+    sessionStorage.removeItem('jnj_compania_activa');
+    localStorage.removeItem('compania');
+    actualizarBarra();
+    return;
+  }
   estado.compania = c.id_compania;
-  estado.ano = c.ano_activo;
-  estado.mes = c.mes_activo;
+  estado.ano = c.ano_activo || 2026;
+  estado.mes = c.mes_activo || 8;
+  sessionStorage.setItem('jnj_compania_activa', c.id_compania);
   localStorage.setItem('compania', c.id_compania);
-  localStorage.setItem('ano', c.ano_activo);
-  localStorage.setItem('mes', c.mes_activo);
+  localStorage.setItem('ano', estado.ano);
+  localStorage.setItem('mes', estado.mes);
   actualizarBarra();
+}
+
+export function actualizarBarra() {
+  const nombreEl = document.getElementById('tenant-nombre-header');
+  const mesEl = document.getElementById('hdr-mes-val');
+  const anoEl = document.getElementById('hdr-ano-val');
+  const periodoLabel = document.getElementById('periodo-label');
+  const sel = document.getElementById('sel-compania');
+
+  if (estado.compania) {
+    const comp = estado.companias.find(x => x.id_compania === estado.compania);
+    const razon = comp ? comp.razon_social : `Empresa #${estado.compania}`;
+    if (nombreEl) nombreEl.textContent = `${estado.compania} - ${razon}`;
+    if (mesEl) mesEl.textContent = String(estado.mes || '08').padStart(2, '0');
+    if (anoEl) anoEl.textContent = estado.ano || '2026';
+    if (sel) sel.value = estado.compania;
+    if (periodoLabel) {
+      periodoLabel.style.display = 'inline-flex';
+    }
+  } else {
+    if (nombreEl) nombreEl.textContent = 'Seleccionar Empresa';
+    if (mesEl) mesEl.textContent = '--';
+    if (anoEl) anoEl.textContent = '----';
+  }
 }
 
 export async function inicializar() {
   inicializarInterfaz();
   configurarSidebarMovil();
+  configurarEventosSeleccionEmpresa();
 
   document.getElementById('modal-cerrar').addEventListener('click', () => {
     document.getElementById('modal').classList.add('hidden');
@@ -46,10 +81,17 @@ export async function inicializar() {
     if (e.target.id === 'modal') document.getElementById('modal').classList.add('hidden');
   });
 
+  // Botón Cambiador de Empresa en el Header
+  document.getElementById('btn-tenant-switcher')?.addEventListener('click', () => {
+    abrirModalSeleccionEmpresa();
+  });
+
   document.getElementById('sel-compania').addEventListener('change', async (e) => {
     const c = estado.companias.find(x => x.id_compania === Number(e.target.value));
-    if (c) setCompania(c);
-    await refrescar();
+    if (c) {
+      setCompania(c);
+      await refrescar();
+    }
   });
 
   document.querySelectorAll('#app-menu button').forEach(b => {
@@ -65,22 +107,19 @@ export async function inicializar() {
     }
   });
 
-  const ultima = localStorage.getItem('compania') || null;
-
   try {
     const comps = await (await fetch('/api/companias')).json();
     estado.companias = comps;
     const sel = document.getElementById('sel-compania');
-    sel.innerHTML = '';
-    for (const c of comps) {
-      const op = document.createElement('option');
-      op.value = c.id_compania;
-      op.textContent = `${c.id_compania} - ${c.razon_social}`;
-      sel.appendChild(op);
+    if (sel) {
+      sel.innerHTML = '';
+      for (const c of comps) {
+        const op = document.createElement('option');
+        op.value = c.id_compania;
+        op.textContent = `${c.id_compania} - ${c.razon_social}`;
+        sel.appendChild(op);
+      }
     }
-    const cSel = comps.find(x => x.id_compania === Number(ultima)) || comps[0];
-    sel.value = cSel.id_compania;
-    setCompania(cSel);
 
     // Obtener rol del usuario autenticado
     const userDataRaw = sessionStorage.getItem('jnj_user_data');
@@ -90,13 +129,234 @@ export async function inicializar() {
     }
     aplicarPermisosRol(rolUsuario);
 
-    const moduloInicial = (rolUsuario === 'SUPER_ADMIN') ? 'seguridad' : 'catalogo';
-    await mostrar(moduloInicial);
-    await refrescar();
+    if (rolUsuario === 'SUPER_ADMIN') {
+      await mostrar('seguridad');
+    } else {
+      // REQUISITO: Desactivar empresa por defecto y forzar selección
+      estado.compania = null;
+      actualizarBarra();
+      abrirModalSeleccionEmpresa();
+    }
   } catch (e) {
     const contenido = document.getElementById('app-contenido');
     contenido.innerHTML = `<div class="msg msg-error">No se pudo conectar con el servidor: ${e.message}</div>`;
   }
+}
+
+// ---------------------------------------------------------------------------
+// COMPONENTE: SELECCIÓN FORZOSA DE EMPRESA Y CAPTURA DE CÓDIGO
+// ---------------------------------------------------------------------------
+export async function abrirModalSeleccionEmpresa() {
+  const modal = document.getElementById('modal-seleccion-empresa');
+  const inputCod = document.getElementById('input-codigo-empresa-modal');
+  const boxNoExiste = document.getElementById('box-empresa-no-existe');
+  const formNueva = document.getElementById('form-incluir-empresa-rapida');
+  const grid = document.getElementById('grid-empresas-modal');
+  const lblTotal = document.getElementById('lbl-total-empresas-modal');
+
+  if (!modal) return;
+
+  boxNoExiste?.classList.add('hidden');
+  formNueva?.classList.add('hidden');
+  if (inputCod) {
+    inputCod.value = '';
+  }
+
+  try {
+    const comps = await (await fetch('/api/companias')).json();
+    estado.companias = comps;
+    if (lblTotal) lblTotal.textContent = `${comps.length} registradas`;
+
+    if (grid) {
+      grid.innerHTML = '';
+      comps.forEach(c => {
+        const esActiva = (estado.compania === c.id_compania);
+        const card = document.createElement('div');
+        card.className = 'empresa-card-modal';
+        card.style.cssText = `
+          background: ${esActiva ? 'rgba(56,189,248,0.18)' : '#071322'};
+          border: 1.5px solid ${esActiva ? '#38bdf8' : '#1e3a5f'};
+          border-radius: 10px;
+          padding: 12px 14px;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+          transition: all .15s ease;
+        `;
+        card.innerHTML = `
+          <div>
+            <div style="font-weight:700; color:#fff; font-size:13.5px;">
+              <span style="color:#38bdf8; font-family:'JetBrains Mono',monospace; font-weight:800;">${c.id_compania}</span> - ${c.razon_social}
+            </div>
+            <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">
+              Cédula: ${c.cedula_juridica || '3-101-000000'} &middot; Período: ${String(c.mes_activo).padStart(2,'0')}/${c.ano_activo}
+            </div>
+          </div>
+          <button class="btn btn-sm ${esActiva ? 'btn-primary' : 'btn-secondary'}" style="font-size:11.5px; padding:4px 10px; flex-shrink:0;">
+            ${esActiva ? '✓ Activa' : 'Abrir Empresa'}
+          </button>
+        `;
+
+        card.addEventListener('click', () => {
+          seleccionarYActivarEmpresa(c);
+        });
+        grid.appendChild(card);
+      });
+    }
+  } catch (err) {
+    console.error('Error cargando empresas:', err);
+  }
+
+  modal.classList.remove('hidden');
+  setTimeout(() => {
+    inputCod?.focus();
+    inputCod?.select();
+  }, 100);
+}
+
+export async function seleccionarYActivarEmpresa(comp) {
+  setCompania(comp);
+  const modal = document.getElementById('modal-seleccion-empresa');
+  if (modal) modal.classList.add('hidden');
+
+  mostrarNotificacionGlobal(`🏢 Empresa activa: [${comp.id_compania} - ${comp.razon_social}] sincronizada.`);
+  await mostrar('catalogo');
+  await refrescar();
+}
+
+function configurarEventosSeleccionEmpresa() {
+  const inputCod = document.getElementById('input-codigo-empresa-modal');
+  const btnBuscar = document.getElementById('btn-buscar-codigo-empresa');
+  const btnConfirmar = document.getElementById('btn-confirmar-incluir-empresa');
+  const btnCancelarNo = document.getElementById('btn-cancelar-incluir-empresa');
+  const formNueva = document.getElementById('form-incluir-empresa-rapida');
+  const boxNoExiste = document.getElementById('box-empresa-no-existe');
+  const btnGuardarAprov = document.getElementById('btn-guardar-aprovisionar-empresa');
+  const btnCerrarAprov = document.getElementById('btn-cerrar-aprovisionar-empresa');
+
+  const ejecutarBusquedaCodigo = () => {
+    const val = (inputCod?.value || '').trim();
+    if (!val) return;
+
+    const num = parseInt(val, 10);
+    if (isNaN(num)) return;
+
+    const encontrada = estado.companias.find(x => x.id_compania === num);
+    if (encontrada) {
+      boxNoExiste?.classList.add('hidden');
+      formNueva?.classList.add('hidden');
+      seleccionarYActivarEmpresa(encontrada);
+    } else {
+      // Manejo de Empresa Inexistente con confirmación
+      formNueva?.classList.add('hidden');
+      const lblNoExiste = document.getElementById('lbl-empresa-no-existe-txt');
+      const lblNuevaNum = document.getElementById('lbl-nueva-empresa-num');
+      if (lblNoExiste) lblNoExiste.textContent = `⚠️ La empresa No. [${num}] no existe en el sistema.`;
+      if (lblNuevaNum) lblNuevaNum.textContent = num;
+      boxNoExiste?.classList.remove('hidden');
+      btnConfirmar?.focus();
+    }
+  };
+
+  btnBuscar?.addEventListener('click', ejecutarBusquedaCodigo);
+  inputCod?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      ejecutarBusquedaCodigo();
+    }
+  });
+
+  btnConfirmar?.addEventListener('click', () => {
+    boxNoExiste?.classList.add('hidden');
+    formNueva?.classList.remove('hidden');
+    const inputNombre = document.getElementById('input-nueva-empresa-nombre');
+    const inputCedula = document.getElementById('input-nueva-empresa-cedula');
+    if (inputNombre) inputNombre.value = '';
+    if (inputCedula) inputCedula.value = '';
+    inputNombre?.focus();
+  });
+
+  btnCancelarNo?.addEventListener('click', () => {
+    boxNoExiste?.classList.add('hidden');
+    if (inputCod) {
+      inputCod.value = '';
+      inputCod.focus();
+    }
+  });
+
+  btnCerrarAprov?.addEventListener('click', () => {
+    formNueva?.classList.add('hidden');
+    if (inputCod) {
+      inputCod.value = '';
+      inputCod.focus();
+    }
+  });
+
+  btnGuardarAprov?.addEventListener('click', async () => {
+    const num = parseInt(document.getElementById('lbl-nueva-empresa-num').textContent, 10);
+    const razon_social = (document.getElementById('input-nueva-empresa-nombre').value || '').trim();
+    const cedula_juridica = (document.getElementById('input-nueva-empresa-cedula').value || '').trim();
+    const optCat = document.getElementById('sel-nuevo-catalogo-modo').value;
+
+    if (!razon_social) {
+      alert('Por favor digite la razón social de la empresa.');
+      return;
+    }
+
+    try {
+      btnGuardarAprov.disabled = true;
+      btnGuardarAprov.textContent = 'Aprovisionando...';
+
+      const res = await fetch('/api/companias', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_compania: num,
+          razon_social,
+          cedula_juridica: cedula_juridica || '3-101-000000',
+          ano_activo: 2026,
+          mes_activo: 8
+        })
+      });
+
+      const nuevaComp = await res.json();
+      if (!res.ok) throw new Error(nuevaComp.error || 'Error creando la empresa');
+
+      // Si es sin catálogo, asegurar cuenta 999-000000
+      if (optCat === '1') {
+        try {
+          await fetch('/api/cuentas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id_compania: num,
+              id_cuenta: 999000000,
+              descripcion: '*** UTILIDADES O PERDIDAS DEL PERIODO ***',
+              tipo: '3',
+              nivel1: '999',
+              nivel2: '00',
+              nivel3: '000'
+            })
+          });
+        } catch (e) {}
+      }
+
+      // Recargar lista y activar
+      const compsActualizadas = await (await fetch('/api/companias')).json();
+      estado.companias = compsActualizadas;
+      const compCreada = compsActualizadas.find(x => x.id_compania === num) || nuevaComp;
+      
+      formNueva?.classList.add('hidden');
+      seleccionarYActivarEmpresa(compCreada);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      btnGuardarAprov.disabled = false;
+      btnGuardarAprov.textContent = '💾 Crear y Abrir Empresa';
+    }
+  });
 }
 
 export async function refrescar() {
@@ -191,6 +451,12 @@ export async function mostrar(nombre) {
     nombre = 'catalogo';
   }
 
+  // Navigation Guard: si es contador y no hay empresa seleccionada, forzar selección
+  if (rolUsuario !== 'SUPER_ADMIN' && !estado.compania) {
+    abrirModalSeleccionEmpresa();
+    return;
+  }
+
   document.querySelectorAll('#app-menu button').forEach(b =>
     b.classList.toggle('activo', b.dataset.modulo === nombre));
 
@@ -249,11 +515,6 @@ function configurarSidebarMovil() {
       mostrar(b.dataset.modulo);
     });
   });
-}
-
-function actualizarBarra() {
-  document.getElementById('periodo-label').textContent =
-    `Período: ${String(estado.mes).padStart(2, '0')}/${estado.ano}`;
 }
 
 // ---------------------------------------------------------------------------
