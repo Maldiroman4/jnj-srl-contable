@@ -81,6 +81,66 @@
     }
 
     /* ==========================================================================
+       MEDIA PRINT (ESTILOS FORMALES DE IMPRESIÓN AUDITABLE)
+       ========================================================================== */
+    .print-header { display: none; }
+
+    @media print {
+      body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+      }
+      .ticker-bar, .app-header, .mobile-bottom-tabs, .btn, .btn-back,
+      #vista-login, .subpanel:first-child, .table-scroll-hint, #buscar-catalogo,
+      #chk-mostrar-inactivas-label, #cat-toolbar-actions {
+        display: none !important;
+      }
+      .view-container {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .subpanel {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        color: #000000 !important;
+        font-size: 11px !important;
+      }
+      th {
+        background: #F1F5F9 !important;
+        color: #0F172A !important;
+        border-bottom: 2px solid #000000 !important;
+        padding: 6px 8px !important;
+      }
+      td {
+        border-bottom: 1px solid #E2E8F0 !important;
+        color: #000000 !important;
+        padding: 5px 8px !important;
+      }
+      td strong {
+        color: #000000 !important;
+      }
+      .pill {
+        border: 1px solid #94A3B8 !important;
+        color: #000000 !important;
+        background: transparent !important;
+      }
+      .print-header {
+        display: block !important;
+        margin-bottom: 20px !important;
+        border-bottom: 2px solid #000000 !important;
+        padding-bottom: 10px !important;
+      }
+    }
+
+    /* ==========================================================================
        APPLE TERMINAL STATUS TICKER (CAPSULE VIBRANCY)
        ========================================================================== */
     /* TOP LIVE STATUS TICKER BAR (CENTERED) */
@@ -1461,9 +1521,21 @@
           <button class="btn-back" id="btn-volver-menu-2"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
-        <!-- FORMULARIO DE ENTRADA RÁPIDA -->
+        <!-- ENCABEZADO FORMAL PARA IMPRESIÓN AUDITABLE -->
+        <div class="print-header">
+          <h2 id="print-cia-nombre" style="margin:0; font-size:18px; font-weight:bold;">Lexus Cloud - Sistema Contable</h2>
+          <p id="print-cia-info" style="margin:3px 0 12px 0; font-size:12px; color:#333;">Catálogo General de Cuentas · Plan Contable Oficial</p>
+        </div>
+
+        <!-- FORMULARIO DE ENTRADA RÁPIDA & UPSERT ASISTIDO -->
         <div class="subpanel" style="margin-bottom:12px;">
-          <h4>Captura Rápida de Cuenta</h4>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <h4 style="margin-bottom:0; border-bottom:none;">
+              Captura Rápida & Upsert Asistido
+              <span id="badge-cuenta-status" class="pill" style="display:none; font-size:11px; margin-left:10px;"></span>
+            </h4>
+            <span id="lbl-modo-upsert" style="font-size:11.5px; color:var(--apple-text-secondary);">Digite el código para buscar o crear</span>
+          </div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; align-items:flex-end;">
             
             <div class="form-group" style="margin-bottom:0;">
@@ -1477,19 +1549,26 @@
             </div>
 
             <div class="form-group" style="margin-bottom:0;">
-              <label>Tipo / Clase</label>
+              <label>Tipo / Clase Contable</label>
               <select id="cat-tipo">
-                <option value="1">1 - ACTIVO</option>
-                <option value="2">2 - PASIVO</option>
-                <option value="3">3 - PATRIMONIO</option>
-                <option value="4">4 - INGRESOS</option>
-                <option value="5">5 - COSTOS</option>
-                <option value="6">6 - GASTOS</option>
+                <option value="1">1 - Activo Circulante</option>
+                <option value="2">2 - Cuentas por Cobrar (Activo)</option>
+                <option value="3">3 - Activo No Circulante / Fijo</option>
+                <option value="4">4 - Otros Activos</option>
+                <option value="5">5 - Pasivo Corto Plazo</option>
+                <option value="6">6 - Cuentas por Pagar (Pasivo)</option>
+                <option value="7">7 - Pasivo Largo Plazo</option>
+                <option value="8">8 - Capital Contable / Patrimonio</option>
+                <option value="10">10 - Ingresos</option>
+                <option value="11">11 - Egresos / Gastos</option>
+                <option value="12">12 - Costo de Ventas</option>
+                <option value="18">18 - Cuentas de Orden Deudoras</option>
+                <option value="19">19 - Cuentas de Orden Acreedoras</option>
               </select>
             </div>
 
             <div class="form-group" style="margin-bottom:0;">
-              <label>Detalle 1</label>
+              <label>Detalle Auxiliar</label>
               <input type="text" id="cat-det1" placeholder="Referencia auxiliar...">
             </div>
 
@@ -1501,34 +1580,55 @@
               </select>
             </div>
 
-            <button class="btn" id="btn-incluir-cuenta" style="height:42px;">
-              <span>+ Incluir Cuenta</span>
-            </button>
+            <div style="display:flex; gap:8px; align-items:center; grid-column: span 2;">
+              <button class="btn" id="btn-incluir-cuenta" style="height:42px; flex:1;">
+                <span>+ Incluir Cuenta</span>
+              </button>
+              <button class="btn btn-secondary" id="btn-toggle-desactivar" style="display:none; height:42px; border-color:rgba(239,68,68,0.5); color:var(--apple-crimson);" title="Desactivación lógica (Soft Delete)">
+                <span>🚫 Desactivar</span>
+              </button>
+              <button class="btn btn-secondary" id="btn-cancelar-edicion" style="display:none; height:42px;">
+                <span>Cancelar</span>
+              </button>
+            </div>
 
           </div>
           <small style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-top:8px;">
-            * Digite <strong>000000</strong> en el campo Cuenta y presione Enter para regresar al Menú Principal.
+            * Si la cuenta ya existe, se cargarán sus datos para <strong>Modificar</strong> o <strong>Desactivar</strong>. Digite <strong>000000</strong> para volver al Menú.
           </small>
         </div>
 
-        <!-- TABLA DEL CATÁLOGO -->
+        <!-- TABLA DEL CATÁLOGO CON BARRA DE EXPORTACIÓN -->
         <div class="subpanel">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-            <h4 style="margin-bottom:0; border-bottom:none;">Plan de Cuentas de la Empresa (<span id="lbl-cat-total-cuentas">0</span> cuentas)</h4>
-            <input type="text" id="buscar-catalogo" placeholder="🔍 Filtrar cuenta o descripción..." style="max-width:280px; padding:6px 12px; font-size:12.5px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h4 style="margin-bottom:2px; border-bottom:none;">Plan de Cuentas de la Empresa (<span id="lbl-cat-total-cuentas">0</span> cuentas)</h4>
+              <span style="font-size:11.5px; color:var(--apple-text-secondary);">Estructura jerárquica: Mayor (N1) → Subcuenta (N2) → Auxiliar (N3)</span>
+            </div>
+            
+            <div id="cat-toolbar-actions" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" id="btn-imprimir-catalogo" style="padding:5px 12px; font-size:12px;" title="Imprimir catálogo formal con estilos auditables">🖨️ Imprimir</button>
+              <button class="btn btn-secondary btn-sm" id="btn-exportar-excel" style="padding:5px 12px; font-size:12px;" title="Exportar archivo Excel con jerarquía indentada">📊 Exportar Excel</button>
+              <button class="btn btn-secondary btn-sm" id="btn-exportar-pdf" style="padding:5px 12px; font-size:12px;" title="Generar PDF formal de auditoría">📄 Exportar PDF</button>
+              <label id="chk-mostrar-inactivas-label" style="font-size:12px; color:var(--apple-text-secondary); display:inline-flex; align-items:center; gap:5px; cursor:pointer; margin-left:6px;">
+                <input type="checkbox" id="chk-mostrar-inactivas" checked> Ver Inactivas
+              </label>
+              <input type="text" id="buscar-catalogo" placeholder="🔍 Filtrar cuenta..." style="max-width:200px; padding:5px 10px; font-size:12px;">
+            </div>
           </div>
 
           <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
-          <div class="table-box" style="max-height:420px; overflow-y:auto;">
+          <div class="table-box" style="max-height:450px; overflow-y:auto;">
             <table>
               <thead>
                 <tr>
                   <th style="width:140px;">Código</th>
                   <th>Descripción de la Cuenta</th>
                   <th>Tipo / Clase</th>
+                  <th style="text-align:center; width:90px;">Estado</th>
                   <th class="num">Saldo Inicial</th>
                   <th class="num">Saldo Actual</th>
-                  <th>Acción</th>
+                  <th style="text-align:center; width:130px;">Acción</th>
                 </tr>
               </thead>
               <tbody id="tbody-catalogo">
@@ -2566,21 +2666,127 @@
       return { ok: true, codigoFmt, nivel, n1, n2, n3 };
     }
 
+    const NOMBRES_TIPO_CUENTA = {
+      '1': '1 - Activo Circulante',
+      '2': '2 - Cuentas por Cobrar (Activo)',
+      '3': '3 - Activo No Circulante / Fijo',
+      '4': '4 - Otros Activos',
+      '5': '5 - Pasivo Corto Plazo',
+      '6': '6 - Cuentas por Pagar (Pasivo)',
+      '7': '7 - Pasivo Largo Plazo',
+      '8': '8 - Capital Contable / Patrimonio',
+      '10': '10 - Ingresos',
+      '11': '11 - Egresos / Gastos',
+      '12': '12 - Costo de Ventas',
+      '18': '18 - Cuentas de Orden Deudoras',
+      '19': '19 - Cuentas de Orden Acreedoras'
+    };
+
+    let cuentaEnEdicion = null;
+
+    function evaluarCuentaEnFormulario(valRaw) {
+      if (!DB_DEMO.companiaActiva || !DB_DEMO.catalogos[DB_DEMO.companiaActiva]) return;
+      const limpio = String(valRaw || '').replace(/[^0-9]/g, '');
+      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva];
+      
+      const badge = document.getElementById('badge-cuenta-status');
+      const lblModo = document.getElementById('lbl-modo-upsert');
+      const btnIncluir = document.getElementById('btn-incluir-cuenta');
+      const btnToggle = document.getElementById('btn-toggle-desactivar');
+      const btnCancelar = document.getElementById('btn-cancelar-edicion');
+
+      if (limpio.length < 3) {
+        cuentaEnEdicion = null;
+        if (badge) badge.style.display = 'none';
+        if (lblModo) lblModo.textContent = 'Digite el código para buscar o crear';
+        if (btnIncluir) btnIncluir.innerHTML = '<span>+ Incluir Cuenta</span>';
+        if (btnToggle) btnToggle.style.display = 'none';
+        if (btnCancelar) btnCancelar.style.display = 'none';
+        return;
+      }
+
+      // Buscar si ya existe la cuenta por código exacto o limpio
+      const encontrada = cat.find(c => {
+        const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+        return cLimpio === limpio || c.codigo === valRaw || cLimpio.startsWith(limpio);
+      });
+
+      if (encontrada && (encontrada.codigo === valRaw || String(encontrada.codigo).replace(/[^0-9]/g, '') === limpio)) {
+        cuentaEnEdicion = encontrada;
+        document.getElementById('cat-desc').value = encontrada.desc;
+        document.getElementById('cat-tipo').value = encontrada.tipo || '1';
+        document.getElementById('cat-det1').value = encontrada.det1 || '';
+
+        const esInactiva = (encontrada.activo === 0);
+        if (badge) {
+          badge.style.display = 'inline-block';
+          badge.className = esInactiva ? 'pill pill-red' : 'pill pill-green';
+          badge.textContent = esInactiva ? '🚫 CUENTA EXISTENTE [INACTIVA]' : '✅ CUENTA EXISTENTE [ACTIVA]';
+        }
+        if (lblModo) lblModo.textContent = 'Modo Edición / Desactivación';
+        if (btnIncluir) btnIncluir.innerHTML = '<span>💾 Guardar Modificaciones</span>';
+        if (btnToggle) {
+          btnToggle.style.display = 'inline-block';
+          btnToggle.innerHTML = `<span>${esInactiva ? '✅ Reactivar Cuenta' : '🚫 Desactivar Cuenta'}</span>`;
+          btnToggle.style.color = esInactiva ? 'var(--apple-mint)' : 'var(--apple-crimson)';
+          btnToggle.style.borderColor = esInactiva ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)';
+        }
+        if (btnCancelar) btnCancelar.style.display = 'inline-block';
+      } else {
+        cuentaEnEdicion = null;
+        if (badge) {
+          if (limpio.length === 3 || limpio.length === 5 || limpio.length === 8) {
+            badge.style.display = 'inline-block';
+            badge.className = 'pill pill-cyan';
+            badge.textContent = '✨ NUEVA CUENTA (DISPONIBLE)';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+        if (lblModo) lblModo.textContent = 'Modo Inclusión de Cuenta';
+        if (btnIncluir) btnIncluir.innerHTML = '<span>+ Incluir Cuenta</span>';
+        if (btnToggle) btnToggle.style.display = 'none';
+        if (btnCancelar) btnCancelar.style.display = 'none';
+      }
+    }
+
+    function resetearFormularioCuenta() {
+      cuentaEnEdicion = null;
+      document.getElementById('cat-cuenta').value = '';
+      document.getElementById('cat-desc').value = '';
+      document.getElementById('cat-det1').value = '';
+      document.getElementById('badge-cuenta-status').style.display = 'none';
+      document.getElementById('lbl-modo-upsert').textContent = 'Digite el código para buscar o crear';
+      document.getElementById('btn-incluir-cuenta').innerHTML = '<span>+ Incluir Cuenta</span>';
+      document.getElementById('btn-toggle-desactivar').style.display = 'none';
+      document.getElementById('btn-cancelar-edicion').style.display = 'none';
+      document.getElementById('cat-cuenta').focus();
+    }
+
     function renderTablaCatalogo() {
       const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
       const tbody = document.getElementById('tbody-catalogo');
       const filtro = (document.getElementById('buscar-catalogo')?.value || '').toLowerCase().trim();
+      const verInactivas = document.getElementById('chk-mostrar-inactivas')?.checked ?? true;
       tbody.innerHTML = '';
 
       // Ocultar datos técnicos internos (como la cuenta 999) de la vista pública
-      const cuentasVisibles = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
+      const noTecnicas = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
+      const cuentasVisibles = verInactivas ? noTecnicas : noTecnicas.filter(c => c.activo !== 0);
 
       document.getElementById('lbl-cat-total-cuentas').textContent = cuentasVisibles.length;
+
+      // Actualizar encabezados de impresión auditable
+      const compActual = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+      const printCia = document.getElementById('print-cia-nombre');
+      const printInfo = document.getElementById('print-cia-info');
+      if (printCia && compActual) printCia.textContent = `${compActual.id} - ${compActual.nombre} (Cédula: ${compActual.cedula})`;
+      if (printInfo && compActual) printInfo.textContent = `Catálogo General de Cuentas · Ejercicio Fiscal ${compActual.periodo || '2026'} · Impreso el: ${new Date().toLocaleDateString('es-CR')}`;
 
       if (cuentasVisibles.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="6" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
+            <td colspan="7" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
               <div style="font-size:32px; margin-bottom:8px;">📂</div>
               <strong style="color:#ffffff; font-size:15px;">0 cuentas registradas.</strong>
               <p style="font-size:12.5px; margin-top:6px;">${DB_DEMO.companiaActiva ? 'Agregue las cuentas de su catálogo usando el formulario superior.' : 'Seleccione o incluya una compañía primero.'}</p>
@@ -2598,8 +2804,13 @@
       filtradas.forEach((c, idx) => {
         const tr = document.createElement('tr');
         const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
-        const nombresTipo = { '1': '1 - Activo', '2': '2 - Pasivo', '3': '3 - Patrimonio', '4': '4 - Ingresos', '5': '5 - Costos', '6': '6 - Gastos' };
         const codigoVisual = formatearCodigoContable(c.codigo);
+        const esInactiva = (c.activo === 0);
+
+        if (esInactiva) {
+          tr.style.opacity = '0.65';
+          tr.style.background = 'rgba(239, 68, 68, 0.04)';
+        }
 
         // Estilo de indentación según nivel
         const limpio = String(c.codigo || '').replace(/[^0-9]/g, '');
@@ -2615,39 +2826,154 @@
           descIndent = `<span style="padding-left:28px; color:var(--apple-text-primary);">• ${c.desc}</span>`;
         }
 
+        const tieneMovimientoOSaldo = (c.act !== 0 || c.ini !== 0);
+
         tr.innerHTML = `
           <td><strong style="font-family:var(--apple-mono); color:${esNivel1 ? 'var(--apple-cyan)' : 'var(--apple-text-primary)'};">${codigoVisual}</strong></td>
           <td>${descIndent}</td>
-          <td><span class="pill" style="font-size:10.5px; padding:2px 8px;">${nombresTipo[c.tipo] || c.tipo}</span></td>
+          <td><span class="pill" style="font-size:10.5px; padding:2px 8px;">${NOMBRES_TIPO_CUENTA[c.tipo] || c.tipo}</span></td>
+          <td style="text-align:center;">
+            <span class="pill ${esInactiva ? 'pill-red' : 'pill-green'}" style="font-size:10px; padding:2px 7px;">
+              ${esInactiva ? 'INACTIVA' : 'ACTIVA'}
+            </span>
+          </td>
           <td class="num">${fmtM(c.ini)}</td>
           <td class="num"><strong>${fmtM(c.act)}</strong></td>
-          <td>
-            <button class="btn btn-secondary btn-sm btn-del-cta" data-codigo="${c.codigo}" style="padding:2px 6px; font-size:10.5px; color:var(--apple-crimson); border-color:rgba(239,68,68,0.3);">Eliminar</button>
+          <td style="text-align:center; white-space:nowrap;">
+            <button class="btn btn-secondary btn-sm btn-toggle-activo-row" data-codigo="${c.codigo}" style="padding:2px 7px; font-size:10.5px; margin-right:4px;">
+              ${esInactiva ? 'Activar' : 'Desactivar'}
+            </button>
+            <button class="btn btn-secondary btn-sm btn-del-cta" data-codigo="${c.codigo}" data-bloqueada="${tieneMovimientoOSaldo ? '1' : '0'}" style="padding:2px 7px; font-size:10.5px; color:var(--apple-crimson); border-color:rgba(239,68,68,0.3);" title="${tieneMovimientoOSaldo ? 'Bloqueo de seguridad: posee movimientos o saldo activo' : 'Eliminar físicamente'}">
+              ${tieneMovimientoOSaldo ? '🔒' : 'Eliminar'}
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
       });
 
+      // Eventos de toggle activo
+      tbody.querySelectorAll('.btn-toggle-activo-row').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const codTarget = btn.dataset.codigo;
+          const cuentaObj = cat.find(x => x.codigo === codTarget);
+          if (!cuentaObj) return;
+
+          const nuevoEstado = cuentaObj.activo === 0 ? 1 : 0;
+          cuentaObj.activo = nuevoEstado;
+
+          // Propagar desactivación a hijos si es N1 o N2
+          const limpio = String(codTarget).replace(/[^0-9]/g, '');
+          if (nuevoEstado === 0 && (limpio.length === 3 || limpio.endsWith('00000'))) {
+            const prefijo = limpio.slice(0, 3);
+            cat.forEach(h => {
+              if (String(h.codigo).replace(/[^0-9]/g, '').startsWith(prefijo)) h.activo = 0;
+            });
+          }
+
+          renderTablaCatalogo();
+          poblarCuentasEnAsiento();
+        });
+      });
+
+      // Eventos de eliminación física con Hard Delete Protection
       tbody.querySelectorAll('.btn-del-cta').forEach(btn => {
         btn.addEventListener('click', () => {
           const codTarget = btn.dataset.codigo;
-          const idxTarget = cat.findIndex(x => x.codigo === codTarget);
-          if (idxTarget !== -1 && confirm(`¿Desea eliminar la cuenta ${codTarget}?`)) {
-            cat.splice(idxTarget, 1);
-            renderTablaCatalogo();
+          const estaBloqueada = (btn.dataset.bloqueada === '1');
+          const cuentaObj = cat.find(x => x.codigo === codTarget);
+          if (!cuentaObj) return;
+
+          if (estaBloqueada) {
+            alert('🛡️ RESTRICCIÓN DE INTEGRIDAD (Hard Delete Protection):\n\nEsta cuenta posee saldo actual o registros asociados en el historial de asientos contables. La eliminación física está estrictamente prohibida por normativa contable.\n\nUtilice el botón "Desactivar" para retirar la cuenta de nuevos comprobantes sin alterar la trazabilidad de auditoría.');
+            return;
+          }
+
+          // Validar si tiene subcuentas hijas
+          const limpio = String(codTarget).replace(/[^0-9]/g, '');
+          const tieneHijos = cat.some(h => {
+            if (h.codigo === codTarget) return false;
+            const hLimpio = String(h.codigo).replace(/[^0-9]/g, '');
+            if (limpio.length === 3 || limpio.endsWith('00000')) return hLimpio.startsWith(limpio.slice(0, 3));
+            if (limpio.length === 5 || limpio.endsWith('000')) return hLimpio.startsWith(limpio.slice(0, 5));
+            return false;
+          });
+
+          if (tieneHijos) {
+            alert('🛡️ RESTRICCIÓN JERÁRQUICA: La cuenta posee subcuentas subordinadas registradas. Debe eliminar o reasignar las cuentas hijas antes de poder eliminar la cuenta padre.');
+            return;
+          }
+
+          if (confirm(`¿Está seguro de eliminar físicamente la cuenta [${codTarget} - ${cuentaObj.desc}]? Esta acción no se puede deshacer.`)) {
+            const idxTarget = cat.findIndex(x => x.codigo === codTarget);
+            if (idxTarget !== -1) {
+              cat.splice(idxTarget, 1);
+              renderTablaCatalogo();
+              poblarCuentasEnAsiento();
+              resetearFormularioCuenta();
+            }
           }
         });
       });
     }
 
-    document.getElementById('buscar-catalogo').addEventListener('input', renderTablaCatalogo);
+    document.getElementById('buscar-catalogo')?.addEventListener('input', renderTablaCatalogo);
+    document.getElementById('chk-mostrar-inactivas')?.addEventListener('change', renderTablaCatalogo);
 
-    // Máscara interactiva al escribir cuenta
+    // BARRA DE HERRAMIENTAS DE EXPORTACIÓN & IMPRESIÓN
+    document.getElementById('btn-imprimir-catalogo')?.addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('btn-exportar-excel')?.addEventListener('click', () => {
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
+      const compActual = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+      const cuentasVisibles = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
+
+      let csv = '\uFEFF'; // BOM UTF-8 para visualización directa en Microsoft Excel
+      csv += `PLAN GENERAL DE CUENTAS CONTABLES - ${compActual ? compActual.nombre : 'EMPRESA ' + DB_DEMO.companiaActiva}\r\n`;
+      csv += `Cédula Jurídica: ${compActual ? compActual.cedula : 'N/A'} | Ejercicio Fiscal: ${compActual ? compActual.periodo : '2026'}\r\n`;
+      csv += `Fecha de Generación: ${new Date().toLocaleString('es-CR')}\r\n\r\n`;
+      csv += `Código;Nivel;Descripción de la Cuenta;Clase Contable;Estado;Saldo Inicial;Saldo Actual\r\n`;
+
+      cuentasVisibles.forEach(c => {
+        const codFmt = formatearCodigoContable(c.codigo);
+        const limpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+        const esN1 = (c.nivel === 1 || limpio.endsWith('00000') || limpio.length === 3);
+        const esN2 = (c.nivel === 2 || (limpio.endsWith('000') && !esN1) || limpio.length === 5);
+        const nivelStr = esN1 ? 'Nivel 1 (Mayor)' : (esN2 ? 'Nivel 2 (Subcuenta)' : 'Nivel 3 (Auxiliar)');
+        const indent = esN1 ? '' : (esN2 ? '   ↳ ' : '      • ');
+
+        const estado = (c.activo === 0) ? 'INACTIVA' : 'ACTIVA';
+        const claseNombre = NOMBRES_TIPO_CUENTA[c.tipo] || c.tipo;
+        const iniFmt = Number(c.ini || 0).toFixed(2);
+        const actFmt = Number(c.act || 0).toFixed(2);
+
+        csv += `"${codFmt}";"${nivelStr}";"${indent}${c.desc.replace(/"/g, '""')}";"${claseNombre}";"${estado}";${iniFmt};${actFmt}\r\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Catalogo_Cuentas_${compActual ? compActual.id : 'Lexus'}_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('btn-exportar-pdf')?.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Máscara interactiva y búsqueda dinámica de cuentas
     const inputCatCuenta = document.getElementById('cat-cuenta');
     inputCatCuenta.addEventListener('input', (e) => {
       const val = e.target.value;
       if (val === '000000' || val === '000' || val === '0') return;
-      e.target.value = formatearCodigoContable(val);
+      const fmt = formatearCodigoContable(val);
+      e.target.value = fmt;
+      evaluarCuentaEnFormulario(fmt);
     });
 
     inputCatCuenta.addEventListener('keydown', (e) => {
@@ -2662,10 +2988,14 @@
       }
     });
 
+    document.getElementById('btn-cancelar-edicion')?.addEventListener('click', resetearFormularioCuenta);
+
+    // Botón de inclusión y modificación asistida
     document.getElementById('btn-incluir-cuenta').addEventListener('click', () => {
       const codigoRaw = document.getElementById('cat-cuenta').value.trim();
       const desc = document.getElementById('cat-desc').value.trim();
       const tipo = document.getElementById('cat-tipo').value;
+      const det1 = document.getElementById('cat-det1').value.trim();
 
       if (!codigoRaw || codigoRaw === '000000' || codigoRaw === '000') {
         mostrarVista('vista-menu');
@@ -2677,7 +3007,7 @@
       }
 
       if (!DB_DEMO.companiaActiva) {
-        alert('Por favor seleccione una empresa activa antes de agregar cuentas.');
+        alert('Por favor seleccione una empresa activa antes de gestionar cuentas.');
         return;
       }
 
@@ -2686,8 +3016,40 @@
       }
 
       const catalogoActual = DB_DEMO.catalogos[DB_DEMO.companiaActiva];
-      const validacion = validarJerarquiaFront(codigoRaw, catalogoActual);
 
+      // CASO A: MODIFICAR CUENTA EXISTENTE (UPSERT)
+      if (cuentaEnEdicion) {
+        const viejaClase = cuentaEnEdicion.tipo;
+        cuentaEnEdicion.desc = desc;
+        cuentaEnEdicion.tipo = tipo;
+        cuentaEnEdicion.det1 = det1;
+
+        // PROPAGACIÓN EN CASCADA SI ES CUENTA MAYOR (NIVEL 1)
+        const limpio = String(cuentaEnEdicion.codigo).replace(/[^0-9]/g, '');
+        const esNivel1 = (cuentaEnEdicion.nivel === 1 || limpio.endsWith('00000') || limpio.length === 3);
+
+        if (esNivel1 && viejaClase !== tipo) {
+          const prefijo = limpio.slice(0, 3);
+          let propagadas = 0;
+          catalogoActual.forEach(h => {
+            if (h.codigo !== cuentaEnEdicion.codigo && String(h.codigo).replace(/[^0-9]/g, '').startsWith(prefijo)) {
+              h.tipo = tipo;
+              propagadas++;
+            }
+          });
+          alert(`✅ Cuenta mayor modificada exitosamente.\n\n⚡ PROPAGACIÓN EN CASCADA: Se actualizó la clase contable a ${propagadas} subcuentas subordinadas en el árbol.`);
+        } else {
+          alert(`✅ Cuenta ${formatearCodigoContable(cuentaEnEdicion.codigo)} actualizada exitosamente.`);
+        }
+
+        renderTablaCatalogo();
+        poblarCuentasEnAsiento();
+        resetearFormularioCuenta();
+        return;
+      }
+
+      // CASO B: INCLUIR NUEVA CUENTA CON VALIDACIÓN JERÁRQUICA
+      const validacion = validarJerarquiaFront(codigoRaw, catalogoActual);
       if (!validacion.ok) {
         alert(validacion.error);
         return;
@@ -2698,6 +3060,8 @@
         desc,
         tipo,
         nivel: validacion.nivel,
+        activo: 1,
+        det1,
         ini: 0,
         act: 0
       });
@@ -2706,11 +3070,31 @@
       catalogoActual.sort((a, b) => a.codigo.localeCompare(b.codigo));
 
       renderTablaCatalogo();
+      poblarCuentasEnAsiento();
+      resetearFormularioCuenta();
+    });
 
-      document.getElementById('cat-cuenta').value = '';
-      document.getElementById('cat-desc').value = '';
-      document.getElementById('cat-det1').value = '';
-      document.getElementById('cat-cuenta').focus();
+    // Botón de alternar desactivación desde el formulario
+    document.getElementById('btn-toggle-desactivar')?.addEventListener('click', () => {
+      if (!cuentaEnEdicion) return;
+      const nuevoEstado = (cuentaEnEdicion.activo === 0) ? 1 : 0;
+      cuentaEnEdicion.activo = nuevoEstado;
+
+      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva];
+      const limpio = String(cuentaEnEdicion.codigo).replace(/[^0-9]/g, '');
+
+      // Si es Nivel 1 y se desactiva, propagar desactivación
+      if (nuevoEstado === 0 && (limpio.length === 3 || limpio.endsWith('00000'))) {
+        const prefijo = limpio.slice(0, 3);
+        cat.forEach(h => {
+          if (String(h.codigo).replace(/[^0-9]/g, '').startsWith(prefijo)) h.activo = 0;
+        });
+      }
+
+      alert(nuevoEstado === 0 ? `🚫 Cuenta ${formatearCodigoContable(cuentaEnEdicion.codigo)} desactivada (Soft Delete).\nNo podrá seleccionarse en nuevos asientos contables.` : `✅ Cuenta ${formatearCodigoContable(cuentaEnEdicion.codigo)} reactivada exitosamente.`);
+      renderTablaCatalogo();
+      poblarCuentasEnAsiento();
+      resetearFormularioCuenta();
     });
 
     // =========================================================================
@@ -2718,8 +3102,8 @@
     // =========================================================================
     function poblarCuentasEnAsiento() {
       const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || DB_DEMO.catalogos[19] || [];
-      // Ocultar cuenta técnica 999 del selector de comprobantes de diario
-      const cuentasOperativas = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
+      // Ocultar cuenta técnica 999 Y CUENTAS INACTIVAS del selector de comprobantes de diario
+      const cuentasOperativas = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999') && c.activo !== 0);
 
       document.querySelectorAll('.asiento-linea-cuenta').forEach(sel => {
         sel.innerHTML = '';

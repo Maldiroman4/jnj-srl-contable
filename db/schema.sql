@@ -6,26 +6,26 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS clases_cuenta (
   id_clase              INTEGER PRIMARY KEY,
   nombre                TEXT    NOT NULL,
-  tipo_rubro            TEXT    NOT NULL CHECK (tipo_rubro IN ('ACTIVO','PASIVO','PATRIMONIO','INGRESO','EGRESO','ORDEN'))
+  tipo_rubro            TEXT    NOT NULL CHECK (tipo_rubro IN ('ACTIVO','PASIVO','PATRIMONIO','INGRESO','EGRESO','ORDEN','ORDEN_DEUDORA','ORDEN_ACREEDORA'))
 );
 
-INSERT OR IGNORE INTO clases_cuenta (id_clase, nombre, tipo_rubro) VALUES
-  (1,  'Activo Circulante',        'ACTIVO'),
-  (2,  'Cuentas por Cobrar',       'ACTIVO'),
-  (3,  'Activo Fijo',              'ACTIVO'),
-  (4,  'Otros Activos',            'ACTIVO'),
-  (5,  'Pasivo Corto Plazo',       'PASIVO'),
-  (6,  'Cuentas por Pagar',        'PASIVO'),
-  (7,  'Pasivo Largo Plazo',       'PASIVO'),
+INSERT OR REPLACE INTO clases_cuenta (id_clase, nombre, tipo_rubro) VALUES
+  (1,  'Activo Circulante',             'ACTIVO'),
+  (2,  'Cuentas por Cobrar',            'ACTIVO'),
+  (3,  'Activo No Circulante / Fijo',   'ACTIVO'),
+  (4,  'Otros Activos',                 'ACTIVO'),
+  (5,  'Pasivo Corto Plazo',            'PASIVO'),
+  (6,  'Cuentas por Pagar',             'PASIVO'),
+  (7,  'Pasivo Largo Plazo',            'PASIVO'),
   (8,  'Capital Contable / Patrimonio', 'PATRIMONIO'),
-  (10, 'Ingresos',                 'INGRESO'),
-  (11, 'Egresos',                  'EGRESO'),
-  (12, 'Costo de Ventas',          'EGRESO'),
-  (13, 'Ingresos por Ventas',      'INGRESO'),
-  (15, 'Ingresos No Gravables',    'INGRESO'),
-  (16, 'Egresos No Deducibles',    'EGRESO'),
-  (18, 'Cuentas de Orden',         'ORDEN'),
-  (19, 'Cuentas de Orden',         'ORDEN');
+  (10, 'Ingresos',                      'INGRESO'),
+  (11, 'Egresos',                       'EGRESO'),
+  (12, 'Costo de Ventas',               'EGRESO'),
+  (13, 'Ingresos por Ventas',           'INGRESO'),
+  (15, 'Ingresos No Gravables',         'INGRESO'),
+  (16, 'Egresos No Deducibles',         'EGRESO'),
+  (18, 'Cuentas de Orden Deudoras',     'ORDEN_DEUDORA'),
+  (19, 'Cuentas de Orden Acreedoras',    'ORDEN_ACREEDORA');
 
 -- ============================================================
 -- COMPAÑÍAS (Multi-empresa, períodos y lotes)
@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS companias (
 --   - es_cuenta_mayor: TRUE si nivel2='00' y nivel3='000'
 --   - es_desglose:     TRUE si no posee hijos (último nivel)
 --   - la clase SOLO se digita en la cuenta mayor; se hereda
+--   - activo: 1 = Activa, 0 = Inactiva (Soft Delete)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS catalogo_cuentas (
   id_cuenta            TEXT    PRIMARY KEY,          -- 8 dígitos sin guiones ('11001001')
@@ -57,6 +58,7 @@ CREATE TABLE IF NOT EXISTS catalogo_cuentas (
   clase_cuenta_id      INTEGER NOT NULL REFERENCES clases_cuenta(id_clase),
   es_cuenta_mayor      INTEGER NOT NULL DEFAULT 0,
   es_desglose          INTEGER NOT NULL DEFAULT 0,
+  activo               INTEGER NOT NULL DEFAULT 1 CHECK (activo IN (0, 1)),
   detalle1             TEXT,
   detalle2             TEXT,
   codigo_cabys         TEXT,
@@ -65,6 +67,9 @@ CREATE TABLE IF NOT EXISTS catalogo_cuentas (
   monto_presupuestado  REAL    NOT NULL DEFAULT 0,
   UNIQUE (id_compania, nivel1, nivel2, nivel3)
 );
+
+CREATE INDEX IF NOT EXISTS idx_cat_jerarquia ON catalogo_cuentas(id_compania, nivel1, nivel2, nivel3);
+CREATE INDEX IF NOT EXISTS idx_cat_activo ON catalogo_cuentas(id_compania, activo);
 
 -- ============================================================
 -- DOCUMENTOS / ASIENTOS (encabezado)

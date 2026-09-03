@@ -127,6 +127,13 @@ function cuentaTieneMovimiento(id_cuenta) {
   ).get(id_cuenta);
 }
 
+function cuentaTieneSaldo(id_cuenta) {
+  const s = db.prepare(
+    'SELECT 1 FROM saldos_mensuales WHERE id_cuenta = ? AND ABS(saldo_actual) > 0.005 LIMIT 1'
+  ).get(id_cuenta);
+  return !!s;
+}
+
 // ¿La cuenta (por nivel1/nivel2) posee descendientes?
 function _tieneDescendientes(c) {
   if (c.nivel2 === '00' && c.nivel3 === '000') {
@@ -166,7 +173,7 @@ function marcarDesglose() {
   });
 }
 
-// Pilar 2: propagar la clase de la cuenta mayor hacia toda su descendencia.
+// Pilar 2: propagar la clase de la cuenta mayor hacia toda su descendencia de forma atómica.
 function propagarClase(compania, mayorIdCuenta, nuevaClase) {
   const prefijo = mayorIdCuenta.slice(0, 3);
   db.prepare(
@@ -194,6 +201,9 @@ function validarAsiento({ id_compania, lineas }) {
 
     if (!cuenta) {
       return { ok: false, error: `Cuenta ${linea.id_cuenta} no existe en la compañía.` };
+    }
+    if (cuenta.activo === 0) {
+      return { ok: false, error: `La cuenta ${cuenta.id_cuenta} - ${cuenta.descripcion} está INACTIVA y no puede recibir nuevos asientos contables.` };
     }
     if (!cuenta.es_desglose) {
       return { ok: false, error: `${linea.id_cuenta} NO Es Cuenta de Desglose ... Presione Una Tecla` };
@@ -229,5 +239,6 @@ module.exports = {
   propagarClase,
   cuentaTieneHijos,
   cuentaTieneMovimiento,
+  cuentaTieneSaldo,
   validarAsiento,
 };

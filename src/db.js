@@ -82,6 +82,45 @@ function inicializar() {
     console.error('Error al verificar columnas de companias:', err.message);
   }
 
+  // Migración de catalogo_cuentas: columna activo, índices y clases ampliadas
+  try {
+    const tableDef = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='clases_cuenta'").get();
+    if (tableDef && !tableDef.sql.includes('ORDEN_DEUDORA')) {
+      db.exec(`
+        PRAGMA foreign_keys = OFF;
+        CREATE TABLE clases_cuenta_new (
+          id_clase   INTEGER PRIMARY KEY,
+          nombre     TEXT NOT NULL,
+          tipo_rubro TEXT NOT NULL CHECK (tipo_rubro IN ('ACTIVO','PASIVO','PATRIMONIO','INGRESO','EGRESO','ORDEN','ORDEN_DEUDORA','ORDEN_ACREEDORA'))
+        );
+        INSERT OR IGNORE INTO clases_cuenta_new SELECT * FROM clases_cuenta;
+        DROP TABLE clases_cuenta;
+        ALTER TABLE clases_cuenta_new RENAME TO clases_cuenta;
+        PRAGMA foreign_keys = ON;
+      `);
+    }
+
+    const colsCat = db.prepare("PRAGMA table_info(catalogo_cuentas)").all();
+    const hasActivo = colsCat.some(c => c.name === 'activo');
+    if (!hasActivo) {
+      db.exec("ALTER TABLE catalogo_cuentas ADD COLUMN activo INTEGER NOT NULL DEFAULT 1");
+    }
+    db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_cat_jerarquia ON catalogo_cuentas(id_compania, nivel1, nivel2, nivel3);
+      CREATE INDEX IF NOT EXISTS idx_cat_activo ON catalogo_cuentas(id_compania, activo);
+      CREATE INDEX IF NOT EXISTS idx_asientos_cuenta ON asientos_detalle(id_cuenta);
+      INSERT OR REPLACE INTO clases_cuenta (id_clase, nombre, tipo_rubro) VALUES
+        (1,  'Activo Circulante',             'ACTIVO'),
+        (2,  'Cuentas por Cobrar',            'ACTIVO'),
+        (3,  'Activo No Circulante / Fijo',   'ACTIVO'),
+        (4,  'Otros Activos',                 'ACTIVO'),
+        (18, 'Cuentas de Orden Deudoras',     'ORDEN_DEUDORA'),
+        (19, 'Cuentas de Orden Acreedoras',    'ORDEN_ACREEDORA');
+    `);
+  } catch (err) {
+    console.error('Error en migración de catalogo_cuentas / clases_cuenta:', err.message);
+  }
+
   // Inicializar Módulos de MONICA (Clientes, Proveedores, Inventario, Facturación, CxC, CxP, Bancos)
   db.exec(`
     CREATE TABLE IF NOT EXISTS clientes (

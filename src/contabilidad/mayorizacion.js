@@ -110,4 +110,74 @@ function cerrarMes(compania, ano, mes) {
   return { ...res, siguiente_periodo: `${nAno}-${String(nMes).padStart(2, '0')}` };
 }
 
-module.exports = { mayorizar, cerrarMes, traspasarSaldos };
+// Cierre anual con rutina de purga de cuentas inactivas con saldo cero para el nuevo período
+function cerrarAnualConPurga(compania, ano, mes = 12) {
+  const resMayorizacion = mayorizar(compania, ano, mes);
+
+  // Asegurar tabla de archivo histórico para purgas
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS catalogo_cuentas_purgadas (
+      id_purga INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_cuenta TEXT NOT NULL,
+      id_compania INTEGER NOT NULL,
+      descripcion TEXT NOT NULL,
+      ano_cierre INTEGER NOT NULL,
+      fecha_purga TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+    );
+  `);
+
+  let purgadas = [];
+  tx(() => {
+    // 1) Identificar cuentas inactivas (activo = 0) con saldo cero en el cierre
+    const candidatas = db.prepare(`
+      SELECT c.id_cuenta, c.descripcion, c.nivel1, c.nivel2, c.nivel3,
+             COALESCE((
+               SELECT s.saldo_actual FROM saldos_mensuales s
+               WHERE s.id_compania = c.id_compania AND s.id_cuenta = c.id_cuenta
+                 AND s.ano = ? AND s.mes = ?
+             ), 0) AS saldo
+      FROM catalogo_cuentas c
+      WHERE c.id_compania = ? AND c.activo = 0
+    `).all(ano, mes, compania);
+
+    // Filtrar aquellas con saldo cero y procesar de nivel más profundo (3) a más alto (1)
+    const porPurgar = candidatas.filter(c => Math.abs(c.saldo) < 0.005);
+    porPurgar.sort((a, b) => b.id_cuenta.localeCompare(a.id_cuenta));
+
+    const insArchivo = db.prepare(`
+      INSERT INTO catalogo_cuentas_purgadas (id_cuenta, id_compania, descripcion, ano_cierre)
+      VALUES (?, ?, ?, ?)
+    `);
+    const delCuenta = db.prepare('DELETE FROM catalogo_cuentas WHERE id_cuenta = ? AND id_compania = ?');
+
+    for (const c of porPurgar) {
+      const tieneAsientos = db.prepare('SELECT 1 FROM asientos_detalle WHERE id_cuenta = ? LIMIT 1').get(c.id_cuenta);
+      if (!tieneAsientos) {
+        insArchivo.run(c.id_cuenta, compania, c.descripcion, ano);
+        db.prepare('DELETE FROM saldos_mensuales WHERE id_cuenta = ? AND id_compania = ?').run(c.id_cuenta, compania);
+        delCuenta.run(c.id_cuenta, compania);
+        purgadas.push({ id_cuenta: c.id_cuenta, descripcion: c.descripcion });
+      }
+    }
+
+    // 2) Traspasar saldos de balance al nuevo período (mes 1 del año siguiente)
+    const nuevoAno = ano + 1;
+    traspasarSaldos(compania, ano, mes, nuevoAno, 1);
+
+    // 3) Actualizar período activo de la compañía
+    db.prepare(`
+      UPDATE companias SET ano_activo = ?, mes_activo = 1 WHERE id_compania = ?
+    `).run(nuevoAno, compania);
+  });
+
+  return {
+    ok: true,
+    ano_cerrado: ano,
+    nuevo_ano: ano + 1,
+    cuentas_procesadas: resMayorizacion.cuentas_procesadas,
+    cuentas_purgadas: purgadas.length,
+    purgadas,
+  };
+}
+
+module.exports = { mayorizar, cerrarMes, traspasarSaldos, cerrarAnualConPurga };
