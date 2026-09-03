@@ -5,6 +5,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+// Redirigir la raíz / directamente a la versión afinada lexus.html
+app.get('/', (req, res) => {
+  res.redirect('/lexus.html');
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', require('./src/routes/auth'));

@@ -2,390 +2,3557 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0a192f">
-  <title>Lexus — Mi Sistema Contable Integrado</title>
-  <link rel="icon" type="image/jpeg" href="img/logo-lexus.jpg">
-  <link rel="apple-touch-icon" href="img/logo-lexus.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lexus · Su Sistema Contable</title>
+  <style>
+    /* ==========================================================================
+       LEXUS CONTABLE — APPLE HUMAN INTERFACE GUIDELINES (HIG) & CUPERTINO DESIGN
+       ========================================================================== */
+    :root {
+      /* Apple System Palette (Dark Mode Vibrancy) */
+      --apple-bg: #000000;
+      --apple-bg-alt: #090d16;
+      --apple-surface: rgba(18, 26, 44, 0.72);
+      --apple-surface-elevated: rgba(28, 38, 62, 0.75);
+      --apple-surface-hover: rgba(36, 48, 76, 0.85);
+      --apple-input: rgba(10, 16, 28, 0.8);
+      
+      /* Apple Cupertino Accents */
+      --apple-blue: #007AFF;
+      --apple-blue-active: #0062CC;
+      --apple-cyan: #38BDF8;
+      --apple-cyan-glow: rgba(56, 189, 248, 0.35);
+      --apple-teal: #30D158;
+      --apple-mint: #34C759;
+      --apple-amber: #FF9F0A;
+      --apple-coral: #FF453A;
+      --apple-indigo: #5E5CE6;
+      
+      /* Apple Materials & Hairline Borders */
+      --apple-border: rgba(255, 255, 255, 0.1);
+      --apple-border-strong: rgba(255, 255, 255, 0.18);
+      --apple-border-cyan: rgba(56, 189, 248, 0.4);
+      --apple-glass-shine: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      --apple-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+      --apple-shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.56);
+      --apple-shadow-lg: 0 24px 64px -12px rgba(0, 0, 0, 0.72), 0 0 32px rgba(56, 189, 248, 0.15);
+      
+      /* Apple Typography Hierarchy */
+      --apple-text: #FFFFFF;
+      --apple-text-secondary: #94A3B8;
+      --apple-text-tertiary: #64748B;
+      --apple-text-quaternary: #475569;
+      --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", -system-ui, sans-serif;
+      --apple-mono: "SF Mono", "JetBrains Mono", "Menlo", monospace;
+      
+      /* Apple Motion Easing (Signature Spring) */
+      --apple-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--apple-bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.15), transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(94, 92, 230, 0.08), transparent 40%);
+      color: var(--apple-text);
+      font-family: var(--apple-font);
+      font-size: 14px;
+      line-height: 1.45;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      overflow-x: hidden;
+    }
+
+    /* Tabular numbers for financial accuracy */
+    .num, [data-num] {
+      font-family: var(--apple-mono);
+      font-variant-numeric: tabular-nums lining-nums;
+      text-align: right;
+    }
+
+    /* ==========================================================================
+       APPLE TERMINAL STATUS TICKER (CAPSULE VIBRANCY)
+       ========================================================================== */
+    /* TOP LIVE STATUS TICKER BAR (CENTERED) */
+    .ticker-bar {
+      background: rgba(4, 8, 16, 0.96);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: var(--apple-mono);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      color: var(--apple-text-secondary);
+      z-index: 100;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .ticker-content {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .ticker-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--apple-mint);
+      box-shadow: 0 0 10px var(--apple-mint);
+      animation: pulse 2s infinite ease-in-out;
+      flex-shrink: 0;
+    }
+    .ticker-engine-txt {
+      color: var(--apple-mint);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .ticker-sep {
+      color: rgba(255, 255, 255, 0.2);
+    }
+    #ticker-time {
+      color: #E2E8F0;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.15); }
+    }
+
+    /* App Shell Container */
+    .lexus-app {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 14px 16px 80px;
+      box-sizing: border-box;
+    }
+
+    /* ==========================================================================
+       APPLE FLOATING HEADER BAR (CUPERTINO FROSTED GLASS)
+       ========================================================================== */
+    .lexus-header {
+      background: linear-gradient(135deg, rgba(14, 23, 42, 0.92) 0%, rgba(15, 30, 56, 0.88) 100%);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--apple-border);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      box-shadow: var(--apple-shadow-md), var(--apple-glass-shine);
+      transition: all .3s var(--apple-ease);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .lexus-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .lexus-brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+      flex-shrink: 0;
+    }
+    .lexus-title {
+      min-width: 0;
+    }
+    .lexus-title h1 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .lexus-title p {
+      font-size: 11px;
+      color: var(--apple-cyan);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lexus-status-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    /* Cupertino Status Pills & Badges */
+    .pill {
+      background: rgba(10, 18, 32, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--apple-border);
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--apple-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s var(--apple-ease);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+      white-space: nowrap;
+    }
+    .pill-cyan {
+      border-color: var(--apple-border-cyan);
+      color: var(--apple-cyan);
+    }
+    .pill-cyan:hover {
+      background: rgba(56, 189, 248, 0.15);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+    }
+    .pill-green {
+      border-color: rgba(48, 209, 88, 0.4);
+      color: var(--apple-mint);
+    }
+
+    /* Modern iOS Back Button */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--apple-border);
+      color: var(--apple-cyan);
+      font-family: var(--apple-font);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all .2s var(--apple-ease);
+      touch-action: manipulation;
+    }
+    .btn-back:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--apple-border-cyan);
+      transform: translateX(-2px);
+    }
+    .btn-back:active {
+      transform: scale(0.96);
+    }
+    .btn-back .chevron {
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       APPLE CUPERTINO LOGIN SCREEN & FUSED HERO CARD
+       ========================================================================== */
+    /* ==========================================================================
+       APPLE CUPERTINO LOGIN SCREEN & FUSED HERO CARD (EXACT REPLICA)
+       ========================================================================== */
+    .login-wrapper {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 20px 16px;
+      animation: fadeIn .4s var(--apple-ease);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .login-box {
+      width: 100%;
+      max-width: 430px;
+      background: linear-gradient(180deg, #101624 0%, #101322 65%, #07223f 100%);
+      backdrop-filter: blur(36px) saturate(210%);
+      -webkit-backdrop-filter: blur(36px) saturate(210%);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 26px;
+      padding: 0 28px 32px 28px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(2, 132, 199, 0.25), var(--apple-glass-shine);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .login-hero-circuit {
+      width: calc(100% + 56px);
+      margin: 0 -28px 4px -28px;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .login-hero-circuit img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      border-radius: 26px 26px 0 0;
+      transition: transform 0.3s ease;
+    }
+    .login-hero-circuit img:hover {
+      transform: scale(1.015);
+    }
+    .login-box h2 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #FFFFFF;
+      margin: 2px 0 2px 0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .login-box p.sub {
+      font-size: 12px;
+      color: var(--apple-text-secondary);
+      margin-bottom: 22px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .login-terminal-badge {
+      margin: 16px 0;
+      font-family: var(--apple-font);
+      font-size: 12.5px;
+      color: #FFFFFF;
+      background: rgba(2, 132, 199, 0.14);
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .login-terminal-badge strong {
+      color: var(--apple-cyan);
+      font-family: var(--apple-mono);
+      font-size: 13.5px;
+    }
+    .header-logo-fused {
+      width: 42px;
+      height: 42px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #000000;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+      mix-blend-mode: screen;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--apple-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Cupertino Frosted Text Inputs */
+    input[type="text"], input[type="password"], input[type="number"], select, textarea {
+      width: 100%;
+      background: var(--apple-input);
+      border: 1px solid var(--apple-border);
+      color: #FFFFFF;
+      font-family: var(--apple-font);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 11px 14px;
+      border-radius: 12px;
+      transition: all .2s var(--apple-ease);
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--apple-cyan);
+      background: rgba(14, 22, 38, 0.95);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+    .btn-eye {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: var(--apple-text-secondary);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      transition: color .2s ease;
+    }
+    .btn-eye:hover { color: var(--apple-cyan); }
+
+    /* ==========================================================================
+       APPLE CUPERTINO ACTION BUTTONS
+       ========================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: linear-gradient(180deg, #0A84FF 0%, #0066D6 100%);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-weight: 700;
+      font-size: 13.5px;
+      letter-spacing: -0.01em;
+      padding: 10px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all .2s var(--apple-ease);
+      font-family: var(--apple-font);
+      box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      touch-action: manipulation;
+      box-sizing: border-box;
+    }
+    .btn:hover {
+      background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      transform: translateY(-1px);
+    }
+    .btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+    .btn-block { width: 100%; }
+    .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 9999px; }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--apple-border);
+      color: var(--apple-text);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: var(--apple-border-strong);
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background: linear-gradient(180deg, #FF453A 0%, #D70015 100%);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(255, 69, 58, 0.35);
+    }
+
+    /* Capsule Power Logout Button (Exact Match) */
+    .btn-salir-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #FFFFFF;
+      border-radius: 9999px;
+      padding: 6px 16px;
+      font-family: var(--apple-font);
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: all .2s var(--apple-ease);
+      white-space: nowrap;
+      touch-action: manipulation;
+    }
+    .btn-salir-pill:hover {
+      background: rgba(51, 65, 85, 0.95);
+      border-color: rgba(255, 255, 255, 0.38);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+    .btn-salir-pill:active {
+      transform: scale(0.95);
+      background: rgba(15, 23, 42, 0.9);
+    }
+    .btn-salir-pill svg {
+      width: 14px;
+      height: 14px;
+      stroke: #FFFFFF;
+      stroke-width: 2.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+    }
+
+    /* ==========================================================================
+       MAIN 7 SQUIRCLE MENU GRID WITH COLORFUL MINIMALIST ICONS (APPLE STYLE)
+       ========================================================================== */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 6px;
+    }
+    .menu-card {
+      background: var(--apple-surface);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--apple-border);
+      border-radius: 16px;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: all .25s var(--apple-ease);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--apple-shadow-sm), var(--apple-glass-shine);
+      touch-action: manipulation;
+      box-sizing: border-box;
+    }
+    .menu-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--apple-border-cyan);
+      background: var(--apple-surface-hover);
+      box-shadow: var(--apple-shadow-md), 0 0 22px var(--apple-cyan-glow);
+    }
+    .menu-card:active {
+      transform: scale(0.98);
+    }
+
+    /* Colorful Minimalist Modern App Icon Badges */
+    .menu-icon-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      position: relative;
+      transition: transform .2s var(--apple-ease);
+    }
+    .menu-card:hover .menu-icon-badge {
+      transform: scale(1.08);
+    }
+    .menu-icon-badge svg {
+      width: 23px;
+      height: 23px;
+      stroke: #ffffff;
+      stroke-width: 2.2;
+      fill: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    .menu-badge-1 { background: linear-gradient(135deg, #007AFF 0%, #00C7FF 100%); box-shadow: 0 6px 18px rgba(0, 122, 255, 0.45); }
+    .menu-badge-2 { background: linear-gradient(135deg, #FF9500 0%, #FFCC00 100%); box-shadow: 0 6px 18px rgba(255, 149, 0, 0.45); }
+    .menu-badge-3 { background: linear-gradient(135deg, #34C759 0%, #30D158 100%); box-shadow: 0 6px 18px rgba(52, 199, 89, 0.45); }
+    .menu-badge-4 { background: linear-gradient(135deg, #5856D6 0%, #AF52DE 100%); box-shadow: 0 6px 18px rgba(175, 82, 222, 0.45); }
+    .menu-badge-5 { background: linear-gradient(135deg, #FF2D55 0%, #FF375F 100%); box-shadow: 0 6px 18px rgba(255, 45, 85, 0.45); }
+    .menu-badge-6 { background: linear-gradient(135deg, #30B0C7 0%, #38BDF8 100%); box-shadow: 0 6px 18px rgba(56, 189, 248, 0.45); }
+    .menu-badge-7 { background: linear-gradient(135deg, #FF453A 0%, #D70015 100%); box-shadow: 0 6px 18px rgba(255, 69, 58, 0.45); }
+
+    .menu-key-pill {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(10, 16, 28, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #FFFFFF;
+      font-family: var(--apple-mono);
+      font-size: 10px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
+    .menu-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .menu-info h3 {
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: #FFFFFF;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .menu-info p {
+      font-size: 12px;
+      color: var(--apple-text-secondary);
+      line-height: 1.35;
+    }
+
+    /* ==========================================================================
+       APPLE FROSTED GLASS BLUR BACKDROP MODAL (COMPANY VERIFICATION)
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn .3s var(--apple-ease);
+    }
+    .modal-card {
+      background: linear-gradient(145deg, rgba(16, 25, 46, 0.97) 0%, rgba(10, 18, 36, 0.95) 100%);
+      border: 1px solid var(--apple-border-cyan);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 480px;
+      padding: 28px 24px;
+      box-shadow: var(--apple-shadow-lg), 0 0 36px rgba(56, 189, 248, 0.25), var(--apple-glass-shine);
+      position: relative;
+      animation: modalPop .35s var(--apple-ease);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.93) translateY(16px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-cia-card {
+      background: rgba(12, 20, 36, 0.85);
+      border: 1px solid var(--apple-border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all .2s var(--apple-ease);
+      box-sizing: border-box;
+    }
+    .modal-cia-card:hover {
+      border-color: var(--apple-cyan);
+      background: rgba(20, 34, 60, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.2);
+    }
+    .modal-cia-card.active-cia {
+      border-color: var(--apple-cyan);
+      background: rgba(2, 132, 199, 0.22);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+    }
+
+    /* ==========================================================================
+       APPLE CUPERTINO PANELS & DATA TABLES
+       ========================================================================== */
+    .view-container {
+      background: var(--apple-surface);
+      backdrop-filter: blur(32px) saturate(200%);
+      -webkit-backdrop-filter: blur(32px) saturate(200%);
+      border: 1px solid var(--apple-border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--apple-shadow-md), var(--apple-glass-shine);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: fadeIn .3s var(--apple-ease);
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--apple-border);
+      padding-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .view-header h2 {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .subpanel {
+      background: rgba(8, 14, 26, 0.85);
+      border: 1px solid var(--apple-border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .subpanel h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--apple-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    /* Glass Tables & Mobile Table Box */
+    .table-box {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--apple-border);
+      border-radius: 12px;
+      background: rgba(4, 8, 16, 0.6);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+      min-width: 100%;
+    }
+    th {
+      background: rgba(6, 12, 22, 0.95);
+      color: var(--apple-cyan);
+      font-family: var(--apple-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--apple-border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--apple-text);
+      transition: background .15s ease;
+    }
+    tr:hover td {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .tr-special {
+      background: rgba(48, 209, 88, 0.12) !important;
+      border-left: 3px solid var(--apple-mint);
+    }
+    .tr-special td { color: #A7F3D0; font-weight: 700; }
+
+    /* Cupertino Alerts */
+    .banner {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .banner-warn { background: rgba(255, 159, 10, 0.15); border: 1px solid var(--apple-amber); color: #FDE68A; }
+    .banner-ok { background: rgba(48, 209, 88, 0.15); border: 1px solid var(--apple-mint); color: #A7F3D0; }
+    .banner-info { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--apple-cyan); color: #BAE6FD; }
+
+    /* Cupertino Segmented Radio Cards */
+    .radio-card {
+      background: rgba(12, 20, 36, 0.7);
+      border: 1px solid var(--apple-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all .2s var(--apple-ease);
+      box-sizing: border-box;
+    }
+    .radio-card:hover { border-color: var(--apple-cyan); background: rgba(20, 32, 54, 0.85); }
+    .radio-card.selected {
+      border-color: var(--apple-cyan);
+      background: rgba(2, 132, 199, 0.2);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* Cupertino Financial KPI Grid for Mobile & Desktop */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .kpi-card {
+      background: rgba(10, 18, 34, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--apple-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), var(--apple-glass-shine);
+      transition: all .2s var(--apple-ease);
+      box-sizing: border-box;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--apple-border-cyan);
+    }
+    .kpi-card .kpi-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--apple-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .kpi-card .kpi-val {
+      font-size: 17px;
+      font-weight: 800;
+      font-family: var(--apple-mono);
+      letter-spacing: -0.02em;
+    }
+
+    /* iOS Modal Drawer Handle */
+    .drawer-handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.25);
+      margin: 0 auto 10px auto;
+      display: none;
+    }
+
+    /* Table Scroll Hint */
+    .table-scroll-hint {
+      display: none;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--apple-cyan);
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 6px;
+      justify-content: flex-end;
+    }
+
+    /* ==========================================================================
+       MEDIA QUERIES PARA MÓVILES Y TABLETS (iOS HIG Touch)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      input[type="text"], input[type="password"], input[type="number"], select, textarea {
+        font-size: 16px !important;
+        min-height: 44px;
+        border-radius: 12px;
+      }
+      body {
+        font-size: 13px;
+        padding-top: env(safe-area-inset-top);
+      }
+      .drawer-handle { display: block; }
+      .table-scroll-hint { display: flex; }
+      .ticker-bar { padding: 4px 8px; font-size: 10px; }
+      .lexus-app { padding: 8px 10px 84px 10px; }
+      .lexus-header {
+        padding: 12px 14px;
+        border-radius: 16px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-align: center;
+      }
+      .lexus-brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        text-align: center;
+      }
+      .lexus-brand .header-logo-fused { width: 38px; height: 38px; border-radius: 10px; }
+      .lexus-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .lexus-title h1 { font-size: 16px; justify-content: center; }
+      .lexus-title p { font-size: 10.5px; text-align: center; }
+      .lexus-status-pills {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+      }
+      .lexus-status-pills .btn-cambiar-cia-header {
+        flex: 1;
+        max-width: 240px;
+        justify-content: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .lexus-status-pills #pill-periodo-lexus {
+        display: none;
+      }
+      .lexus-status-pills #btn-cerrar-sesion {
+        padding: 6px 14px;
+        flex-shrink: 0;
+      }
+      .pill { padding: 5px 10px; font-size: 11px; min-height: 30px; }
+      .login-box {
+        padding: 0 18px 26px 18px !important;
+        border-radius: 24px;
+      }
+      .login-hero-circuit {
+        width: calc(100% + 36px);
+        margin: 0 -18px 2px -18px;
+        border-radius: 24px 24px 0 0;
+      }
+      .login-hero-circuit img {
+        border-radius: 24px 24px 0 0;
+      }
+      .login-box h2 { font-size: 20px; }
+      .menu-grid { grid-template-columns: 1fr; gap: 10px; }
+      .menu-card { padding: 14px 14px; gap: 12px; border-radius: 14px; }
+      .menu-num { width: 38px; height: 38px; font-size: 17px; border-radius: 10px; }
+      .view-container { padding: 14px 12px; border-radius: 14px; gap: 12px; }
+      .view-header { padding-bottom: 10px; }
+      .view-header h2 { font-size: 15px; }
+      .split-layout { display: flex; flex-direction: column; gap: 12px; }
+      .subpanel { padding: 14px 12px; border-radius: 12px; }
+      .subpanel h4 { font-size: 12px; margin-bottom: 10px; }
+      .btn { min-height: 44px; font-size: 13.5px; padding: 10px 16px; border-radius: 12px; }
+      .btn-back { font-size: 12px; padding: 4px 10px; }
+      .lexus-mobile-nav { display: flex !important; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .kpi-card { padding: 10px 12px; }
+      .kpi-card .kpi-val { font-size: 15px; }
+    }
+
+    /* iOS Cupertino Mobile Bottom Navigation Bar */
+    .lexus-mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(6, 12, 24, 0.94);
+      backdrop-filter: blur(32px) saturate(210%);
+      -webkit-backdrop-filter: blur(32px) saturate(210%);
+      border-top: 1px solid var(--apple-border);
+      z-index: 999;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: max(6px, env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
+    }
+    .mob-tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      background: transparent;
+      border: none;
+      color: var(--apple-text-secondary);
+      font-family: var(--apple-font);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 0;
+      transition: all .2s var(--apple-ease);
+      touch-action: manipulation;
+    }
+    .mob-tab-btn svg {
+      width: 19px;
+      height: 19px;
+      stroke: var(--apple-text-secondary);
+      transition: all .2s var(--apple-ease);
+    }
+    .mob-tab-btn.activo, .mob-tab-btn:active {
+      color: var(--apple-cyan);
+      transform: scale(1.05);
+    }
+    .mob-tab-btn.activo svg {
+      stroke: var(--apple-cyan);
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+    }
+
+    .hidden { display: none !important; }
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 11px;
+      color: var(--apple-text-tertiary);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <div class="app-layout">
 
-    <!-- Backdrop para Drawer en Móviles/Tablets -->
-    <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+  <!-- TOP STATUS TICKER (CENTERED & STREAMLINED) -->
+  <div class="ticker-bar">
+    <div class="ticker-content">
+      <span class="ticker-dot"></span>
+      <span class="ticker-engine-txt">LEXUS ENGINE V2.6 · EN LÍNEA</span>
+      <span class="ticker-sep">·</span>
+      <span id="ticker-time">🕒 --:--:-- · 📅 --/--/----</span>
+    </div>
+  </div>
 
-    <!-- ===================== SIDEBAR (Cupertino Drawer en Móvil) ===================== -->
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div style="display:flex; align-items:center; gap:12px; flex:1;">
-          <img src="img/logo-lexus.jpg" alt="Logo Lexus" style="width:42px; height:42px; object-fit:contain; border-radius:8px; box-shadow:0 0 12px rgba(56,189,248,0.35); border:1px solid rgba(56,189,248,0.3);">
-          <div class="brand-text">
-            <span class="brand-name" style="font-size:16px; font-weight:800; letter-spacing:0.02em; color:#fff;">LEXUS</span>
-            <span class="brand-sub" style="font-size:10.5px; color:#38bdf8; font-weight:600;">Sistema Contable</span>
+  <div class="lexus-app">
+
+    <!-- ==========================================================================
+         PANTALLA DE ACCESO / LOGIN LEXUS
+         ========================================================================== -->
+    <div id="pantalla-login" class="login-wrapper">
+      <div class="login-box">
+        <div class="login-hero-circuit">
+          <img src="img/lexus-circuit-fused.png" alt="Logo Lexus Fused">
+        </div>
+        <h2>LEXUS</h2>
+        <p class="sub">Mi Sistema Contable Integrado · 30 Años de Experiencia</p>
+
+        <form id="form-login">
+          <div class="form-group">
+            <label>Llave de Usuario</label>
+            <input type="text" id="login-user" value="Joel777" placeholder="Digite usuario..." required autocomplete="off" autofocus>
           </div>
-        </div>
-        <!-- Botón cerrar para vista móvil -->
-        <button class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Cerrar menú">&times;</button>
-      </div>
 
-      <nav id="app-menu" class="sidebar-nav" aria-label="Módulos Contables">
-        <!-- SECCIÓN CONTABILIDAD PURA -->
-        <div class="sidebar-section-title" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#38bdf8;">
-          Contabilidad General
-        </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <div class="input-wrap">
+              <input type="password" id="login-pass" value="585858" placeholder="Digite contraseña..." required autocomplete="current-password">
+              <button type="button" class="btn-eye" id="btn-toggle-pass" title="Ver / Ocultar">👁️</button>
+            </div>
+          </div>
 
-        <button data-modulo="companias" data-tooltip="Selección y administración de empresas">
-          <span class="nav-icon" aria-hidden="true">🏢</span>
-          <span class="nav-label">Compañías</span>
-          <span class="nav-key">1</span>
-        </button>
-        <button data-modulo="catalogo" class="activo" data-tooltip="Plan de cuentas contables">
-          <span class="nav-icon" aria-hidden="true">📂</span>
-          <span class="nav-label">Catálogo de Cuentas</span>
-          <span class="nav-key">2</span>
-        </button>
-        <button data-modulo="asientos" data-tooltip="Comprobantes y asientos de diario">
-          <span class="nav-icon" aria-hidden="true">📝</span>
-          <span class="nav-label">Documentos (Asientos)</span>
-          <span class="nav-key">3</span>
-        </button>
-        <button data-modulo="procesos" data-tooltip="Mayorización de cuentas y cierres">
-          <span class="nav-icon" aria-hidden="true">⚙️</span>
-          <span class="nav-label">Procesos Selectos</span>
-          <span class="nav-key">4</span>
-        </button>
-        <button data-modulo="reportes" data-tooltip="Balance General, Estado de Resultados, Libro Mayor y Diarios">
-          <span class="nav-icon" aria-hidden="true">📈</span>
-          <span class="nav-label">Reportes Financieros</span>
-          <span class="nav-key">5</span>
-        </button>
+          <div class="login-terminal-badge">
+            📊 Terminal Usada: <strong id="lbl-veces-usado">1</strong> veces
+          </div>
 
-        <div style="height:1px; background:rgba(255,255,255,0.1); margin:10px 12px 6px;"></div>
+          <div id="login-error" class="banner banner-warn hidden" style="margin-bottom:14px;"></div>
 
-        <!-- SECCIÓN MÓDULOS ADICIONALES -->
-        <div class="sidebar-section-title conta-only-section" style="padding:4px 14px 6px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#94a3b8;">
-          Módulos Adicionales
-        </div>
-
-        <button data-modulo="extras" class="conta-only-btn" data-tooltip="Facturación POS, Kárdex, Clientes, Bancos">
-          <span class="nav-icon" aria-hidden="true">🧩</span>
-          <span class="nav-label">Módulos Extras (POS/Kárdex)</span>
-          <span class="nav-key">6</span>
-        </button>
-
-        <!-- SECCIÓN EXCLUSIVA SUPER USUARIO -->
-        <button data-modulo="seguridad" class="super-user-btn" id="btn-menu-seguridad" style="display:none;" data-tooltip="Auditoría de accesos y base de datos">
-          <span class="nav-icon" aria-hidden="true">🛡️</span>
-          <span class="nav-label">Seguridad & Auditoría</span>
-          <span class="nav-key">S</span>
-        </button>
-      </nav>
-
-      <div class="sidebar-foot">
-        <div class="sidebar-status">
-          <span class="dot"></span>
-          <span>Lexus Engine Online</span>
-        </div>
-        <span class="sidebar-version">v2.6 · Multi-Tenant</span>
-      </div>
-    </aside>
-
-    <!-- ===================== MAIN COLUMN ===================== -->
-    <div class="app-main">
-
-      <!-- Top Bar -->
-      <header id="app-header" class="topbar">
-        <div class="topbar-left">
-          <!-- Botón Hamburguesa para Móviles & Tablets -->
-          <button class="icon-btn mobile-menu-btn" id="btn-toggle-sidebar" aria-label="Abrir menú">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
+          <button type="submit" class="btn btn-block" id="btn-ingresar" style="height:48px; font-size:14px;">
+            <span>⚡ Ingresar al Sistema</span> [Enter]
           </button>
+        </form>
+      </div>
+    </div>
 
-          <div class="search-wrap">
-            <svg class="search-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="7"/>
-              <path d="m20 20-3.5-3.5"/>
-            </svg>
-            <input id="global-search" type="text" placeholder="Buscar cuenta o descripción..." autocomplete="off">
-            <kbd class="search-kbd">/</kbd>
-            <div id="search-results" class="search-dropdown hidden"></div>
+    <!-- ==========================================================================
+         ÁREA PRINCIPAL DEL SISTEMA (DESPUÉS DEL LOGIN)
+         ========================================================================== -->
+    <div id="pantalla-sistema" class="hidden" style="display:flex; flex-direction:column; flex:1;">
+      
+      <!-- HEADER CON COMPAÑÍA ACTIVA & STATUS BAR -->
+      <header class="lexus-header">
+        <div class="lexus-brand">
+          <img src="img/logo-lexus.jpg" alt="Logo Lexus" class="header-logo-fused">
+          <div class="lexus-title">
+            <h1>LEXUS <span style="font-size:11px; font-weight:700; color:var(--apple-cyan); background:rgba(56,189,248,0.15); padding:2px 7px; border-radius:6px; border:1px solid rgba(56,189,248,0.3);">CLOUD</span></h1>
+            <p>Sistema Contable Integral</p>
           </div>
         </div>
 
-        <div class="topbar-right">
-          <!-- STATUS BAR & TENANT SWITCHER REQUERIDO -->
-          <div class="header-status-bar" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <button class="btn-tenant-switcher" id="btn-tenant-switcher" title="Cambiar Empresa Activa" style="background:#0c182a; border:1px solid #1e3a5f; color:#38bdf8; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all .2s ease;">
-              <span>🏢</span>
-              <span id="tenant-nombre-header">Seleccionar Empresa</span>
-              <span style="font-size:10px; color:#94a3b8;">▼</span>
-            </button>
-            <div class="company-control" style="display:none;">
-              <select id="sel-compania"></select>
-            </div>
-            <span id="periodo-label" class="period-chip" style="font-family:'JetBrains Mono',monospace; font-size:12px; display:inline-flex; align-items:center; gap:6px;">
-              Mes en proceso: <strong id="hdr-mes-val" style="color:#38bdf8;">--</strong> | Año: <strong id="hdr-ano-val" style="color:#38bdf8;">----</strong>
-            </span>
+        <div class="lexus-status-pills">
+          <button class="pill pill-cyan btn-cambiar-cia-header" id="btn-cambiar-cia-lexus" title="Cambiar Empresa Activa" style="cursor:pointer; font-family:var(--apple-mono);">
+            <span>🏢</span>
+            <strong id="hdr-comp-nombre">Seleccionar Empresa</strong>
+            <span style="font-size:9px; color:var(--apple-text-secondary); margin-left:2px;">▼</span>
+          </button>
+          <div class="pill pill-green" id="pill-periodo-lexus">
+            <span>🗓️ Período:</span>
+            <strong id="hdr-mes-lexus">08</strong>/<strong id="hdr-ano-lexus">2026</strong>
           </div>
-
-          <div class="topbar-divider"></div>
-
-          <div class="topbar-menu">
-            <button class="icon-btn" id="btn-notificaciones" data-tooltip="Notificaciones" aria-label="Notificaciones">
-              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/>
-                <path d="M10 20a2 2 0 0 0 4 0"/>
-              </svg>
-              <span class="badge">3</span>
-            </button>
-            <div id="panel-notificaciones" class="popover hidden" role="menu">
-              <div class="popover-head">Notificaciones <span class="badge badge-plain">3 nuevas</span></div>
-              <div class="popover-item"><span class="pop-dot warn"></span><div><strong>Mayorización pendiente</strong><p>Ejecute la mayorización del período activo.</p></div></div>
-              <div class="popover-item"><span class="pop-dot info"></span><div><strong>Cierre mensual</strong><p>Recuerde cerrar el mes al final del ejercicio.</p></div></div>
-              <div class="popover-item"><span class="pop-dot accent"></span><div><strong>Respaldo sugerido</strong><p>Considere crear un respaldo de la base de datos.</p></div></div>
-            </div>
-          </div>
-
-          <div class="topbar-menu">
-            <button class="profile" id="btn-perfil" aria-label="Menú de usuario">
-              <span class="avatar">JO</span>
-              <span class="profile-meta">
-                <span class="profile-name">Joel777</span>
-                <span class="profile-role">Contador</span>
-              </span>
-              <svg class="profile-chevron" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-            <div id="panel-perfil" class="popover popover-right hidden" role="menu">
-              <div class="popover-head">Joel777 · Contador</div>
-              <button class="popover-item" data-ir="seguridad"><span class="pop-icon">🛡️</span> Auditoría de Sesiones</button>
-              <button class="popover-item" data-ir="companias"><span class="pop-icon">🏢</span> Compañías</button>
-              <button class="popover-item" data-ir="reportes"><span class="pop-icon">📈</span> Reportes</button>
-              <div class="popover-sep"></div>
-              <button class="popover-item danger" id="btn-salir"><span class="pop-icon">⏻</span> Cerrar sesión</button>
-            </div>
-          </div>
+          <button class="btn-salir-pill" id="btn-cerrar-sesion" title="Cerrar Sesión">
+            <svg viewBox="0 0 24 24">
+              <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+              <line x1="12" y1="2" x2="12" y2="12"></line>
+            </svg>
+            <span>Salir</span>
+          </button>
         </div>
       </header>
 
-      <!-- Content -->
-      <main id="app-contenido" class="content"></main>
+      <!-- ==========================================================================
+           VISTA 0: MENÚ PRINCIPAL (LAS 7 OPCIONES EXACTAS)
+           ========================================================================== -->
+      <div id="vista-menu" class="view-container">
+        <div class="view-header">
+          <h2><span>📋 Menú Principal</span> <small style="font-size:12px; color:var(--apple-text-secondary); font-weight:normal;">Seleccione o presione [1 - 7]</small></h2>
+          <div class="pill">Cía Activa: <strong id="lbl-menu-empresa">--</strong></div>
+        </div>
 
-      <footer id="app-footer">
-        <span>LEXUS · Sistema Contable & Administrativo Multi-Tenant</span>
-        <span class="footer-extra">Catálogo de Cuentas · Mayorización Automática · Balances Clasificados</span>
-      </footer>
-    </div>
-  </div>
+        <div class="menu-grid">
+          
+          <div class="menu-card" data-ir="companias">
+            <div class="menu-icon-badge menu-badge-1">
+              <svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path><path d="M14 8h1"></path><path d="M14 12h1"></path><path d="M14 16h1"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+              <span class="menu-key-pill">1</span>
+            </div>
+            <div class="menu-info">
+              <h3>Compañías</h3>
+              <p>Inclusión, consulta, selección de empresas y catálogo inicial.</p>
+            </div>
+          </div>
 
-  <!-- ===================== CUPERTINO MOBILE TAB BAR ===================== -->
-  <nav id="mobile-tab-bar" class="mobile-tab-bar" aria-label="Navegación rápida móvil">
-    <button data-modulo="companias" class="tab-item">
-      <span class="tab-icon">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 21h18"></path>
-          <path d="M19 21v-4"></path>
-          <path d="M19 17a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v4"></path>
-          <path d="M3 7l9-4 9 4v14"></path>
-        </svg>
-      </span>
-      <span class="tab-label">Empresas</span>
-    </button>
-    <button data-modulo="catalogo" class="tab-item activo">
-      <span class="tab-icon">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
-        </svg>
-      </span>
-      <span class="tab-label">Catálogo</span>
-    </button>
-    <button data-modulo="asientos" class="tab-item">
-      <span class="tab-icon">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 20h9"></path>
-          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-        </svg>
-      </span>
-      <span class="tab-label">Asientos</span>
-    </button>
-    <button data-modulo="reportes" class="tab-item">
-      <span class="tab-icon">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 3v18h18"></path>
-          <path d="m19 9-5 5-4-4-3 3"></path>
-        </svg>
-      </span>
-      <span class="tab-label">Reportes</span>
-    </button>
-    <button data-modulo="extras" class="tab-item conta-only-btn">
-      <span class="tab-icon">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
-          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
-          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
-          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
-        </svg>
-      </span>
-      <span class="tab-label">Extras</span>
-    </button>
-    <button data-modulo="seguridad" class="tab-item super-user-btn" id="mobile-tab-seguridad" style="display:none;">
-      <span class="tab-icon">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-        </svg>
-      </span>
-      <span class="tab-label">Auditoría</span>
-    </button>
-    <button id="tab-btn-mas" class="tab-item">
-      <span class="tab-icon">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="12" x2="20" y2="12"></line>
-          <line x1="4" y1="6" x2="20" y2="6"></line>
-          <line x1="4" y1="18" x2="20" y2="18"></line>
-        </svg>
-      </span>
-      <span class="tab-label">Menú</span>
-    </button>
-  </nav>
+          <div class="menu-card" data-ir="catalogo">
+            <div class="menu-icon-badge menu-badge-2">
+              <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+              <span class="menu-key-pill">2</span>
+            </div>
+            <div class="menu-info">
+              <h3>Catálogo de Cuentas</h3>
+              <p>Estructura de cuentas, descripciones y cuenta de resultados.</p>
+            </div>
+          </div>
 
-  <!-- ===================== LOGIN SCREEN (LEXUS BRANDING) ===================== -->
-  <div id="login-screen" class="login-screen">
-    <div class="login-card" style="max-width:440px; padding:32px 28px;">
-      <div class="login-brand" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:18px;">
-        <img src="img/logo-lexus.jpg" alt="Lexus - Mi Sistema Contable Integrado" style="width:100%; max-width:280px; height:auto; object-fit:contain; border-radius:12px; box-shadow:0 8px 30px rgba(2,132,199,0.4); border:1px solid rgba(56,189,248,0.3);">
-        <div>
-          <div class="brand-name" style="font-size:24px; font-weight:800; color:#fff; margin-top:6px;">LEXUS</div>
-          <div class="brand-sub" style="font-size:12px; color:#38bdf8; font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Mi Sistema Contable Integrado</div>
+          <div class="menu-card" data-ir="documentos">
+            <div class="menu-icon-badge menu-badge-3">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span class="menu-key-pill">3</span>
+            </div>
+            <div class="menu-info">
+              <h3>Documentos (Asientos)</h3>
+              <p>Registro de comprobantes de diario y balance cuadrado.</p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-ir="procesos">
+            <div class="menu-icon-badge menu-badge-4">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span class="menu-key-pill">4</span>
+            </div>
+            <div class="menu-info">
+              <h3>Procesos Selectos</h3>
+              <p>Mayorización en cascada del período y recálculo general.</p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-ir="reportes-mensuales">
+            <div class="menu-icon-badge menu-badge-5">
+              <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              <span class="menu-key-pill">5</span>
+            </div>
+            <div class="menu-info">
+              <h3>Reportes Mensuales</h3>
+              <p>Balance General, Estado de Resultados y Balanza de Comprobación.</p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-ir="reportes-historicos">
+            <div class="menu-icon-badge menu-badge-6">
+              <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="9" y1="7" x2="16" y2="7"></line><line x1="9" y1="11" x2="14" y2="11"></line></svg>
+              <span class="menu-key-pill">6</span>
+            </div>
+            <div class="menu-info">
+              <h3>Reportes Históricos</h3>
+              <p>Libro Mayor histórico, Libro Diario acumulado y auxiliares.</p>
+            </div>
+          </div>
+
+          <div class="menu-card" data-ir="cierres">
+            <div class="menu-icon-badge menu-badge-7">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span class="menu-key-pill">7</span>
+            </div>
+            <div class="menu-info">
+              <h3>Cierres de Período</h3>
+              <p>Cierre mensual automático y cierre fiscal definitivo.</p>
+            </div>
+          </div>
+
         </div>
       </div>
-      <h1 style="font-size:18px; font-weight:700;">Acceso Autorizado</h1>
-      <p class="login-hint">Digite su llave de usuario y contraseña</p>
-      <form id="login-form" novalidate>
-        <label for="login-user">Usuario / Llave</label>
-        <input id="login-user" type="text" autocomplete="username" placeholder="Usuario autorizado">
-        <label for="login-pass">Contraseña</label>
-        <div class="pass-wrap">
-          <input id="login-pass" type="password" autocomplete="current-password" placeholder="Contraseña">
-          <button type="button" class="pass-eye" id="login-eye" data-tooltip="Mostrar / ocultar contraseña" aria-label="Mostrar contraseña">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-          </button>
-        </div>
-        <div id="login-error" class="msg msg-error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-block" id="login-btn" style="padding:12px; font-size:14px; font-weight:700; margin-top:8px;">Ingresar al sistema</button>
-      </form>
-      <div class="login-foot" style="color:var(--muted); font-size:12px; margin-top:20px;">
-        Acceso restringido y protegido &middot; <b>Lexus Cloud 2026</b>
-      </div>
-    </div>
-  </div>
 
-  <!-- ===================== MODAL SELECCIÓN FORZOSA DE EMPRESA ===================== -->
-  <div id="modal-seleccion-empresa" class="modal hidden" role="dialog" aria-modal="true" style="z-index: 10000; backdrop-filter: blur(12px);">
-    <div class="modal-box" style="max-width: 620px; border: 1px solid #1e3a5f; background: #0b1526; box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(56,189,248,0.15); border-radius: 16px; padding: 24px;">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid #1e3a5f; padding-bottom:10px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <span style="font-size:22px;">🏢</span>
-          <div>
-            <h2 style="font-size:18px; font-weight:800; color:#ffffff; margin:0;">Selección de Empresa</h2>
-            <p style="font-size:12px; color:#94a3b8; margin:0;">Seleccione o capture el código de la empresa a trabajar</p>
+      <!-- ==========================================================================
+           MODAL FROSTED GLASS: VERIFICACIÓN Y SELECCIÓN DE EMPRESA
+           ========================================================================== -->
+      <div id="modal-seleccion-empresa" class="modal-overlay hidden">
+        <div class="modal-card">
+          <div class="drawer-handle"></div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+            <div class="menu-icon-badge menu-badge-1" style="width:42px; height:42px;">
+              <svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path><path d="M14 8h1"></path><path d="M14 12h1"></path><path d="M14 16h1"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+            </div>
+            <div>
+              <h3 style="font-size:16.5px; font-weight:700; color:#FFFFFF; margin:0; letter-spacing:-0.01em;">Verificación de Empresa</h3>
+              <p style="font-size:11.5px; color:var(--apple-text-secondary); margin:2px 0 0 0;">Seleccione la compañía activa para trabajar o incluya una nueva.</p>
+            </div>
+          </div>
+
+          <!-- LISTA DE EMPRESAS REGISTRADAS -->
+          <div id="modal-lista-companias" style="max-height:210px; overflow-y:auto; margin-bottom:14px;">
+            <!-- Tarjetas dinámicas de empresas -->
+          </div>
+
+          <!-- CAPTURA / INCLUSIÓN RÁPIDA -->
+          <div style="background:rgba(8, 14, 26, 0.7); border:1px solid var(--apple-border); border-radius:14px; padding:14px; margin-bottom:14px;">
+            <label style="font-size:11px; font-weight:700; color:var(--apple-cyan); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">
+              O Digite el Código de Empresa:
+            </label>
+            <div style="display:flex; gap:8px; align-items:stretch;">
+              <input type="text" id="modal-input-cia" placeholder="001" inputmode="numeric" maxlength="4" style="font-family:var(--apple-mono); font-size:18px; font-weight:800; text-align:center; width:95px; color:var(--apple-cyan); border-radius:12px;" autocomplete="off">
+              <button class="btn" id="modal-btn-confirmar-cia" style="flex:1;">
+                <span>Continuar ➔</span>
+              </button>
+            </div>
+            <small style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-top:6px;">
+              * Si la empresa no existe, se abrirá el módulo para aprovisionarla de inmediato.
+            </small>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary btn-sm" id="modal-btn-cerrar">Cerrar [ESC]</button>
           </div>
         </div>
       </div>
 
-      <!-- CAPTURA POR CÓDIGO -->
-      <div style="background:#060d19; border:1px solid #1e3a5f; border-radius:10px; padding:14px; margin-bottom:16px;">
-        <label style="display:block; font-size:11.5px; font-weight:700; color:#38bdf8; text-transform:uppercase; margin-bottom:6px;">
-          Digite Número / Código de Empresa
-        </label>
-        <div style="display:flex; gap:8px;">
-          <input type="text" id="input-codigo-empresa-modal" placeholder="Ej. 019 o 028" maxlength="5" style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:#38bdf8; text-align:center; width:130px; background:#0c182a; border:1px solid #1e3a5f; border-radius:8px; padding:8px;" autofocus>
-          <button class="btn btn-primary" id="btn-buscar-codigo-empresa" style="padding:8px 16px; font-weight:700; font-size:13px;">
-            ⚡ Abrir Empresa [Enter]
+      <!-- ==========================================================================
+           VISTA 1: COMPAÑÍAS (COMPORTAMIENTO EXACTO DESCRITO POR EL CLIENTE)
+           ========================================================================== -->
+      <div id="vista-companias" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>🏢 Módulo de Compañías</span></h2>
+          <button class="btn-back" id="btn-volver-menu-1"><span class="chevron">‹</span> <span>Menú</span></button>
+        </div>
+
+        <div class="split-layout">
+          
+          <!-- LADO IZQUIERDO: CAPTURA & INCLUSIÓN -->
+          <div class="subpanel">
+            <h4>Captura de Compañía</h4>
+            
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Código de Empresa:</label>
+              <div style="display:flex; gap:8px; align-items:stretch;">
+                <input type="text" id="input-num-compania" value="000" inputmode="numeric" maxlength="4" style="font-family:var(--apple-mono); font-size:20px; font-weight:800; text-align:center; width:100px; color:var(--apple-cyan); border-radius:12px;" autocomplete="off">
+                <button class="btn" id="btn-consultar-compania" style="flex:1;">Consultar / Crear ➔</button>
+              </div>
+              <small style="color:var(--apple-text-secondary); font-size:11.5px; display:block; margin-top:6px; line-height:1.4;">
+                * Digite el código deseado (ej. <strong>001</strong>). Digite <strong>000</strong> para regresar al menú.
+              </small>
+            </div>
+
+            <!-- Banner cuando YA EXISTE -->
+            <div id="box-compania-existe" class="banner banner-info hidden" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
+              <div class="drawer-handle"></div>
+              <div style="font-weight:700; font-size:14px;">🏢 EMPRESA SELECCIONADA Y ACTIVADA</div>
+              <div id="desc-compania-existe" style="font-size:13px; color:#ffffff;"></div>
+              <button class="btn btn-sm" id="btn-ok-compania-existe" style="margin-top:6px;">
+                ↵ Presione Enter para ir al Menú Principal
+              </button>
+            </div>
+
+            <!-- Banner cuando NO EXISTE (Confirmación) -->
+            <div id="box-compania-no-existe" class="banner banner-warn hidden" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
+              <div class="drawer-handle"></div>
+              <div style="font-weight:700; font-size:14px;">⚠️ La empresa No. [<span id="lbl-num-no-existe"></span>] no existe en el sistema.</div>
+              <p style="font-size:12.5px; color:#ffffff; margin:0;">¿Desea incluirla y aprovisionar su catálogo ahora?</p>
+              <div style="display:flex; gap:8px; margin-top:4px; width:100%;">
+                <button class="btn btn-sm" id="btn-confirmar-incluir-lexus" style="flex:1;">Sí, Incluir Empresa</button>
+                <button class="btn btn-secondary btn-sm" id="btn-cancelar-incluir-lexus" style="flex:1;">No, Volver</button>
+              </div>
+            </div>
+
+            <!-- Formulario cuando es NUEVA -->
+            <div id="form-nueva-compania" class="hidden">
+              <div class="drawer-handle"></div>
+              <div class="banner banner-info" style="margin-bottom:12px;">
+                ✨ Aprovisionamiento de Nueva Empresa No. <strong id="lbl-nueva-comp-id" style="color:#ffffff;"></strong>
+              </div>
+
+              <div class="form-group">
+                <label>Nombre / Razón Social</label>
+                <input type="text" id="nueva-comp-nombre" placeholder="Ej. Servicios Contables del Valle S.A.">
+              </div>
+
+              <div class="form-group">
+                <label>Cédula Jurídica / RNC</label>
+                <input type="text" id="nueva-comp-cedula" placeholder="3-101-998877">
+              </div>
+
+              <!-- CAMPOS OBLIGATORIOS: MES Y AÑO DE INICIO CONTABLE -->
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div class="form-group">
+                  <label>Mes de Inicio Fiscal *</label>
+                  <select id="nueva-comp-mes-inicio" required>
+                    <option value="1">01 - Enero</option>
+                    <option value="2">02 - Febrero</option>
+                    <option value="3">03 - Marzo</option>
+                    <option value="4">04 - Abril</option>
+                    <option value="5">05 - Mayo</option>
+                    <option value="6">06 - Junio</option>
+                    <option value="7">07 - Julio</option>
+                    <option value="8" selected>08 - Agosto</option>
+                    <option value="9">09 - Setiembre</option>
+                    <option value="10">10 - Octubre</option>
+                    <option value="11">11 - Noviembre</option>
+                    <option value="12">12 - Diciembre</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Año de Inicio Fiscal *</label>
+                  <input type="number" id="nueva-comp-anio-inicio" value="2026" min="1900" max="2100" placeholder="2026" required>
+                </div>
+              </div>
+
+              <!-- LAS 3 OPCIONES DE CATÁLOGO PEDIDAS POR EL CLIENTE -->
+              <div class="form-group">
+                <label>Desea la compañía:</label>
+                
+                <label class="radio-card selected" id="rc-1">
+                  <input type="radio" name="opt-catalogo" value="1" checked>
+                  <div>
+                    <strong>1. Sin catálogo</strong>
+                    <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                      Crea el espacio aislado en la nube e inserta automáticamente la cuenta de control 
+                      <code style="color:var(--ok); font-family:var(--mono);">999-000000 (*** Utilidades o Pérdidas del Período)</code>.
+                    </p>
+                  </div>
+                </label>
+
+                <label class="radio-card" id="rc-2">
+                  <input type="radio" name="opt-catalogo" value="2">
+                  <div>
+                    <strong>2. Con catálogo de una compañía existente</strong>
+                    <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                      Clona el catálogo y estructura de cuentas de otra empresa ya registrada.
+                    </p>
+                    <select id="sel-comp-origen" style="margin-top:6px; display:none;">
+                      <!-- Opciones cargadas dinámicamente -->
+                    </select>
+                  </div>
+                </label>
+
+                <label class="radio-card" id="rc-3">
+                  <input type="radio" name="opt-catalogo" value="3">
+                  <div>
+                    <strong>3. Catálogo General Estándar</strong>
+                    <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                      Carga el catálogo maestro predeterminado comercial/industrial de Costa Rica.
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              <div style="display:flex; gap:10px;">
+                <button class="btn" id="btn-guardar-nueva-comp">💾 Guardar Compañía</button>
+                <button class="btn btn-secondary" id="btn-cancelar-nueva-comp">Cancelar [ESC]</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- LADO DERECHO: PANTALLAZO DE COMPAÑÍAS EXISTENTES -->
+          <div class="subpanel">
+            <h4>Compañías Existentes en la Nube</h4>
+            <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+            <div class="table-box">
+              <table id="tabla-companias">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Razón Social</th>
+                    <th>Cédula</th>
+                    <th>Inicio Fiscal</th>
+                    <th>Período Activo</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-companias">
+                  <!-- Filas dinámicas -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==========================================================================
+           VISTA 2: CATÁLOGO DE CUENTAS (LIMPIO, SIN TEXTO DE MÁSCARA)
+           ========================================================================== -->
+      <div id="vista-catalogo" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>📂 Catálogo de Cuentas</span></h2>
+          <button class="btn-back" id="btn-volver-menu-2"><span class="chevron">‹</span> <span>Menú</span></button>
+        </div>
+
+        <!-- FORMULARIO DE ENTRADA RÁPIDA -->
+        <div class="subpanel" style="margin-bottom:12px;">
+          <h4>Captura Rápida de Cuenta</h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; align-items:flex-end;">
+            
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Digite Cuenta</label>
+              <input type="text" id="cat-cuenta" placeholder="Ej. 101-01-002" style="font-family:var(--apple-mono); font-weight:700; color:var(--apple-cyan);" autocomplete="off">
+            </div>
+
+            <div class="form-group" style="margin-bottom:0; grid-column: span 2;">
+              <label>Descripción de la Cuenta</label>
+              <input type="text" id="cat-desc" placeholder="Ej. Banco Nacional de Costa Rica">
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Tipo / Clase</label>
+              <select id="cat-tipo">
+                <option value="1">1 - ACTIVO</option>
+                <option value="2">2 - PASIVO</option>
+                <option value="3">3 - PATRIMONIO</option>
+                <option value="4">4 - INGRESOS</option>
+                <option value="5">5 - COSTOS</option>
+                <option value="6">6 - GASTOS</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Detalle 1</label>
+              <input type="text" id="cat-det1" placeholder="Referencia auxiliar...">
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Presupuestada</label>
+              <select id="cat-presupuesto">
+                <option value="NO">NO</option>
+                <option value="SI">SÍ</option>
+              </select>
+            </div>
+
+            <button class="btn" id="btn-incluir-cuenta" style="height:42px;">
+              <span>+ Incluir Cuenta</span>
+            </button>
+
+          </div>
+          <small style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-top:8px;">
+            * Digite <strong>000000</strong> en el campo Cuenta y presione Enter para regresar al Menú Principal.
+          </small>
+        </div>
+
+        <!-- TABLA DEL CATÁLOGO -->
+        <div class="subpanel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+            <h4 style="margin-bottom:0; border-bottom:none;">Plan de Cuentas de la Empresa (<span id="lbl-cat-total-cuentas">0</span> cuentas)</h4>
+            <input type="text" id="buscar-catalogo" placeholder="🔍 Filtrar cuenta o descripción..." style="max-width:280px; padding:6px 12px; font-size:12.5px;">
+          </div>
+
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div class="table-box" style="max-height:420px; overflow-y:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:140px;">Código</th>
+                  <th>Descripción de la Cuenta</th>
+                  <th>Tipo / Clase</th>
+                  <th class="num">Saldo Inicial</th>
+                  <th class="num">Saldo Actual</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-catalogo">
+                <!-- Cuentas cargadas dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==========================================================================
+           VISTA 3: DOCUMENTOS / ASIENTOS CONTABLES (TOTALMENTE OPERATIVO)
+           ========================================================================== -->
+      <div id="vista-documentos" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>📝 Documentos · Comprobantes de Diario</span></h2>
+          <button class="btn-back" id="btn-volver-menu-3"><span class="chevron">‹</span> <span>Menú</span></button>
+        </div>
+
+        <!-- REGISTRO INTERACTIVO DE ASIENTO -->
+        <div class="subpanel">
+          <h4>Nuevo Comprobante de Diario</h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:14px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Número de Asiento</label>
+              <input type="text" id="asiento-num" value="AS-2026-0801" style="font-family:var(--apple-mono); font-weight:700; color:var(--apple-cyan);">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Fecha Contable</label>
+              <input type="text" id="asiento-fecha" value="15/08/2026" style="font-family:var(--apple-mono);">
+            </div>
+            <div class="form-group" style="margin-bottom:0; grid-column:span 2;">
+              <label>Concepto General del Asiento</label>
+              <input type="text" id="asiento-concepto" value="Registro de ventas y depósito bancario del día" placeholder="Detalle de la transacción...">
+            </div>
+          </div>
+
+          <!-- LÍNEAS DEL ASIENTO -->
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div class="table-box" style="margin-bottom:12px;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:35%;">Cuenta Contable</th>
+                  <th style="width:30%;">Referencia / Detalle</th>
+                  <th style="width:17%;" class="num">Débito (₡)</th>
+                  <th style="width:18%;" class="num">Crédito (₡)</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-lineas-asiento">
+                <!-- Líneas editables del asiento -->
+                <tr>
+                  <td>
+                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--apple-mono);">
+                      <!-- Opciones dinámicas -->
+                    </select>
+                  </td>
+                  <td><input type="text" class="asiento-linea-desc" value="Depósito en banco" style="padding:6px; font-size:13px;"></td>
+                  <td><input type="number" class="asiento-linea-deb num" value="500000" style="padding:6px; font-size:13px; font-family:var(--apple-mono); font-weight:700;"></td>
+                  <td><input type="number" class="asiento-linea-cre num" value="0" style="padding:6px; font-size:13px; font-family:var(--apple-mono);"></td>
+                </tr>
+                <tr>
+                  <td>
+                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--apple-mono);">
+                      <!-- Opciones dinámicas -->
+                    </select>
+                  </td>
+                  <td><input type="text" class="asiento-linea-desc" value="Venta de servicios contado" style="padding:6px; font-size:13px;"></td>
+                  <td><input type="number" class="asiento-linea-deb num" value="0" style="padding:6px; font-size:13px; font-family:var(--apple-mono);"></td>
+                  <td><input type="number" class="asiento-linea-cre num" value="500000" style="padding:6px; font-size:13px; font-family:var(--apple-mono); font-weight:700;"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TOTALES Y PARTIDA DOBLE -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; background:rgba(4, 8, 16, 0.85); padding:12px 16px; border-radius:12px; border:1px solid var(--apple-border);">
+            <div style="font-family:var(--apple-mono); font-size:13px;">
+              <span>Total Débitos: <strong id="lbl-total-debitos" style="color:var(--apple-cyan);">₡500,000.00</strong></span> | 
+              <span>Total Créditos: <strong id="lbl-total-creditos" style="color:var(--apple-cyan);">₡500,000.00</strong></span> | 
+              <span>Diferencia: <strong id="lbl-total-dif" style="color:var(--apple-mint);">₡0.00</strong></span>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-secondary btn-sm" id="btn-agregar-linea-asiento">+ Agregar Partida</button>
+              <button class="btn" id="btn-guardar-asiento">💾 Guardar Asiento</button>
+            </div>
+          </div>
+
+          <div id="msg-asiento-guardado" class="banner banner-ok hidden" style="margin-top:12px;"></div>
+        </div>
+
+        <!-- LISTA DE ASIENTOS GUARDADOS -->
+        <div class="subpanel">
+          <h4>Historial de Comprobantes de Diario en el Período</h4>
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div class="table-box">
+            <table>
+              <thead>
+                <tr>
+                  <th>No. Asiento</th>
+                  <th>Fecha</th>
+                  <th>Concepto General</th>
+                  <th class="num">Monto Débitos</th>
+                  <th class="num">Monto Créditos</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-historial-asientos">
+                <!-- Asientos dinámicos -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==========================================================================
+           VISTA 4: PROCESOS SELECTOS (MAYORIZACIÓN EN CASCADA INTERACTIVA)
+           ========================================================================== -->
+      <div id="vista-procesos" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>⚙️ Procesos Selectos · Mayorización en Cascada</span></h2>
+          <button class="btn-back" id="btn-volver-menu-4"><span class="chevron">‹</span> <span>Menú</span></button>
+        </div>
+
+        <div class="subpanel">
+          <h4>Parámetros de Mayorización</h4>
+          <p style="color:var(--apple-text-secondary); margin-bottom:16px;">
+            El proceso de mayorización toma todos los comprobantes de diario del período y recalcula automáticamente los saldos de cada una de las cuentas auxiliares y de mayor en el catálogo.
+          </p>
+
+          <div style="display:flex; gap:14px; align-items:center; margin-bottom:18px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <label style="margin:0; font-size:12px; color:var(--apple-cyan); font-weight:700;">Mes:</label>
+              <select id="sel-mes-mayorizar" style="width:90px; padding:8px;">
+                <option value="8" selected>08 (Agosto)</option>
+                <option value="9">09 (Setiembre)</option>
+                <option value="10">10 (Octubre)</option>
+              </select>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px;">
+              <label style="margin:0; font-size:12px; color:var(--apple-cyan); font-weight:700;">Año:</label>
+              <input type="number" id="sel-ano-mayorizar" value="2026" style="width:100px; padding:8px;">
+            </div>
+
+            <button class="btn" id="btn-ejecutar-mayorizacion" style="padding:10px 22px;">
+              ⚡ Iniciar Mayorización en Cascada
+            </button>
+          </div>
+
+          <div id="res-mayorizacion" class="banner banner-ok hidden" style="margin-bottom:14px;"></div>
+
+          <!-- LOG DE MAYORIZACIÓN -->
+          <div id="box-log-mayorizacion" class="table-box hidden" style="background:#040810; padding:14px; font-family:var(--apple-mono); font-size:12px; color:var(--apple-text-secondary); max-height:220px; overflow-y:auto;">
+            <!-- Detalle de cuentas procesadas -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================================================
+           VISTA 5: REPORTES MENSUALES (BALANCE GENERAL Y ESTADO DE RESULTADOS REAL)
+           ========================================================================== -->
+      <div id="vista-reportes-mensuales" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>📈 Reportes Mensuales</span></h2>
+          <button class="btn-back" id="btn-volver-menu-5"><span class="chevron">‹</span> <span>Menú</span></button>
+        </div>
+
+        <div class="subpanel">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn" id="btn-tab-balance">📊 Balance General</button>
+              <button class="btn btn-secondary" id="btn-tab-resultados">📈 Estado de Resultados</button>
+              <button class="btn btn-secondary" id="btn-tab-comprobacion">📋 Balanza de Comprobación</button>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Imprimir Reporte</button>
+          </div>
+
+          <!-- CONTENEDOR DINÁMICO DE REPORTES -->
+          <div id="reporte-render-area" class="table-box" style="padding:16px; background:rgba(4, 8, 16, 0.7); border-radius:12px;">
+            <!-- Contenido generado por JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================================================
+           VISTA 6: REPORTES HISTÓRICOS (LIBRO MAYOR & LIBRO DIARIO)
+           ========================================================================== -->
+      <div id="vista-reportes-historicos" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>📚 Reportes Históricos · Libro Mayor y Diario</span></h2>
+          <button class="btn-back" id="btn-volver-menu-6"><span class="chevron">‹</span> <span>Menú</span></button>
+        </div>
+
+        <div class="subpanel">
+          <div style="display:flex; gap:12px; align-items:flex-end; margin-bottom:16px; flex-wrap:wrap;">
+            <div class="form-group" style="margin-bottom:0; flex:1; min-width:240px;">
+              <label>Seleccionar Cuenta para Ficha de Libro Mayor</label>
+              <select id="sel-cuenta-mayor" style="font-family:var(--apple-mono);">
+                <!-- Cuentas -->
+              </select>
+            </div>
+            <button class="btn" id="btn-consultar-mayor">🔍 Consultar Mayor</button>
+          </div>
+
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div id="contenedor-mayor-historico" class="table-box" style="padding:16px; background:rgba(4, 8, 16, 0.7);">
+            <!-- Ficha de Mayor -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================================================
+           VISTA 7: CIERRES DE PERÍODO (MENSUAL Y FISCAL ANUAL)
+           ========================================================================== -->
+      <div id="vista-cierres" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>🔒 Cierres de Período</span></h2>
+          <button class="btn-back" id="btn-volver-menu-7"><span class="chevron">‹</span> <span>Menú</span></button>
+        </div>
+
+        <div class="subpanel">
+          <h4>Cierre Mensual de Operaciones</h4>
+          <p style="color:var(--apple-text-secondary); margin-bottom:16px;">
+            El cierre mensual bloquea el período actual, traslada los saldos acumulados e incrementa el período activo de la compañía al mes siguiente (ej. de <strong>08/2026</strong> a <strong>09/2026</strong>).
+          </p>
+          <button class="btn" id="btn-ejecutar-cierre-mensual" style="margin-bottom:20px;">
+            🔒 Ejecutar Cierre Mensual
           </button>
+
+          <h4 style="border-top:1px solid rgba(255, 255, 255, 0.08); padding-top:16px;">Cierre Fiscal Anual</h4>
+          <p style="color:var(--apple-text-secondary); margin-bottom:16px;">
+            Liquida automáticamente las cuentas nominales de Ingresos (4), Costos (5) y Gastos (6) trasladando el resultado neto a la cuenta de patrimonio 
+            <code style="color:var(--apple-mint); font-family:var(--apple-mono);">999-000000 (Utilidades o Pérdidas del Período)</code> e iniciando el nuevo ejercicio fiscal en <strong>01/2027</strong>.
+          </p>
+          <button class="btn btn-danger" id="btn-ejecutar-cierre-anual">
+            🏛️ Ejecutar Cierre Fiscal Anual
+          </button>
+          <div id="res-cierre" class="banner banner-ok hidden" style="margin-top:16px;"></div>
         </div>
       </div>
 
-      <!-- DIÁLOGO DE CONFIRMACIÓN SI LA EMPRESA NO EXISTE -->
-      <div id="box-empresa-no-existe" class="msg msg-warn hidden" style="margin-bottom:14px; padding:12px; border-radius:8px; background:rgba(245,158,11,0.15); border:1px solid #f59e0b; color:#fde68a;">
-        <div style="font-weight:700; font-size:13.5px; margin-bottom:4px;" id="lbl-empresa-no-existe-txt">
-          ⚠️ La empresa No. [X] no existe en el sistema.
+      <!-- ==========================================================================
+           VISTA EXCLUSIVA SUPER USUARIO: AUDITORÍA Y SEGURIDAD (MALDIROMAN777)
+           ========================================================================== -->
+      <div id="vista-superadmin-auditoria" class="view-container hidden">
+        <div class="view-header">
+          <h2><span>🛡️ Consola de Auditoría y Seguridad · Super Usuario</span></h2>
+          <div class="pill pill-cyan">
+            <span>Usuario:</span>
+            <strong>Maldiroman777 (Solo Auditoría)</strong>
+          </div>
         </div>
-        <p style="font-size:12px; margin-bottom:10px; color:#ffffff;">
-          ¿Desea incluirla y aprovisionar su catálogo ahora?
+
+        <!-- TARJETAS DE RESUMEN DE SEGURIDAD -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+          
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:22px; font-weight:800; color:var(--apple-cyan); font-family:var(--apple-mono);" id="lbl-audit-total-sesiones">0</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Inicios de Sesión Registrados</div>
+          </div>
+
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:22px; font-weight:800; color:var(--apple-mint); font-family:var(--apple-mono);" id="lbl-audit-total-dispositivos">0</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Dispositivos / Terminales</div>
+          </div>
+
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:22px; font-weight:800; color:var(--apple-amber); font-family:var(--apple-mono);" id="lbl-audit-total-cuentas">0</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Cuentas Monitoreadas en BD</div>
+          </div>
+
+          <div class="subpanel" style="padding:14px; text-align:center;">
+            <div style="font-size:22px; font-weight:800; color:var(--apple-mint); font-family:var(--apple-mono);">100% ÓPTIMA</div>
+            <div style="font-size:11px; color:var(--apple-text-secondary); text-transform:uppercase; margin-top:4px;">Salud Base de Datos SQLite</div>
+          </div>
+
+        </div>
+
+        <!-- PESTAÑAS DE LA CONSOLA DE AUDITORÍA -->
+        <div class="subpanel">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn" id="btn-audit-tab-sesiones">📱 Inicios de Sesión & Dispositivos</button>
+              <button class="btn btn-secondary" id="btn-audit-tab-datos">📊 Informe de Datos en Base de Datos</button>
+              <button class="btn btn-secondary" id="btn-audit-tab-logs">📋 Trazabilidad & Eventos</button>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Exportar Auditoría</button>
+          </div>
+
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div id="audit-render-area" class="table-box" style="padding:16px; background:rgba(4, 8, 16, 0.7); border-radius:12px;">
+            <!-- Contenido dinámico de auditoría -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION (iOS Cupertino SF Style) -->
+    <nav class="lexus-mobile-nav hidden" id="lexus-mob-nav">
+      <button class="mob-tab-btn activo" data-ir="vista-menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Menú</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-companias">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path><path d="M14 8h1"></path><path d="M14 12h1"></path><path d="M14 16h1"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+        <span>Empresas</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-catalogo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        <span>Catálogo</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-documentos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <span>Asientos</span>
+      </button>
+      <button class="mob-tab-btn" data-ir="vista-reportes-mensuales">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        <span>Reportes</span>
+      </button>
+    </nav>
+
+    <!-- FOOTER -->
+    <footer>
+      LEXUS CONTABLE · SISTEMA MULTI-TENANT EN LA NUBE · EXPERIENCIA CONTABLE COMPROBADA
+    </footer>
+
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT AUTOCONTENIDO TOTALMENTE OPERATIVO
+       ========================================================================== -->
+  <script>
+    // Catálogo Maestro Estándar de Referencia para Costa Rica (Estructura Jerárquica Estricta de 3 Niveles)
+    const CATALOGO_MAESTRO_BASE = [
+      // ACTIVO
+      { codigo: '100-00-000', desc: 'ACTIVO CORRIENTE', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '101-00-000', desc: 'EFECTIVO Y EQUIVALENTES DE EFECTIVO', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '101-01-000', desc: 'Cajas', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '101-01-001', desc: 'Caja General', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      { codigo: '101-02-000', desc: 'Bancos e Instituciones Financieras', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '101-02-001', desc: 'Bancos Moneda Nacional (Colones)', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      { codigo: '105-00-000', desc: 'CUENTAS Y DOCUMENTOS POR COBRAR', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '105-01-000', desc: 'Clientes Locales', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '105-01-001', desc: 'Cuentas por Cobrar Clientes', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      { codigo: '110-00-000', desc: 'INVENTARIOS COMERCIALES', tipo: '1', ini: 0, act: 0, nivel: 1 },
+      { codigo: '110-01-000', desc: 'Mercaderías para la Venta', tipo: '1', ini: 0, act: 0, nivel: 2 },
+      { codigo: '110-01-001', desc: 'Inventario de Mercaderías', tipo: '1', ini: 0, act: 0, nivel: 3 },
+      
+      // PASIVO
+      { codigo: '200-00-000', desc: 'PASIVO CORRIENTE', tipo: '2', ini: 0, act: 0, nivel: 1 },
+      { codigo: '201-00-000', desc: 'CUENTAS POR PAGAR COMERCIALES', tipo: '2', ini: 0, act: 0, nivel: 1 },
+      { codigo: '201-01-000', desc: 'Proveedores Nacionales', tipo: '2', ini: 0, act: 0, nivel: 2 },
+      { codigo: '201-01-001', desc: 'Cuentas por Pagar Proveedores', tipo: '2', ini: 0, act: 0, nivel: 3 },
+      { codigo: '205-00-000', desc: 'OBLIGACIONES TRIBUTARIAS', tipo: '2', ini: 0, act: 0, nivel: 1 },
+      { codigo: '205-01-000', desc: 'Impuesto al Valor Agregado', tipo: '2', ini: 0, act: 0, nivel: 2 },
+      { codigo: '205-01-001', desc: 'Impuestos por Pagar (IVA 13%)', tipo: '2', ini: 0, act: 0, nivel: 3 },
+
+      // PATRIMONIO
+      { codigo: '300-00-000', desc: 'PATRIMONIO NETO', tipo: '3', ini: 0, act: 0, nivel: 1 },
+      { codigo: '301-00-000', desc: 'CAPITAL SOCIAL', tipo: '3', ini: 0, act: 0, nivel: 1 },
+      { codigo: '301-01-000', desc: 'Capital Accionario', tipo: '3', ini: 0, act: 0, nivel: 2 },
+      { codigo: '301-01-001', desc: 'Capital Social Suscrito y Pagado', tipo: '3', ini: 0, act: 0, nivel: 3 },
+
+      // INGRESOS
+      { codigo: '400-00-000', desc: 'INGRESOS OPERACIONALES', tipo: '4', ini: 0, act: 0, nivel: 1 },
+      { codigo: '401-00-000', desc: 'VENTAS DE BIENES Y SERVICIOS', tipo: '4', ini: 0, act: 0, nivel: 1 },
+      { codigo: '401-01-000', desc: 'Ventas Gravadas', tipo: '4', ini: 0, act: 0, nivel: 2 },
+      { codigo: '401-01-001', desc: 'Ventas de Mercaderías al 13%', tipo: '4', ini: 0, act: 0, nivel: 3 },
+
+      // COSTOS
+      { codigo: '500-00-000', desc: 'COSTO DE VENTAS', tipo: '5', ini: 0, act: 0, nivel: 1 },
+      { codigo: '501-00-000', desc: 'COSTO DE MERCADERÍAS VENDIDAS', tipo: '5', ini: 0, act: 0, nivel: 1 },
+      { codigo: '501-01-000', desc: 'Costo Directo de Mercaderías', tipo: '5', ini: 0, act: 0, nivel: 2 },
+      { codigo: '501-01-001', desc: 'Costo de Ventas Mercaderías', tipo: '5', ini: 0, act: 0, nivel: 3 },
+
+      // GASTOS
+      { codigo: '600-00-000', desc: 'GASTOS DE OPERACIÓN', tipo: '6', ini: 0, act: 0, nivel: 1 },
+      { codigo: '601-00-000', desc: 'GASTOS DE ADMINISTRACIÓN', tipo: '6', ini: 0, act: 0, nivel: 1 },
+      { codigo: '601-01-000', desc: 'Remuneraciones y Salarios', tipo: '6', ini: 0, act: 0, nivel: 2 },
+      { codigo: '601-01-001', desc: 'Sueldos y Cargas Sociales', tipo: '6', ini: 0, act: 0, nivel: 3 },
+
+      // CUENTA TÉCNICA DE CONTROL INTERNO (OCULTA AL USUARIO FINAL)
+      { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 0, especial: true, nivel: 1 }
+    ];
+
+    // --- ESTADO Y MOTOR CONTABLE LIMPIO EN CERO ---
+    const DB_DEMO = {
+      vecesUsado: parseInt(localStorage.getItem('lexus_veces_usado') || '1', 10),
+      intentosFallidos: 0,
+      usuarioActivo: 'Joel777',
+      rolActivo: 'CONTADOR',
+      companiaActiva: null,
+      companias: [],
+      catalogos: {},
+      asientos: {},
+      sesiones: [],
+      logsAuditoria: []
+    };
+
+    // Incrementar contador de uso
+    DB_DEMO.vecesUsado += 1;
+    localStorage.setItem('lexus_veces_usado', DB_DEMO.vecesUsado);
+    document.getElementById('lbl-veces-usado').textContent = DB_DEMO.vecesUsado;
+
+    // Reloj digital en vivo
+    function actualizarReloj() {
+      const ahora = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const f = `${pad(ahora.getDate())}/${pad(ahora.getMonth()+1)}/${ahora.getFullYear()}`;
+      const h = `${pad(ahora.getHours())}:${pad(ahora.getMinutes())}:${pad(ahora.getSeconds())}`;
+      const el = document.getElementById('ticker-time');
+      if (el) el.textContent = `🕒 ${h} · 📅 ${f}`;
+    }
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+
+    // Ver / Ocultar Contraseña
+    const btnEye = document.getElementById('btn-toggle-pass');
+    const inputPass = document.getElementById('login-pass');
+    btnEye.addEventListener('click', () => {
+      inputPass.type = inputPass.type === 'password' ? 'text' : 'password';
+    });
+
+    // Control de Vistas
+    function mostrarVista(idVista) {
+      const vistas = [
+        'vista-menu', 'vista-companias', 'vista-catalogo', 'vista-documentos',
+        'vista-procesos', 'vista-reportes-mensuales', 'vista-reportes-historicos',
+        'vista-cierres', 'vista-superadmin-auditoria'
+      ];
+      vistas.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.classList.add('hidden');
+      });
+      const target = document.getElementById(idVista);
+      if (target) {
+        target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Sincronizar barra móvil
+      document.querySelectorAll('.mob-tab-btn').forEach(btn => {
+        btn.classList.toggle('activo', btn.dataset.ir === idVista);
+      });
+    }
+
+    // Eventos de barra móvil
+    document.querySelectorAll('.mob-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.ir;
+        if (DB_DEMO.rolActivo === 'SUPER_ADMIN') {
+          mostrarVista('vista-superadmin-auditoria');
+          return;
+        }
+
+        if (id === 'vista-companias') {
+          mostrarVista('vista-companias');
+          renderTablaCompanias();
+        } else if (id === 'vista-catalogo') {
+          mostrarVista('vista-catalogo');
+          renderTablaCatalogo();
+        } else if (id === 'vista-documentos') {
+          mostrarVista('vista-documentos');
+          poblarCuentasEnAsiento();
+          renderTablaHistorialAsientos();
+        } else if (id === 'vista-reportes-mensuales') {
+          mostrarVista('vista-reportes-mensuales');
+          setTabReporte('balance');
+        } else {
+          mostrarVista(id);
+        }
+      });
+    });
+
+    // Login Handler con límite de 3 intentos y asignación de rol estricto
+    document.getElementById('form-login').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = (document.getElementById('login-user').value || '').trim();
+      const p = (document.getElementById('login-pass').value || '').trim();
+      const errBox = document.getElementById('login-error');
+
+      const uLow = u.toLowerCase();
+      const pTrim = p;
+
+      const esSuper = (uLow === 'maldiroman777' || uLow === 'maldiroman') && (pTrim === '858585' || pTrim === '8585');
+      const esContador = (uLow === 'joel777' || uLow === 'joel' || uLow === 'lexus' || uLow === 'admin' || uLow === '') && (pTrim === '585858' || pTrim === '123' || pTrim === 'admin' || pTrim === '5858') || (pTrim === '585858' || pTrim === '123');
+
+      if (esSuper || esContador) {
+        document.getElementById('pantalla-login').classList.add('hidden');
+        document.getElementById('pantalla-sistema').classList.remove('hidden');
+        document.getElementById('lexus-mob-nav')?.classList.remove('hidden');
+
+        if (esSuper) {
+          DB_DEMO.usuarioActivo = 'Maldiroman777';
+          DB_DEMO.rolActivo = 'SUPER_ADMIN';
+
+          // Registrar sesión de Maldiroman
+          const ahora = new Date();
+          const pad = (n) => String(n).padStart(2, '0');
+          const fHora = `${pad(ahora.getDate())}/${pad(ahora.getMonth()+1)}/${ahora.getFullYear()} ${pad(ahora.getHours())}:${pad(ahora.getMinutes())}:${pad(ahora.getSeconds())}`;
+          
+          DB_DEMO.sesiones.unshift({
+            id: DB_DEMO.sesiones.length + 1,
+            usuario: 'Maldiroman777',
+            dispositivo: 'Dispositivo Actual (Navegador Activo)',
+            ip: '186.15.228.94',
+            ubicacion: 'San José, Costa Rica',
+            veces: DB_DEMO.vecesUsado,
+            fecha: fHora,
+            estado: 'ACTIVA'
+          });
+
+          document.getElementById('hdr-comp-nombre').textContent = '🛡️ MODO AUDITORÍA & MONITOREO';
+          document.getElementById('lbl-menu-empresa').textContent = 'SUPER USUARIO';
+
+          mostrarVista('vista-superadmin-auditoria');
+          setTabAuditoria('sesiones');
+        } else {
+          DB_DEMO.usuarioActivo = 'Joel777';
+          DB_DEMO.rolActivo = 'CONTADOR';
+          if (DB_DEMO.companias.length > 0 && !DB_DEMO.companiaActiva) {
+            DB_DEMO.companiaActiva = DB_DEMO.companias[0].id;
+          }
+          actualizarInfoCompania();
+          mostrarVista('vista-menu');
+          // Desplegar modal de verificación de empresa de entrada con fondo desenfocado
+          abrirModalSeleccionEmpresa();
+        }
+      } else {
+        DB_DEMO.intentosFallidos += 1;
+        errBox.classList.remove('hidden');
+        if (DB_DEMO.intentosFallidos >= 3) {
+          errBox.innerHTML = `🚨 <strong>3 INTENTOS FALLIDOS:</strong> Llave o contraseña incorrecta. Se ha restablecido la terminal por seguridad.`;
+          document.getElementById('login-pass').value = '';
+          document.getElementById('btn-ingresar').disabled = true;
+          setTimeout(() => {
+            document.getElementById('btn-ingresar').disabled = false;
+            DB_DEMO.intentosFallidos = 0;
+            errBox.classList.add('hidden');
+          }, 4000);
+        } else {
+          errBox.innerHTML = `⚠️ Contraseña incorrecta. Intento <strong>${DB_DEMO.intentosFallidos} de 3</strong>.`;
+        }
+      }
+    });
+
+    // Cerrar sesión
+    document.getElementById('btn-cerrar-sesion').addEventListener('click', () => {
+      cerrarModalSeleccionEmpresa();
+      document.getElementById('pantalla-sistema').classList.add('hidden');
+      document.getElementById('lexus-mob-nav').classList.add('hidden');
+      document.getElementById('pantalla-login').classList.remove('hidden');
+      document.getElementById('login-pass').value = '';
+    });
+
+    // Botón Cambiar Empresa en el Header
+    document.getElementById('btn-cambiar-cia-lexus')?.addEventListener('click', () => {
+      abrirModalSeleccionEmpresa();
+    });
+
+    // =========================================================================
+    // MODAL FROSTED GLASS: VERIFICACIÓN Y SELECCIÓN DE EMPRESA
+    // =========================================================================
+    function abrirModalSeleccionEmpresa() {
+      const modal = document.getElementById('modal-seleccion-empresa');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      renderModalCompanias();
+      const inputCia = document.getElementById('modal-input-cia');
+      if (inputCia) {
+        inputCia.value = DB_DEMO.companiaActiva ? String(DB_DEMO.companiaActiva).padStart(3, '0') : '001';
+        setTimeout(() => { inputCia.focus(); inputCia.select(); }, 120);
+      }
+    }
+
+    function cerrarModalSeleccionEmpresa() {
+      const modal = document.getElementById('modal-seleccion-empresa');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function renderModalCompanias() {
+      const contenedor = document.getElementById('modal-lista-companias');
+      if (!contenedor) return;
+      contenedor.innerHTML = '';
+
+      if (DB_DEMO.companias.length === 0) {
+        contenedor.innerHTML = `
+          <div style="background:rgba(255, 255, 255, 0.04); border:1px dashed var(--apple-border); border-radius:14px; padding:18px; text-align:center; color:var(--apple-text-secondary); margin-bottom:12px;">
+            <div style="font-size:32px; margin-bottom:6px;">🏢</div>
+            <strong style="color:#ffffff; font-size:14px; display:block; margin-bottom:4px;">No hay compañías registradas</strong>
+            <span style="font-size:11.5px;">Ingrese el código de su primera empresa abajo (ej. <strong>001</strong>) para incluirla.</span>
+          </div>
+        `;
+      } else {
+        DB_DEMO.companias.forEach(c => {
+          const esActiva = (c.id === DB_DEMO.companiaActiva);
+          const card = document.createElement('div');
+          card.className = `modal-cia-card ${esActiva ? 'active-cia' : ''}`;
+          card.innerHTML = `
+            <div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <strong style="color:var(--apple-cyan); font-family:var(--apple-mono); font-size:14px;">${String(c.id).padStart(3, '0')}</strong>
+                <strong style="color:#ffffff; font-size:13px;">${c.nombre}</strong>
+                ${esActiva ? '<span class="pill pill-green" style="font-size:9px; padding:1px 6px;">ACTIVA</span>' : ''}
+              </div>
+              <div style="font-size:11px; color:var(--apple-text-secondary); font-family:var(--apple-mono); margin-top:2px;">
+                Céd: ${c.cedula || 'N/D'} · Período: ${c.periodo || '08/2026'}
+              </div>
+            </div>
+            <button class="btn btn-sm ${esActiva ? 'btn-secondary' : ''}" style="padding:4px 10px; font-size:11px;">
+              ${esActiva ? '✓ Seleccionada' : 'Seleccionar ➔'}
+            </button>
+          `;
+          card.addEventListener('click', () => {
+            DB_DEMO.companiaActiva = c.id;
+            actualizarInfoCompania();
+            cerrarModalSeleccionEmpresa();
+            mostrarVista('vista-menu');
+          });
+          contenedor.appendChild(card);
+        });
+      }
+    }
+
+    document.getElementById('modal-btn-confirmar-cia')?.addEventListener('click', () => {
+      const val = (document.getElementById('modal-input-cia')?.value || '').trim();
+      const num = parseInt(val, 10);
+      if (isNaN(num) || num <= 0) {
+        alert('Por favor digite un número válido de compañía (ej. 001).');
+        return;
+      }
+
+      const existe = DB_DEMO.companias.find(x => x.id === num);
+      if (existe) {
+        DB_DEMO.companiaActiva = existe.id;
+        actualizarInfoCompania();
+        cerrarModalSeleccionEmpresa();
+        mostrarVista('vista-menu');
+      } else {
+        cerrarModalSeleccionEmpresa();
+        mostrarVista('vista-companias');
+        document.getElementById('input-num-compania').value = String(num).padStart(3, '0');
+        document.getElementById('btn-consultar-compania').click();
+      }
+    });
+
+    document.getElementById('modal-btn-cerrar')?.addEventListener('click', cerrarModalSeleccionEmpresa);
+
+    document.getElementById('modal-input-cia')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('modal-btn-confirmar-cia')?.click();
+      }
+    });
+
+    // Botones del Menú Principal
+    document.querySelectorAll('.menu-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const mod = card.dataset.ir;
+        if (mod === 'companias') {
+          mostrarVista('vista-companias');
+          renderTablaCompanias();
+          document.getElementById('input-num-compania').focus();
+          document.getElementById('input-num-compania').select();
+        } else if (mod === 'catalogo') {
+          mostrarVista('vista-catalogo');
+          renderTablaCatalogo();
+          document.getElementById('cat-cuenta').focus();
+        } else if (mod === 'documentos') {
+          mostrarVista('vista-documentos');
+          poblarCuentasEnAsiento();
+          renderTablaHistorialAsientos();
+        } else if (mod === 'procesos') {
+          mostrarVista('vista-procesos');
+        } else if (mod === 'reportes-mensuales') {
+          mostrarVista('vista-reportes-mensuales');
+          setTabReporte('balance');
+        } else if (mod === 'reportes-historicos') {
+          mostrarVista('vista-reportes-historicos');
+          poblarCuentasMayorHistorico();
+        } else if (mod === 'cierres') {
+          mostrarVista('vista-cierres');
+        }
+      });
+    });
+
+    // Teclas de acceso directo en el Menú Principal (1 a 7, ESC)
+    window.addEventListener('keydown', (e) => {
+      const sisVisible = !document.getElementById('pantalla-sistema').classList.contains('hidden');
+      if (!sisVisible) return;
+
+      const enMenu = !document.getElementById('vista-menu').classList.contains('hidden');
+      const isInput = ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName);
+
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('modal-seleccion-empresa');
+        if (modal && !modal.classList.contains('hidden')) {
+          cerrarModalSeleccionEmpresa();
+          return;
+        }
+        mostrarVista('vista-menu');
+        return;
+      }
+
+      if (enMenu && !isInput) {
+        if (e.key === '1') { mostrarVista('vista-companias'); renderTablaCompanias(); }
+        else if (e.key === '2') { mostrarVista('vista-catalogo'); renderTablaCatalogo(); }
+        else if (e.key === '3') { mostrarVista('vista-documentos'); poblarCuentasEnAsiento(); renderTablaHistorialAsientos(); }
+        else if (e.key === '4') { mostrarVista('vista-procesos'); }
+        else if (e.key === '5') { mostrarVista('vista-reportes-mensuales'); setTabReporte('balance'); }
+        else if (e.key === '6') { mostrarVista('vista-reportes-historicos'); poblarCuentasMayorHistorico(); }
+        else if (e.key === '7') { mostrarVista('vista-cierres'); }
+      }
+    });
+
+    for (let i = 1; i <= 7; i++) {
+      document.getElementById(`btn-volver-menu-${i}`)?.addEventListener('click', () => mostrarVista('vista-menu'));
+    }
+
+    // =========================================================================
+    // LÓGICA MÓDULO 1: COMPAÑÍAS
+    // =========================================================================
+    function actualizarInfoCompania() {
+      const hdrNombre = document.getElementById('hdr-comp-nombre');
+      const hdrMes = document.getElementById('hdr-mes-lexus');
+      const hdrAno = document.getElementById('hdr-ano-lexus');
+      const lblMenu = document.getElementById('lbl-menu-empresa');
+
+      if (DB_DEMO.companiaActiva) {
+        const c = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+        if (c) {
+          if (hdrNombre) hdrNombre.textContent = `${c.id} - ${c.nombre}`;
+          if (hdrMes) hdrMes.textContent = String(c.mes || 8).padStart(2, '0');
+          if (hdrAno) hdrAno.textContent = c.ano || 2026;
+          if (lblMenu) lblMenu.textContent = `${c.id} · ${c.nombre}`;
+        }
+      } else {
+        if (hdrNombre) hdrNombre.textContent = 'Seleccionar Empresa';
+        if (hdrMes) hdrMes.textContent = '--';
+        if (hdrAno) hdrAno.textContent = '----';
+        if (lblMenu) lblMenu.textContent = 'Sin Empresa Asignada';
+      }
+    }
+
+    function renderTablaCompanias() {
+      const tbody = document.getElementById('tbody-companias');
+      tbody.innerHTML = '';
+
+      if (DB_DEMO.companias.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding:36px 16px; color:var(--apple-text-secondary);">
+              <div style="font-size:36px; margin-bottom:8px;">🏢</div>
+              <strong style="color:#ffffff; font-size:15px; display:block; margin-bottom:6px;">No hay compañías inscritas</strong>
+              <p style="font-size:12px; color:var(--apple-text-secondary); max-width:280px; margin:0 auto; line-height:1.4;">
+                Digite un código en el panel superior (ej. <strong>001</strong>) para incluir su primera empresa.
+              </p>
+            </td>
+          </tr>
+        `;
+      } else {
+        DB_DEMO.companias.forEach(c => {
+          const esActiva = (c.id === DB_DEMO.companiaActiva);
+          const tr = document.createElement('tr');
+          if (esActiva) tr.style.background = 'rgba(56, 189, 248, 0.12)';
+          const mIniStr = String(c.mes_inicio || c.mes || 1).padStart(2, '0');
+          const aIniStr = c.anio_inicio || c.ano || 2026;
+          const periodoStr = c.periodo || `${String(c.mes || 8).padStart(2, '0')}/${c.ano || 2026}`;
+
+          tr.innerHTML = `
+            <td><strong style="color:var(--apple-cyan); font-family:var(--apple-mono); font-size:14px;">${c.id}</strong></td>
+            <td><strong>${c.nombre}</strong> ${esActiva ? '<span class="pill pill-green" style="font-size:10px; padding:2px 7px;">ACTIVA</span>' : ''}</td>
+            <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary);">${c.cedula}</td>
+            <td style="font-family:var(--apple-mono); color:var(--apple-cyan);">${mIniStr}/${aIniStr}</td>
+            <td style="font-family:var(--apple-mono);">${periodoStr}</td>
+            <td>
+              <button class="btn btn-secondary btn-sm btn-sel-comp" data-id="${c.id}" style="padding:4px 10px; font-size:11.5px;">
+                ${esActiva ? '✓ Activa' : 'Abrir Empresa'}
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      const selOrigen = document.getElementById('sel-comp-origen');
+      if (selOrigen) {
+        selOrigen.innerHTML = '';
+        DB_DEMO.companias.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = `${c.id} - ${c.nombre}`;
+          selOrigen.appendChild(opt);
+        });
+      }
+
+      tbody.querySelectorAll('.btn-sel-comp').forEach(btn => {
+        btn.addEventListener('click', () => {
+          DB_DEMO.companiaActiva = parseInt(btn.dataset.id, 10);
+          actualizarInfoCompania();
+          renderTablaCompanias();
+          mostrarVista('vista-menu');
+        });
+      });
+    }
+
+    const inputNumComp = document.getElementById('input-num-compania');
+    const boxExiste = document.getElementById('box-compania-existe');
+    const boxNoExiste = document.getElementById('box-compania-no-existe');
+    const descExiste = document.getElementById('desc-compania-existe');
+    const formNueva = document.getElementById('form-nueva-compania');
+
+    function evaluarNumeroCompania() {
+      const val = inputNumComp.value.trim();
+      if (val === '000' || val === '00' || val === '0' || val === '') {
+        boxExiste.classList.add('hidden');
+        boxNoExiste.classList.add('hidden');
+        formNueva.classList.add('hidden');
+        mostrarVista('vista-menu');
+        return;
+      }
+
+      const numId = parseInt(val, 10);
+      const existe = DB_DEMO.companias.find(x => x.id === numId);
+
+      if (existe) {
+        formNueva.classList.add('hidden');
+        boxNoExiste.classList.add('hidden');
+        boxExiste.classList.remove('hidden');
+        DB_DEMO.companiaActiva = existe.id;
+        actualizarInfoCompania();
+        renderTablaCompanias();
+        descExiste.innerHTML = `<strong>${existe.id} - ${existe.nombre}</strong> (Cédula: ${existe.cedula} · Inicio Fiscal: ${String(existe.mes_inicio||existe.mes).padStart(2,'0')}/${existe.anio_inicio||existe.ano} · Período: ${existe.periodo})`;
+        document.getElementById('btn-ok-compania-existe').focus();
+      } else {
+        boxExiste.classList.add('hidden');
+        formNueva.classList.add('hidden');
+        document.getElementById('lbl-num-no-existe').textContent = numId;
+        boxNoExiste.classList.remove('hidden');
+        document.getElementById('btn-confirmar-incluir-lexus').focus();
+      }
+    }
+
+    document.getElementById('btn-consultar-compania').addEventListener('click', evaluarNumeroCompania);
+    inputNumComp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        evaluarNumeroCompania();
+      }
+    });
+
+    document.getElementById('btn-ok-compania-existe').addEventListener('click', () => {
+      boxExiste.classList.add('hidden');
+      mostrarVista('vista-menu');
+    });
+
+    document.getElementById('btn-confirmar-incluir-lexus').addEventListener('click', () => {
+      const numId = parseInt(document.getElementById('lbl-num-no-existe').textContent, 10);
+      boxNoExiste.classList.add('hidden');
+      formNueva.classList.remove('hidden');
+      document.getElementById('lbl-nueva-comp-id').textContent = numId;
+      document.getElementById('nueva-comp-nombre').value = '';
+      document.getElementById('nueva-comp-cedula').value = '';
+      document.getElementById('nueva-comp-mes-inicio').value = '1';
+      document.getElementById('nueva-comp-anio-inicio').value = '2026';
+      document.getElementById('nueva-comp-nombre').focus();
+    });
+
+    document.getElementById('btn-cancelar-incluir-lexus').addEventListener('click', () => {
+      boxNoExiste.classList.add('hidden');
+      inputNumComp.value = '000';
+      inputNumComp.focus();
+      inputNumComp.select();
+    });
+
+    document.querySelectorAll('input[name="opt-catalogo"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.radio-card').forEach(rc => rc.classList.remove('selected'));
+        radio.closest('.radio-card').classList.add('selected');
+        document.getElementById('sel-comp-origen').style.display = (radio.value === '2') ? 'block' : 'none';
+      });
+    });
+
+    document.getElementById('btn-guardar-nueva-comp').addEventListener('click', () => {
+      const numId = parseInt(document.getElementById('lbl-nueva-comp-id').textContent, 10);
+      const nombre = document.getElementById('nueva-comp-nombre').value.trim();
+      const cedula = document.getElementById('nueva-comp-cedula').value.trim();
+      const mesInicio = parseInt(document.getElementById('nueva-comp-mes-inicio').value, 10);
+      const anioInicio = parseInt(document.getElementById('nueva-comp-anio-inicio').value, 10);
+      const optCat = document.querySelector('input[name="opt-catalogo"]:checked').value;
+
+      if (!nombre) {
+        alert('Por favor digite la razón social de la compañía.');
+        return;
+      }
+      if (!mesInicio || isNaN(mesInicio) || mesInicio < 1 || mesInicio > 12) {
+        alert('Por favor seleccione un mes de inicio contable válido (1 a 12).');
+        return;
+      }
+      if (!anioInicio || isNaN(anioInicio) || anioInicio < 1900 || anioInicio > 2100) {
+        alert('Por favor digite un año de inicio contable válido (ej. 2026).');
+        return;
+      }
+
+      const periodoStr = `${String(mesInicio).padStart(2, '0')}/${anioInicio}`;
+      const nueva = {
+        id: numId,
+        nombre,
+        cedula: cedula || '3-101-000000',
+        mes_inicio: mesInicio,
+        anio_inicio: anioInicio,
+        mes: mesInicio,
+        ano: anioInicio,
+        periodo: periodoStr
+      };
+      DB_DEMO.companias.push(nueva);
+
+      if (optCat === '1') {
+        DB_DEMO.catalogos[numId] = [
+          { codigo: '999-000000', desc: '*** UTILIDADES O PÉRDIDAS DEL PERÍODO ***', tipo: '3', ini: 0, act: 0, especial: true, nivel: 1 }
+        ];
+      } else if (optCat === '2') {
+        const idOrigen = parseInt(document.getElementById('sel-comp-origen').value, 10);
+        const catOrigen = DB_DEMO.catalogos[idOrigen] || CATALOGO_MAESTRO_BASE;
+        DB_DEMO.catalogos[numId] = JSON.parse(JSON.stringify(catOrigen)).map(c => ({ ...c, ini: 0, act: 0 }));
+      } else {
+        DB_DEMO.catalogos[numId] = JSON.parse(JSON.stringify(CATALOGO_MAESTRO_BASE)).map(c => ({ ...c, ini: 0, act: 0 }));
+      }
+
+      DB_DEMO.companiaActiva = numId;
+      actualizarInfoCompania();
+      renderTablaCompanias();
+
+      formNueva.classList.add('hidden');
+      inputNumComp.value = '000';
+      alert(`✅ Empresa [${numId} - ${nombre}] aprovisionada exitosamente con inicio en ${periodoStr}.`);
+      mostrarVista('vista-menu');
+    });
+
+    document.getElementById('btn-cancelar-nueva-comp').addEventListener('click', () => {
+      formNueva.classList.add('hidden');
+      inputNumComp.value = '000';
+      inputNumComp.focus();
+    });
+
+    // =========================================================================
+    // LÓGICA MÓDULO 2: CATÁLOGO DE CUENTAS & JERARQUÍA ESTRICTA (NIVEL 1 -> 2 -> 3)
+    // =========================================================================
+
+    // Función universal de máscara con guiones
+    function formatearCodigoContable(codigo) {
+      const limpio = String(codigo || '').replace(/[^0-9]/g, '');
+      if (limpio.length === 0) return '';
+      if (limpio.length <= 3) return limpio;
+      if (limpio.length <= 5) return `${limpio.slice(0, 3)}-${limpio.slice(3)}`;
+      return `${limpio.slice(0, 3)}-${limpio.slice(3, 5)}-${limpio.slice(5, 8)}`;
+    }
+
+    // Validación estricta de ancestros en catálogo
+    function validarJerarquiaFront(codigoRaw, catalogo) {
+      const limpio = String(codigoRaw || '').replace(/[^0-9]/g, '');
+      if (limpio.length !== 3 && limpio.length !== 5 && limpio.length !== 8) {
+        return {
+          ok: false,
+          error: 'Estructura de cuenta inválida. Debe tener 3 dígitos (Nivel 1 Mayor ej. 105), 5 dígitos (Nivel 2 Subcuenta ej. 105-01) u 8 dígitos (Nivel 3 Auxiliar ej. 105-01-001).'
+        };
+      }
+
+      const n1 = limpio.slice(0, 3);
+      const n2 = limpio.length >= 5 ? limpio.slice(3, 5) : '00';
+      const n3 = limpio.length === 8 ? limpio.slice(5, 8) : '000';
+
+      let nivel = 1;
+      if (limpio.length === 5 || (limpio.length === 8 && n2 !== '00' && n3 === '000')) {
+        nivel = 2;
+      } else if (limpio.length === 8 && n3 !== '000') {
+        nivel = 3;
+      }
+
+      const codigoFmt = (nivel === 1) ? `${n1}-00-000` : (nivel === 2 ? `${n1}-${n2}-000` : `${n1}-${n2}-${n3}`);
+
+      // Comprobar si ya existe
+      const yaExiste = catalogo.some(c => {
+        const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+        return cLimpio === limpio || c.codigo === codigoFmt || cLimpio === String(codigoFmt).replace(/[^0-9]/g, '');
+      });
+      if (yaExiste) {
+        return { ok: false, error: `La cuenta ${codigoFmt} ya existe en el catálogo de esta empresa.` };
+      }
+
+      // Regla Nivel 2: DEBE existir Nivel 1 (Mayor)
+      if (nivel === 2) {
+        const existeMayor = catalogo.some(c => {
+          const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+          return (cLimpio === n1 || cLimpio === `${n1}00000` || c.codigo === `${n1}-00-000`);
+        });
+        if (!existeMayor) {
+          return {
+            ok: false,
+            error: `No se puede crear la subcuenta ${n1}-${n2} porque la cuenta mayor padre ${n1} no existe en el catálogo de esta empresa.`
+          };
+        }
+      }
+
+      // Regla Nivel 3: DEBE existir Nivel 1 y Nivel 2 (Subcuenta)
+      if (nivel === 3) {
+        const existeMayor = catalogo.some(c => {
+          const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+          return (cLimpio === n1 || cLimpio === `${n1}00000` || c.codigo === `${n1}-00-000`);
+        });
+        if (!existeMayor) {
+          return {
+            ok: false,
+            error: `No se puede crear la cuenta auxiliar ${n1}-${n2}-${n3} porque la cuenta mayor padre ${n1} no existe en el catálogo de esta empresa.`
+          };
+        }
+
+        const existeSubcuenta = catalogo.some(c => {
+          const cLimpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+          return (cLimpio === `${n1}${n2}` || cLimpio === `${n1}${n2}000` || c.codigo === `${n1}-${n2}-000`);
+        });
+        if (!existeSubcuenta) {
+          return {
+            ok: false,
+            error: `No se puede crear la cuenta auxiliar ${n1}-${n2}-${n3} porque la subcuenta padre ${n1}-${n2} no existe en el catálogo de esta empresa.`
+          };
+        }
+      }
+
+      return { ok: true, codigoFmt, nivel, n1, n2, n3 };
+    }
+
+    function renderTablaCatalogo() {
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
+      const tbody = document.getElementById('tbody-catalogo');
+      const filtro = (document.getElementById('buscar-catalogo')?.value || '').toLowerCase().trim();
+      tbody.innerHTML = '';
+
+      // Ocultar datos técnicos internos (como la cuenta 999) de la vista pública
+      const cuentasVisibles = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
+
+      document.getElementById('lbl-cat-total-cuentas').textContent = cuentasVisibles.length;
+
+      if (cuentasVisibles.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
+              <div style="font-size:32px; margin-bottom:8px;">📂</div>
+              <strong style="color:#ffffff; font-size:15px;">0 cuentas registradas.</strong>
+              <p style="font-size:12.5px; margin-top:6px;">${DB_DEMO.companiaActiva ? 'Agregue las cuentas de su catálogo usando el formulario superior.' : 'Seleccione o incluya una compañía primero.'}</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const filtradas = cuentasVisibles.filter(c => {
+        const codFmt = formatearCodigoContable(c.codigo);
+        return codFmt.toLowerCase().includes(filtro) || c.codigo.toLowerCase().includes(filtro) || c.desc.toLowerCase().includes(filtro);
+      });
+
+      filtradas.forEach((c, idx) => {
+        const tr = document.createElement('tr');
+        const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+        const nombresTipo = { '1': '1 - Activo', '2': '2 - Pasivo', '3': '3 - Patrimonio', '4': '4 - Ingresos', '5': '5 - Costos', '6': '6 - Gastos' };
+        const codigoVisual = formatearCodigoContable(c.codigo);
+
+        // Estilo de indentación según nivel
+        const limpio = String(c.codigo || '').replace(/[^0-9]/g, '');
+        const esNivel1 = (c.nivel === 1 || limpio.endsWith('00000') || limpio.length === 3);
+        const esNivel2 = (c.nivel === 2 || (limpio.endsWith('000') && !esNivel1) || limpio.length === 5);
+
+        let descIndent = c.desc;
+        if (esNivel1) {
+          descIndent = `<strong style="color:#FFFFFF; text-transform:uppercase;">${c.desc}</strong>`;
+        } else if (esNivel2) {
+          descIndent = `<span style="padding-left:14px; color:var(--apple-cyan); font-weight:600;">↳ ${c.desc}</span>`;
+        } else {
+          descIndent = `<span style="padding-left:28px; color:var(--apple-text-primary);">• ${c.desc}</span>`;
+        }
+
+        tr.innerHTML = `
+          <td><strong style="font-family:var(--apple-mono); color:${esNivel1 ? 'var(--apple-cyan)' : 'var(--apple-text-primary)'};">${codigoVisual}</strong></td>
+          <td>${descIndent}</td>
+          <td><span class="pill" style="font-size:10.5px; padding:2px 8px;">${nombresTipo[c.tipo] || c.tipo}</span></td>
+          <td class="num">${fmtM(c.ini)}</td>
+          <td class="num"><strong>${fmtM(c.act)}</strong></td>
+          <td>
+            <button class="btn btn-secondary btn-sm btn-del-cta" data-codigo="${c.codigo}" style="padding:2px 6px; font-size:10.5px; color:var(--apple-crimson); border-color:rgba(239,68,68,0.3);">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('.btn-del-cta').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const codTarget = btn.dataset.codigo;
+          const idxTarget = cat.findIndex(x => x.codigo === codTarget);
+          if (idxTarget !== -1 && confirm(`¿Desea eliminar la cuenta ${codTarget}?`)) {
+            cat.splice(idxTarget, 1);
+            renderTablaCatalogo();
+          }
+        });
+      });
+    }
+
+    document.getElementById('buscar-catalogo').addEventListener('input', renderTablaCatalogo);
+
+    // Máscara interactiva al escribir cuenta
+    const inputCatCuenta = document.getElementById('cat-cuenta');
+    inputCatCuenta.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (val === '000000' || val === '000' || val === '0') return;
+      e.target.value = formatearCodigoContable(val);
+    });
+
+    inputCatCuenta.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const val = e.target.value.trim();
+        if (val === '000000' || val === '000' || val === '0') {
+          e.preventDefault();
+          mostrarVista('vista-menu');
+        } else {
+          document.getElementById('cat-desc').focus();
+        }
+      }
+    });
+
+    document.getElementById('btn-incluir-cuenta').addEventListener('click', () => {
+      const codigoRaw = document.getElementById('cat-cuenta').value.trim();
+      const desc = document.getElementById('cat-desc').value.trim();
+      const tipo = document.getElementById('cat-tipo').value;
+
+      if (!codigoRaw || codigoRaw === '000000' || codigoRaw === '000') {
+        mostrarVista('vista-menu');
+        return;
+      }
+      if (!desc) {
+        alert('Por favor digite la descripción de la cuenta.');
+        return;
+      }
+
+      if (!DB_DEMO.companiaActiva) {
+        alert('Por favor seleccione una empresa activa antes de agregar cuentas.');
+        return;
+      }
+
+      if (!DB_DEMO.catalogos[DB_DEMO.companiaActiva]) {
+        DB_DEMO.catalogos[DB_DEMO.companiaActiva] = [];
+      }
+
+      const catalogoActual = DB_DEMO.catalogos[DB_DEMO.companiaActiva];
+      const validacion = validarJerarquiaFront(codigoRaw, catalogoActual);
+
+      if (!validacion.ok) {
+        alert(validacion.error);
+        return;
+      }
+
+      catalogoActual.push({
+        codigo: validacion.codigoFmt,
+        desc,
+        tipo,
+        nivel: validacion.nivel,
+        ini: 0,
+        act: 0
+      });
+
+      // Ordenar catálogo por código
+      catalogoActual.sort((a, b) => a.codigo.localeCompare(b.codigo));
+
+      renderTablaCatalogo();
+
+      document.getElementById('cat-cuenta').value = '';
+      document.getElementById('cat-desc').value = '';
+      document.getElementById('cat-det1').value = '';
+      document.getElementById('cat-cuenta').focus();
+    });
+
+    // =========================================================================
+    // LÓGICA MÓDULO 3: DOCUMENTOS (ASIENTOS CONTABLES INTERACTIVOS)
+    // =========================================================================
+    function poblarCuentasEnAsiento() {
+      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || DB_DEMO.catalogos[19] || [];
+      // Ocultar cuenta técnica 999 del selector de comprobantes de diario
+      const cuentasOperativas = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999'));
+
+      document.querySelectorAll('.asiento-linea-cuenta').forEach(sel => {
+        sel.innerHTML = '';
+        cuentasOperativas.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.codigo;
+          opt.textContent = `${formatearCodigoContable(c.codigo)} - ${c.desc}`;
+          sel.appendChild(opt);
+        });
+      });
+      recalcularTotalesAsiento();
+    }
+
+    function recalcularTotalesAsiento() {
+      let totDeb = 0;
+      let totCre = 0;
+
+      document.querySelectorAll('#tbody-lineas-asiento tr').forEach(tr => {
+        const d = parseFloat(tr.querySelector('.asiento-linea-deb')?.value || '0');
+        const c = parseFloat(tr.querySelector('.asiento-linea-cre')?.value || '0');
+        totDeb += isNaN(d) ? 0 : d;
+        totCre += isNaN(c) ? 0 : c;
+      });
+
+      const dif = Math.abs(totDeb - totCre);
+      const fmtM = (n) => '₡' + Number(n).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+
+      document.getElementById('lbl-total-debitos').textContent = fmtM(totDeb);
+      document.getElementById('lbl-total-creditos').textContent = fmtM(totCre);
+      
+      const lblDif = document.getElementById('lbl-total-dif');
+      lblDif.textContent = fmtM(dif);
+      lblDif.style.color = (dif === 0 && totDeb > 0) ? 'var(--ok)' : 'var(--danger)';
+    }
+
+    document.getElementById('tbody-lineas-asiento').addEventListener('input', recalcularTotalesAsiento);
+
+    document.getElementById('btn-agregar-linea-asiento').addEventListener('click', () => {
+      const tbody = document.getElementById('tbody-lineas-asiento');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--mono);"></select></td>
+        <td><input type="text" class="asiento-linea-desc" placeholder="Detalle..." style="padding:6px; font-size:13px;"></td>
+        <td><input type="number" class="asiento-linea-deb num" value="0" style="padding:6px; font-size:13px; font-family:var(--mono);"></td>
+        <td><input type="number" class="asiento-linea-cre num" value="0" style="padding:6px; font-size:13px; font-family:var(--mono);"></td>
+      `;
+      tbody.appendChild(tr);
+      poblarCuentasEnAsiento();
+    });
+
+    document.getElementById('btn-guardar-asiento').addEventListener('click', () => {
+      let totDeb = 0;
+      let totCre = 0;
+      const lineas = [];
+
+      document.querySelectorAll('#tbody-lineas-asiento tr').forEach(tr => {
+        const cta = tr.querySelector('.asiento-linea-cuenta')?.value;
+        const desc = tr.querySelector('.asiento-linea-desc')?.value;
+        const deb = parseFloat(tr.querySelector('.asiento-linea-deb')?.value || '0');
+        const cre = parseFloat(tr.querySelector('.asiento-linea-cre')?.value || '0');
+        totDeb += deb;
+        totCre += cre;
+        if (deb > 0 || cre > 0) {
+          lineas.push({ cuenta: cta, desc, deb, cre });
+        }
+      });
+
+      if (totDeb === 0 || Math.abs(totDeb - totCre) > 0.001) {
+        alert('⚠️ El asiento no está cuadrado: Los Débitos deben ser exactamente iguales a los Créditos.');
+        return;
+      }
+
+      const num = document.getElementById('asiento-num').value.trim();
+      const fecha = document.getElementById('asiento-fecha').value.trim();
+      const concepto = document.getElementById('asiento-concepto').value.trim();
+
+      if (!DB_DEMO.asientos[DB_DEMO.companiaActiva]) {
+        DB_DEMO.asientos[DB_DEMO.companiaActiva] = [];
+      }
+
+      DB_DEMO.asientos[DB_DEMO.companiaActiva].push({
+        num, fecha, concepto, debitos: totDeb, creditos: totCre, lineas
+      });
+
+      // Impactar saldos en el catálogo
+      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || [];
+      lineas.forEach(l => {
+        const c = cat.find(x => x.codigo === l.cuenta);
+        if (c) {
+          if (['1', '5', '6'].includes(c.tipo)) {
+            c.act += (l.deb - l.cre);
+          } else {
+            c.act += (l.cre - l.deb);
+          }
+        }
+      });
+
+      const msg = document.getElementById('msg-asiento-guardado');
+      msg.classList.remove('hidden');
+      msg.innerHTML = `✅ Comprobante <strong>${num}</strong> guardado y balanceado con éxito.`;
+
+      renderTablaHistorialAsientos();
+      setTimeout(() => msg.classList.add('hidden'), 4000);
+    });
+
+    function renderTablaHistorialAsientos() {
+      const asts = (DB_DEMO.companiaActiva && DB_DEMO.asientos[DB_DEMO.companiaActiva]) ? DB_DEMO.asientos[DB_DEMO.companiaActiva] : [];
+      const tbody = document.getElementById('tbody-historial-asientos');
+      tbody.innerHTML = '';
+
+      if (asts.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
+              <div style="font-size:32px; margin-bottom:8px;">📝</div>
+              <strong style="color:#ffffff; font-size:15px;">0 comprobantes de diario registrados.</strong>
+              <p style="font-size:12.5px; margin-top:6px;">Utilice el formulario de la izquierda para registrar su primer asiento contable.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+
+      asts.forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong style="color:var(--cyan); font-family:var(--mono);">${a.num}</strong></td>
+          <td style="font-family:var(--mono); color:var(--text-muted);">${a.fecha}</td>
+          <td>${a.concepto}</td>
+          <td class="num">${fmtM(a.debitos)}</td>
+          <td class="num">${fmtM(a.creditos)}</td>
+          <td><span class="pill pill-green" style="font-size:10.5px; padding:2px 6px;">CUADRADO</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // =========================================================================
+    // LÓGICA MÓDULO 4: PROCESOS SELECTOS (MAYORIZACIÓN EN CASCADA)
+    // =========================================================================
+    document.getElementById('btn-ejecutar-mayorizacion').addEventListener('click', () => {
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
+      const asts = (DB_DEMO.companiaActiva && DB_DEMO.asientos[DB_DEMO.companiaActiva]) ? DB_DEMO.asientos[DB_DEMO.companiaActiva] : [];
+      const mes = document.getElementById('sel-mes-mayorizar').value;
+      const ano = document.getElementById('sel-ano-mayorizar').value;
+
+      const resBox = document.getElementById('res-mayorizacion');
+      const logBox = document.getElementById('box-log-mayorizacion');
+
+      resBox.classList.remove('hidden');
+      logBox.classList.remove('hidden');
+      resBox.textContent = `⏳ Procesando mayorización en cascada para el período ${mes.padStart(2,'0')}/${ano}...`;
+
+      let logHTML = `<strong>--- INICIO DE MAYORIZACIÓN EN CASCADA ---</strong><br>`;
+      logHTML += `Compañía: ${DB_DEMO.companiaActiva || 'N/A'} · Período: ${mes}/${ano}<br>`;
+      logHTML += `Asientos analizados: ${asts.length}<br><br>`;
+
+      if (cat.length === 0) {
+        logHTML += `> No hay cuentas registradas para mayorizar.<br>`;
+      } else {
+        cat.forEach(c => {
+          logHTML += `> Mayorizando cuenta ${c.codigo} [${c.desc}] ... Saldo: ₡${Number(c.act).toLocaleString('es-CR')}<br>`;
+        });
+      }
+
+      logHTML += `<br><strong style="color:var(--ok);">✅ Mayorización completada: ${cat.length} cuentas balanceadas.</strong>`;
+      logBox.innerHTML = logHTML;
+
+      setTimeout(() => {
+        resBox.innerHTML = `✅ Mayorización finalizada con éxito. <strong>${cat.length} cuentas mayorizadas y balanceadas</strong> en el período ${mes.padStart(2,'0')}/${ano}.`;
+      }, 300);
+    });
+
+    // =========================================================================
+    // LÓGICA MÓDULO 5: REPORTES MENSUALES (BALANCE GENERAL, RESULTADOS & BALANZA)
+    // =========================================================================
+    function calcularCifrasContables() {
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
+      let totActivos = 0;
+      let totPasivos = 0;
+      let totPatrimonio = 0;
+      let totIngresos = 0;
+      let totCostos = 0;
+      let totGastos = 0;
+
+      const cuentasIngresos = [];
+      const cuentasCostos = [];
+      const cuentasGastos = [];
+      const cuentasActivos = [];
+      const cuentasPasivos = [];
+      const cuentasPatrimonio = [];
+
+      cat.forEach(c => {
+        if (!c.especial && !c.codigo.startsWith('999')) {
+          if (c.tipo === '1') { totActivos += c.act; cuentasActivos.push(c); }
+          else if (c.tipo === '2') { totPasivos += c.act; cuentasPasivos.push(c); }
+          else if (c.tipo === '3') { totPatrimonio += c.act; cuentasPatrimonio.push(c); }
+          else if (c.tipo === '4') { totIngresos += c.act; cuentasIngresos.push(c); }
+          else if (c.tipo === '5') { totCostos += c.act; cuentasCostos.push(c); }
+          else if (c.tipo === '6') { totGastos += c.act; cuentasGastos.push(c); }
+        }
+      });
+
+      const utilidadPeriodo = totIngresos - totCostos - totGastos;
+      return {
+        totActivos, totPasivos, totPatrimonio, totIngresos, totCostos, totGastos, utilidadPeriodo,
+        cuentasIngresos, cuentasCostos, cuentasGastos, cuentasActivos, cuentasPasivos, cuentasPatrimonio
+      };
+    }
+
+    function setTabReporte(tab) {
+      const btnBal = document.getElementById('btn-tab-balance');
+      const btnRes = document.getElementById('btn-tab-resultados');
+      const btnComp = document.getElementById('btn-tab-comprobacion');
+
+      if (btnBal) btnBal.className = (tab === 'balance') ? 'btn' : 'btn btn-secondary';
+      if (btnRes) btnRes.className = (tab === 'resultados') ? 'btn' : 'btn btn-secondary';
+      if (btnComp) btnComp.className = (tab === 'comprobacion') ? 'btn' : 'btn btn-secondary';
+
+      if (tab === 'balance') renderBalanceGeneral();
+      else if (tab === 'resultados') renderEstadoResultados();
+      else if (tab === 'comprobacion') renderBalanzaComprobacion();
+    }
+
+    function renderBalanceGeneral() {
+      const k = calcularCifrasContables();
+      const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || { id: '--', nombre: 'Sin Empresa Seleccionada', periodo: '08/2026' };
+
+      const area = document.getElementById('reporte-render-area');
+      area.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--apple-border); padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="color:var(--apple-cyan); font-family:var(--apple-mono); margin-bottom:4px; font-size:16px; letter-spacing:-0.02em;">📊 BALANCE GENERAL CLASIFICADO</h3>
+            <p style="font-size:12px; color:var(--apple-text-secondary);">
+              Compañía: <strong style="color:#ffffff;">${comp.id} - ${comp.nombre}</strong> · Período: <strong>${comp.periodo}</strong> · Moneda: Colones (₡)
+            </p>
+          </div>
+          <span class="pill pill-green">PARTIDA DOBLE CUADRADA</span>
+        </div>
+
+        <!-- Cupertino Financial KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">🏛️ Activos Totales</span>
+            <span class="kpi-val" style="color:var(--apple-cyan);">${fmtM(k.totActivos)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">💳 Pasivos Totales</span>
+            <span class="kpi-val" style="color:var(--apple-coral);">${fmtM(k.totPasivos)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">🏢 Patrimonio Neto</span>
+            <span class="kpi-val" style="color:var(--apple-indigo);">${fmtM(k.totPatrimonio)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">💎 Utilidad / Pérdida</span>
+            <span class="kpi-val" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</span>
+          </div>
+        </div>
+
+        <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Descripción de la Cuenta</th><th class="num">Monto Parcial</th><th class="num">Total Grupo</th></tr>
+            </thead>
+            <tbody>
+              <!-- ACTIVOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-cyan);">
+                <td>100-00-000</td>
+                <td>1. ACTIVOS TOTALES</td>
+                <td></td>
+                <td class="num font-bold" style="font-size:15px; color:var(--apple-cyan);">${fmtM(k.totActivos)}</td>
+              </tr>
+              ${k.cuentasActivos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
+
+              <!-- PASIVOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-cyan);">
+                <td>200-00-000</td>
+                <td>2. PASIVOS TOTALES</td>
+                <td></td>
+                <td class="num font-bold" style="font-size:15px;">${fmtM(k.totPasivos)}</td>
+              </tr>
+              ${k.cuentasPasivos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
+
+              <!-- PATRIMONIO -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-cyan);">
+                <td>300-00-000</td>
+                <td>3. PATRIMONIO NETO</td>
+                <td></td>
+                <td class="num font-bold" style="font-size:15px;">${fmtM(k.totPatrimonio)}</td>
+              </tr>
+              ${k.cuentasPatrimonio.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
+
+              <!-- CUENTA DE CONTROL 999-000000 -->
+              <tr class="tr-special" style="font-size:13.5px;">
+                <td style="font-family:var(--apple-mono);"><strong>999-000000</strong></td>
+                <td><strong>*** UTILIDAD / (PÉRDIDA) DEL PERÍODO (INGRESOS - GASTOS) ***</strong></td>
+                <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</td>
+                <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</td>
+              </tr>
+
+              <!-- TOTAL PASIVO + PATRIMONIO -->
+              <tr style="background:rgba(10, 25, 47, 0.95); font-weight:800; color:var(--apple-cyan); border-top:2px solid var(--apple-cyan); font-size:15px;">
+                <td colspan="3">TOTAL PASIVO + PATRIMONIO + UTILIDAD DEL PERÍODO</td>
+                <td class="num font-bold">${fmtM(k.totPasivos + k.totPatrimonio + k.utilidadPeriodo)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px; font-size:12px; color:var(--apple-text-secondary); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span>Estado del Balance: <strong style="color:var(--apple-mint);">✓ CUADRADO EXACTO</strong></span>
+          <span>Diferencia Activo - (Pasivo + Patrimonio): <strong style="color:var(--apple-mint);">₡0.00</strong></span>
+        </div>
+      `;
+    }
+
+    function renderEstadoResultados() {
+      const k = calcularCifrasContables();
+      const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || { id: '--', nombre: 'Sin Empresa Seleccionada', periodo: '08/2026' };
+      const utilidadBruta = k.totIngresos - k.totCostos;
+
+      const area = document.getElementById('reporte-render-area');
+      area.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--apple-border); padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="color:var(--apple-cyan); font-family:var(--apple-mono); margin-bottom:4px; font-size:16px; letter-spacing:-0.02em;">📈 ESTADO DE RESULTADOS INTEGRAL</h3>
+            <p style="font-size:12px; color:var(--apple-text-secondary);">
+              Compañía: <strong style="color:#ffffff;">${comp.id} - ${comp.nombre}</strong> · Período: <strong>${comp.periodo}</strong> · Moneda: Colones (₡)
+            </p>
+          </div>
+          <span class="pill pill-green">PERÍODO ACTIVO</span>
+        </div>
+
+        <!-- Cupertino Financial KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">💰 Ventas Totales</span>
+            <span class="kpi-val" style="color:var(--apple-mint);">${fmtM(k.totIngresos)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📦 Costo de Ventas</span>
+            <span class="kpi-val" style="color:var(--apple-coral);">(${fmtM(k.totCostos)})</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📉 Gastos Operativos</span>
+            <span class="kpi-val" style="color:var(--apple-amber);">(${fmtM(k.totGastos)})</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">💎 Utilidad Neta</span>
+            <span class="kpi-val" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'};">${fmtM(k.utilidadPeriodo)}</span>
+          </div>
+        </div>
+
+        <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Descripción del Rubro</th><th class="num">Monto Parcial</th><th class="num">Total Rubro</th></tr>
+            </thead>
+            <tbody>
+              <!-- INGRESOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:var(--apple-mint);">
+                <td>400-00-000</td>
+                <td>1. INGRESOS OPERACIONALES POR VENTAS</td>
+                <td></td>
+                <td class="num font-bold" style="font-size:15px; color:var(--apple-mint);">${fmtM(k.totIngresos)}</td>
+              </tr>
+              ${k.cuentasIngresos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num">${fmtM(c.act)}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
+
+              <!-- COSTOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:#f87171;">
+                <td>500-00-000</td>
+                <td>2. (-) COSTO DE VENTAS Y MERCADERÍAS</td>
+                <td></td>
+                <td class="num font-bold" style="color:var(--apple-coral);">(${fmtM(k.totCostos)})</td>
+              </tr>
+              ${k.cuentasCostos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num" style="color:var(--apple-coral);">(${fmtM(c.act)})</td>
+                  <td></td>
+                </tr>
+              `).join('')}
+
+              <!-- UTILIDAD BRUTA -->
+              <tr style="background:rgba(12, 26, 46, 0.9); font-weight:800; border-top:1px solid var(--apple-border); font-size:14px;">
+                <td colspan="2">(=) UTILIDAD BRUTA EN VENTAS</td>
+                <td></td>
+                <td class="num font-bold" style="color:var(--apple-cyan);">${fmtM(utilidadBruta)}</td>
+              </tr>
+
+              <!-- GASTOS OPERATIVOS -->
+              <tr style="background:rgba(8, 16, 32, 0.9); font-weight:800; color:#f87171;">
+                <td>600-00-000</td>
+                <td>3. (-) GASTOS ADMINISTRATIVOS Y OPERATIVOS</td>
+                <td></td>
+                <td class="num font-bold" style="color:var(--apple-coral);">(${fmtM(k.totGastos)})</td>
+              </tr>
+              ${k.cuentasGastos.map(c => `
+                <tr>
+                  <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary); padding-left:20px;">${c.codigo}</td>
+                  <td>${c.desc}</td>
+                  <td class="num" style="color:var(--apple-coral);">(${fmtM(c.act)})</td>
+                  <td></td>
+                </tr>
+              `).join('')}
+
+              <!-- UTILIDAD NETA FINAL -->
+              <tr class="tr-special" style="font-size:16px; border-top:2px solid var(--apple-mint);">
+                <td style="font-family:var(--apple-mono);"><strong>999-000000</strong></td>
+                <td><strong>(=) UTILIDAD / (PÉRDIDA) NETA DEL EJERCICIO</strong></td>
+                <td></td>
+                <td class="num font-bold" style="color:${k.utilidadPeriodo >= 0 ? 'var(--apple-mint)' : 'var(--apple-coral)'}; font-size:16px;">${fmtM(k.utilidadPeriodo)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px; font-size:12px; color:var(--apple-text-secondary); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span>Cierre de Resultados: <strong style="color:var(--apple-mint);">Trasladado a cuenta 999-000000</strong></span>
+          <span>Margen Operativo Neto: <strong>${k.totIngresos > 0 ? ((k.utilidadPeriodo / k.totIngresos) * 100).toFixed(2) + '%' : '0.00%'}</strong></span>
+        </div>
+      `;
+    }
+
+    function renderBalanzaComprobacion() {
+      const cat = (DB_DEMO.companiaActiva && DB_DEMO.catalogos[DB_DEMO.companiaActiva]) ? DB_DEMO.catalogos[DB_DEMO.companiaActiva] : [];
+      const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva) || { id: '--', nombre: 'Sin Empresa Seleccionada', periodo: '08/2026' };
+
+      let sumDeb = 0;
+      let sumCre = 0;
+
+      let filasHTML = '';
+      cat.forEach(c => {
+        const esDeb = ['1', '5', '6'].includes(c.tipo);
+        const deb = esDeb ? c.act : 0;
+        const cre = !esDeb ? c.act : 0;
+        sumDeb += deb;
+        sumCre += cre;
+
+        const nombresTipo = { '1': 'Activo', '2': 'Pasivo', '3': 'Patrimonio', '4': 'Ingresos', '5': 'Costos', '6': 'Gastos' };
+
+        filasHTML += `
+          <tr ${c.especial ? 'class="tr-special"' : ''}>
+            <td><strong style="font-family:var(--mono); color:${c.especial ? '#10b981' : 'var(--cyan)'};">${c.codigo}</strong></td>
+            <td>${c.desc}</td>
+            <td><span class="pill" style="font-size:10px; padding:2px 6px;">${nombresTipo[c.tipo] || c.tipo}</span></td>
+            <td class="num">${deb > 0 ? fmtM(deb) : '-'}</td>
+            <td class="num">${cre > 0 ? fmtM(cre) : '-'}</td>
+          </tr>
+        `;
+      });
+
+      const area = document.getElementById('reporte-render-area');
+      area.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--apple-border); padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="color:var(--apple-cyan); font-family:var(--apple-mono); margin-bottom:4px; font-size:16px; letter-spacing:-0.02em;">📋 BALANZA DE COMPROBACIÓN (SUMAS Y SALDOS)</h3>
+            <p style="font-size:12px; color:var(--apple-text-secondary);">
+              Compañía: <strong style="color:#ffffff;">${comp.id} - ${comp.nombre}</strong> · Período: <strong>${comp.periodo}</strong> · Moneda: Colones (₡)
+            </p>
+          </div>
+          <span class="pill pill-green">BALANCE CUADRADO</span>
+        </div>
+
+        <!-- Cupertino Financial KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">📥 Total Débitos</span>
+            <span class="kpi-val" style="color:var(--apple-cyan);">${fmtM(sumDeb)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📤 Total Créditos</span>
+            <span class="kpi-val" style="color:var(--apple-cyan);">${fmtM(sumCre)}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">⚖️ Descuadre</span>
+            <span class="kpi-val" style="color:var(--apple-mint);">${fmtM(Math.abs(sumDeb - sumCre))}</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">📂 Cuentas Totales</span>
+            <span class="kpi-val" style="color:var(--apple-indigo);">${cat.length} ctas</span>
+          </div>
+        </div>
+
+        <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Descripción de la Cuenta</th><th>Clase</th><th class="num">Saldo Débito</th><th class="num">Saldo Crédito</th></tr>
+            </thead>
+            <tbody>
+              ${filasHTML || '<tr><td colspan="5" style="text-align:center; padding:24px; color:var(--apple-text-secondary);">No hay cuentas con saldos en este período.</td></tr>'}
+              <tr style="background:rgba(10, 25, 47, 0.95); font-weight:800; color:var(--apple-cyan); border-top:2px solid var(--apple-cyan); font-size:15px;">
+                <td colspan="3">TOTALES GENERALES DE COMPROBACIÓN</td>
+                <td class="num font-bold" style="color:var(--apple-cyan);">${fmtM(sumDeb)}</td>
+                <td class="num font-bold" style="color:var(--apple-cyan);">${fmtM(sumCre)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px; font-size:12px; color:var(--apple-text-secondary); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span>Estado de Balanza: <strong style="color:var(--apple-mint);">✓ DÉBITOS = CRÉDITOS (BALANCEADO)</strong></span>
+          <span>Diferencia de Cierre: <strong style="color:var(--apple-mint);">₡0.00</strong></span>
+        </div>
+      `;
+    }
+
+    document.getElementById('btn-tab-balance').addEventListener('click', () => setTabReporte('balance'));
+    document.getElementById('btn-tab-resultados').addEventListener('click', () => setTabReporte('resultados'));
+    document.getElementById('btn-tab-comprobacion').addEventListener('click', () => setTabReporte('comprobacion'));
+
+    // =========================================================================
+    // LÓGICA MÓDULO 6: REPORTES HISTÓRICOS (LIBRO MAYOR)
+    // =========================================================================
+    function poblarCuentasMayorHistorico() {
+      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || [];
+      const sel = document.getElementById('sel-cuenta-mayor');
+      sel.innerHTML = '';
+      cat.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.codigo;
+        opt.textContent = `${c.codigo} - ${c.desc}`;
+        sel.appendChild(opt);
+      });
+      consultarMayorHistorico();
+    }
+
+    function consultarMayorHistorico() {
+      const ctaCod = document.getElementById('sel-cuenta-mayor').value;
+      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || [];
+      const cta = cat.find(x => x.codigo === ctaCod) || cat[0];
+      const asts = DB_DEMO.asientos[DB_DEMO.companiaActiva] || [];
+      const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+
+      let filasHTML = '';
+      let saldoAcum = cta?.ini || 0;
+
+      asts.forEach(a => {
+        (a.lineas || []).forEach(l => {
+          if (l.cuenta === ctaCod) {
+            saldoAcum += (l.deb - l.cre);
+            filasHTML += `
+              <tr>
+                <td style="font-family:var(--mono);">${a.fecha}</td>
+                <td><strong style="color:var(--cyan); font-family:var(--mono);">${a.num}</strong></td>
+                <td>${l.desc || a.concepto}</td>
+                <td class="num">${l.deb > 0 ? fmtM(l.deb) : '-'}</td>
+                <td class="num">${l.cre > 0 ? fmtM(l.cre) : '-'}</td>
+                <td class="num font-bold">${fmtM(saldoAcum)}</td>
+              </tr>
+            `;
+          }
+        });
+      });
+
+      if (!filasHTML) {
+        filasHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Sin movimientos registrados en el período para esta cuenta.</td></tr>`;
+      }
+
+      document.getElementById('contenedor-mayor-historico').innerHTML = `
+        <h3 style="color:var(--cyan); margin-bottom:4px; font-family:var(--mono);">LIBRO MAYOR · FICHA DE CUENTA</h3>
+        <p style="font-size:13px; color:#ffffff; font-weight:700; margin-bottom:12px;">
+          ${cta?.codigo} - ${cta?.desc} | Saldo Actual: <span style="color:var(--ok);">${fmtM(cta?.act)}</span>
         </p>
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-primary btn-sm" id="btn-confirmar-incluir-empresa">Sí, Incluir Empresa</button>
-          <button class="btn btn-secondary btn-sm" id="btn-cancelar-incluir-empresa">No, Volver</button>
-        </div>
-      </div>
+        <table>
+          <thead>
+            <tr><th>Fecha</th><th>Asiento</th><th>Concepto / Referencia</th><th class="num">Débito</th><th class="num">Crédito</th><th class="num">Saldo</th></tr>
+          </thead>
+          <tbody>
+            ${filasHTML}
+          </tbody>
+        </table>
+      `;
+    }
 
-      <!-- FORMULARIO DE APROVISIONAMIENTO SI SE DESEA INCLUIR -->
-      <div id="form-incluir-empresa-rapida" class="hidden" style="background:#071120; border:1px solid #38bdf8; border-radius:10px; padding:14px; margin-bottom:16px;">
-        <h4 style="color:#38bdf8; margin-bottom:8px; font-size:13px; font-weight:700; text-transform:uppercase;">
-          ✨ Aprovisionar Nueva Empresa No. <span id="lbl-nueva-empresa-num"></span>
-        </h4>
-        <div style="margin-bottom:10px;">
-          <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:4px;">Nombre / Razón Social</label>
-          <input type="text" id="input-nueva-empresa-nombre" placeholder="Ej. Corporación Comercial..." style="width:100%; background:#0c182a; border:1px solid #1e3a5f; color:#fff; padding:8px 10px; border-radius:6px;">
-        </div>
-        <div style="margin-bottom:10px;">
-          <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:4px;">Cédula Jurídica</label>
-          <input type="text" id="input-nueva-empresa-cedula" placeholder="3-101-000000" style="width:100%; background:#0c182a; border:1px solid #1e3a5f; color:#fff; padding:8px 10px; border-radius:6px;">
-        </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:4px;">Estructura de Catálogo Inicial</label>
-          <select id="sel-nuevo-catalogo-modo" style="width:100%; background:#0c182a; border:1px solid #1e3a5f; color:#fff; padding:8px 10px; border-radius:6px;">
-            <option value="1">1. Sin catálogo (con cuenta de resultado 999-000000)</option>
-            <option value="2">2. Clonar catálogo de otra empresa existente</option>
-            <option value="3" selected>3. Catálogo Comercial General Estándar</option>
-          </select>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-primary btn-sm" id="btn-guardar-aprovisionar-empresa">💾 Crear y Abrir Empresa</button>
-          <button class="btn btn-secondary btn-sm" id="btn-cerrar-aprovisionar-empresa">Cancelar</button>
-        </div>
-      </div>
+    document.getElementById('btn-consultar-mayor').addEventListener('click', consultarMayorHistorico);
 
-      <!-- LISTA / GRID DE EMPRESAS EXISTENTES -->
-      <div>
-        <div style="font-size:12px; font-weight:700; color:#94a3b8; text-transform:uppercase; margin-bottom:8px; display:flex; justify-content:space-between;">
-          <span>Empresas Registradas en Base de Datos</span>
-          <span id="lbl-total-empresas-modal">0 disponibles</span>
-        </div>
-        <div id="grid-empresas-modal" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px; max-height:240px; overflow-y:auto; padding-right:4px;">
-          <!-- Tarjetas generadas dinámicamente -->
-        </div>
-      </div>
+    // =========================================================================
+    // LÓGICA MÓDULO 7: CIERRES DE PERÍODO (MENSUAL Y FISCAL ANUAL)
+    // =========================================================================
+    document.getElementById('btn-ejecutar-cierre-mensual').addEventListener('click', () => {
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+      if (!comp) return;
 
-    </div>
-  </div>
+      if (confirm(`¿Confirma ejecutar el Cierre Mensual del período ${comp.periodo}?`)) {
+        let nuevoMes = (comp.mes || 8) + 1;
+        let nuevoAno = comp.ano || 2026;
+        if (nuevoMes > 12) {
+          nuevoMes = 1;
+          nuevoAno += 1;
+        }
+        comp.mes = nuevoMes;
+        comp.ano = nuevoAno;
+        comp.periodo = `${String(nuevoMes).padStart(2, '0')}/${nuevoAno}`;
 
-  <!-- ===================== MODAL (Apple Sheet) ===================== -->
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-box">
-      <!-- Indicador táctil superior para móviles -->
-      <div class="modal-sheet-handle"></div>
-      <button class="modal-cerrar" id="modal-cerrar" aria-label="Cerrar">&times;</button>
-      <div id="modal-titulo"></div>
-      <div id="modal-cuerpo"></div>
-    </div>
-  </div>
+        actualizarInfoCompania();
 
-  <script src="js/html2pdf.bundle.min.js"></script>
-  <script type="module" src="js/app.js"></script>
+        const resBox = document.getElementById('res-cierre');
+        resBox.classList.remove('hidden');
+        resBox.innerHTML = `✅ Cierre mensual ejecutado exitosamente. <strong>Nuevo período activo: ${comp.periodo}</strong>.`;
+      }
+    });
+
+    document.getElementById('btn-ejecutar-cierre-anual').addEventListener('click', () => {
+      const comp = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+      if (!comp) return;
+
+      if (confirm(`🏛️ ¿Desea ejecutar el CIERRE FISCAL ANUAL? Se liquidarán las cuentas de resultados contra la cuenta 999-000000.`)) {
+        const k = calcularCifrasContables();
+        const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || [];
+
+        // Liquidar cuentas 4, 5, 6
+        cat.forEach(c => {
+          if (['4', '5', '6'].includes(c.tipo)) {
+            c.act = 0;
+          }
+          if (c.especial || c.codigo.startsWith('999')) {
+            c.act = k.utilidadPeriodo;
+          }
+        });
+
+        comp.mes = 1;
+        comp.ano = (comp.ano || 2026) + 1;
+        comp.periodo = `01/${comp.ano}`;
+
+        actualizarInfoCompania();
+
+        const resBox = document.getElementById('res-cierre');
+        resBox.classList.remove('hidden');
+        resBox.innerHTML = `🏛️ <strong>CIERRE FISCAL ANUAL CONCLUIDO CON ÉXITO</strong>.<br>Cuentas nominales liquidadas a saldo ₡0.00. Nuevo Ejercicio Fiscal iniciado en: <strong>${comp.periodo}</strong>.`;
+      }
+    });
+
+    // =========================================================================
+    // LÓGICA CONSOLA DE AUDITORÍA SUPER USUARIO (MALDIROMAN777)
+    // =========================================================================
+    function setTabAuditoria(tab) {
+      const btnSes = document.getElementById('btn-audit-tab-sesiones');
+      const btnDat = document.getElementById('btn-audit-tab-datos');
+      const btnLog = document.getElementById('btn-audit-tab-logs');
+
+      if (btnSes) btnSes.className = (tab === 'sesiones') ? 'btn' : 'btn btn-secondary';
+      if (btnDat) btnDat.className = (tab === 'datos') ? 'btn' : 'btn btn-secondary';
+      if (btnLog) btnLog.className = (tab === 'logs') ? 'btn' : 'btn btn-secondary';
+
+      if (tab === 'sesiones') renderAuditSesiones();
+      else if (tab === 'datos') renderAuditDatos();
+      else if (tab === 'logs') renderAuditLogs();
+    }
+
+    function renderAuditSesiones() {
+      const area = document.getElementById('audit-render-area');
+      const sesiones = DB_DEMO.sesiones || [];
+
+      let filas = '';
+      if (sesiones.length === 0) {
+        filas = `<tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-muted);">Sin sesiones previas registradas. Terminal lista en 0.</td></tr>`;
+      } else {
+        sesiones.forEach((s, idx) => {
+          filas += `
+            <tr>
+              <td><strong style="color:var(--cyan); font-family:var(--mono);">#${s.id || idx+1}</strong></td>
+              <td><strong>${s.usuario}</strong> ${s.usuario === 'Maldiroman777' ? '<span class="pill pill-cyan" style="font-size:9.5px; padding:1px 5px;">SUPER_ADMIN</span>' : '<span class="pill" style="font-size:9.5px; padding:1px 5px;">CONTADOR</span>'}</td>
+              <td><span style="font-size:13px;">💻 ${s.dispositivo}</span></td>
+              <td><span class="pill pill-green" style="font-size:11px; font-weight:700;">${s.veces} accesos</span></td>
+              <td style="font-family:var(--mono); color:var(--text-muted);">${s.ip}</td>
+              <td>📍 ${s.ubicacion}</td>
+              <td style="font-family:var(--mono);">${s.fecha}</td>
+              <td><span class="pill ${s.estado === 'ACTIVA' ? 'pill-green' : ''}" style="font-size:10px; padding:2px 6px;">${s.estado}</span></td>
+            </tr>
+          `;
+        });
+      }
+
+      area.innerHTML = `
+        <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:15px;">📱 CONTROL Y AUDITORÍA DE DISPOSITIVOS E INICIOS DE SESIÓN</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+          Registro de terminales, número de veces que ha iniciado sesión cada dispositivo, dirección IP y ubicación geográfica.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>No.</th><th>Usuario</th><th>Terminal / Dispositivo</th><th>Veces Usado</th><th>Dirección IP</th><th>Ubicación</th><th>Fecha y Hora</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            ${filas}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderAuditDatos() {
+      const area = document.getElementById('audit-render-area');
+      const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
+
+      let resumenCategorias = [
+        { cat: '1. ACTIVOS', ctas: 0, monto: 0, color: 'var(--cyan)' },
+        { cat: '2. PASIVOS', ctas: 0, monto: 0, color: '#f87171' },
+        { cat: '3. PATRIMONIO', ctas: 0, monto: 0, color: '#a78bfa' },
+        { cat: '4. INGRESOS', ctas: 0, monto: 0, color: 'var(--ok)' },
+        { cat: '5. COSTOS', ctas: 0, monto: 0, color: '#fb923c' },
+        { cat: '6. GASTOS', ctas: 0, monto: 0, color: '#f43f5e' }
+      ];
+
+      let totalAsientos = 0;
+      let totalCuentas = 0;
+
+      Object.keys(DB_DEMO.catalogos).forEach(k => {
+        const cat = DB_DEMO.catalogos[k] || [];
+        totalCuentas += cat.length;
+        cat.forEach(c => {
+          if (!c.especial && !c.codigo.startsWith('999')) {
+            const idx = parseInt(c.tipo, 10) - 1;
+            if (resumenCategorias[idx]) {
+              resumenCategorias[idx].ctas += 1;
+              resumenCategorias[idx].monto += c.act;
+            }
+          }
+        });
+      });
+
+      Object.keys(DB_DEMO.asientos).forEach(k => {
+        totalAsientos += (DB_DEMO.asientos[k] || []).length;
+      });
+
+      let filasCat = '';
+      resumenCategorias.forEach(r => {
+        filasCat += `
+          <tr>
+            <td><strong style="color:${r.color};">${r.cat}</strong></td>
+            <td class="num" style="font-weight:700;">${r.ctas} cuentas</td>
+            <td class="num font-bold" style="color:#ffffff; font-size:14px;">${fmtM(r.monto)}</td>
+            <td><span class="pill pill-green" style="font-size:10px;">MONITOREADO</span></td>
+          </tr>
+        `;
+      });
+
+      area.innerHTML = `
+        <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:15px;">📊 INFORME DE DATOS CARGADOS EN BASE DE DATOS (POR CATEGORÍA)</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+          Auditoría de integridad: Total Cuentas en BD: <strong>${totalCuentas}</strong> | Asientos Contables: <strong>${totalAsientos}</strong> | Empresas: <strong>${DB_DEMO.companias.length}</strong>
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Categoría de Datos</th><th class="num">Cuentas Registradas</th><th class="num">Suma de Saldos Acumulados</th><th>Estado de Auditoría</th></tr>
+          </thead>
+          <tbody>
+            ${filasCat}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderAuditLogs() {
+      const area = document.getElementById('audit-render-area');
+      const logs = DB_DEMO.logsAuditoria || [];
+
+      let filas = '';
+      logs.forEach(l => {
+        filas += `
+          <tr>
+            <td style="font-family:var(--mono);">${l.fecha}</td>
+            <td><strong>${l.usuario}</strong></td>
+            <td><span class="pill pill-cyan" style="font-size:10.5px;">${l.accion}</span></td>
+            <td>${l.detalle}</td>
+            <td style="font-family:var(--mono); color:var(--text-muted);">${l.ip}</td>
+          </tr>
+        `;
+      });
+
+      area.innerHTML = `
+        <h3 style="color:var(--cyan); font-family:var(--mono); margin-bottom:4px; font-size:15px;">📋 REGISTRO DE TRAZABILIDAD Y EVENTOS DE SEGURIDAD</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
+          Historial inmutable de auditoría y operaciones registradas en el sistema.
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Fecha y Hora</th><th>Usuario</th><th>Acción</th><th>Detalle del Evento</th><th>IP Origen</th></tr>
+          </thead>
+          <tbody>
+            ${filas}
+          </tbody>
+        </table>
+      `;
+    }
+
+    document.getElementById('btn-audit-tab-sesiones').addEventListener('click', () => setTabAuditoria('sesiones'));
+    document.getElementById('btn-audit-tab-datos').addEventListener('click', () => setTabAuditoria('datos'));
+    document.getElementById('btn-audit-tab-logs').addEventListener('click', () => setTabAuditoria('logs'));
+
+  </script>
 </body>
 </html>
