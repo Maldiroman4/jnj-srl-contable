@@ -1,0 +1,19 @@
+﻿# Koyeb deployment configuration
+name: jnj-srl-contable
+services:
+  - name: web
+    type: web
+    git:
+      repository: Maldiroman4/jnj-srl-contable
+      branch: main
+    docker:
+      dockerfile: Dockerfile
+    ports:
+      - port: 3000
+        path: /
+    routes:
+      - path: /
+    instance_type: nano
+    scalings:
+      min: 1
+      max: 1
