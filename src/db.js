@@ -121,6 +121,52 @@ function inicializar() {
     console.error('Error en migración de catalogo_cuentas / clases_cuenta:', err.message);
   }
 
+  // Migración de tipos_documento y estado en documentos_asientos
+  try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS tipos_documento (
+        codigo                TEXT    PRIMARY KEY,
+        nombre                TEXT    NOT NULL,
+        categoria             TEXT    NOT NULL CHECK (categoria IN ('MANUAL', 'BANCOS', 'AUTOMATICO')),
+        alimenta_conciliacion INTEGER NOT NULL DEFAULT 0 CHECK (alimenta_conciliacion IN (0, 1)),
+        activo                INTEGER NOT NULL DEFAULT 1 CHECK (activo IN (0, 1))
+      );
+
+      INSERT OR REPLACE INTO tipos_documento (codigo, nombre, categoria, alimenta_conciliacion, activo) VALUES
+        ('01', 'Ventas', 'MANUAL', 0, 1),
+        ('02', 'Ingresos de Caja', 'MANUAL', 0, 1),
+        ('03', 'Recibos de Dinero', 'MANUAL', 0, 1),
+        ('04', 'Facturas de Compras / Gastos', 'MANUAL', 0, 1),
+        ('05', 'Depósitos Bancarios', 'BANCOS', 1, 1),
+        ('06', 'Notas de Débito Bancarias', 'BANCOS', 1, 1),
+        ('07', 'Notas de Crédito Bancarias', 'BANCOS', 1, 1),
+        ('08', 'Cheques Emitidos', 'BANCOS', 1, 1),
+        ('09', 'Transferencias Salientes (SINPE)', 'BANCOS', 1, 1),
+        ('10', 'Transferencias Entrantes (SINPE)', 'BANCOS', 1, 1),
+        ('11', 'Comisiones y Cargos Bancarios', 'BANCOS', 1, 1),
+        ('12', 'Intereses Ganados / Bancos', 'BANCOS', 1, 1),
+        ('20', 'Pagos a Proveedores', 'BANCOS', 1, 1),
+        ('30', 'Cobros a Clientes', 'BANCOS', 1, 1),
+        ('75', 'Depósitos Automáticos de Facturación', 'AUTOMATICO', 1, 1),
+        ('76', 'Depreciación Activos Fijos', 'AUTOMATICO', 0, 1),
+        ('77', 'Cierre Mensual de Ventas / Facturación', 'AUTOMATICO', 0, 1),
+        ('78', 'Liquidación Costo de Ventas e Inventario', 'AUTOMATICO', 0, 1),
+        ('79', 'Planillas y Cargas Sociales', 'AUTOMATICO', 0, 1),
+        ('80', 'Diferencial Cambiario Automático', 'AUTOMATICO', 0, 1),
+        ('85', 'Ajuste Automático Cuentas por Cobrar', 'AUTOMATICO', 0, 1),
+        ('86', 'Ajuste Automático Cuentas por Pagar', 'AUTOMATICO', 0, 1),
+        ('90', 'Cierre Fiscal Anual de Resultados', 'AUTOMATICO', 0, 1);
+    `);
+
+    const colsDocs = db.prepare("PRAGMA table_info(documentos_asientos)").all();
+    const hasEstado = colsDocs.some(c => c.name === 'estado');
+    if (!hasEstado) {
+      db.exec("ALTER TABLE documentos_asientos ADD COLUMN estado TEXT NOT NULL DEFAULT 'ASENTADO'");
+    }
+  } catch (err) {
+    console.error('Error en migración de tipos_documento / documentos_asientos:', err.message);
+  }
+
   // Inicializar Módulos de MONICA (Clientes, Proveedores, Inventario, Facturación, CxC, CxP, Bancos)
   db.exec(`
     CREATE TABLE IF NOT EXISTS clientes (
@@ -326,8 +372,11 @@ function inicializar() {
     INSERT OR REPLACE INTO usuarios (username, password, nombre_completo, rol, activo) VALUES
       ('Maldiroman777', '858585', 'Maldiroman · Super Usuario & Auditor de Seguridad', 'SUPER_ADMIN', 1),
       ('Joel777', '585858', 'Joel · Contador & Operador Contable', 'CONTADOR', 1);
+
+    INSERT OR IGNORE INTO companias (id_compania, razon_social, cedula_juridica, mes_inicio, anio_inicio, mes_activo, ano_activo) VALUES
+      (19, 'JNJ S.R.L. Consultoría Contable', '3-102-859423', 1, 2026, 1, 2026);
   `);
-  console.log('Base de datos inicializada limpia en 0 con usuarios autorizados.');
+  console.log('Base de datos inicializada limpia en 0 con usuarios autorizados y compañía base.');
 }
 
 inicializar();

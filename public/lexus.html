@@ -1645,100 +1645,141 @@
            ========================================================================== -->
       <div id="vista-documentos" class="view-container hidden">
         <div class="view-header">
-          <h2><span>📝 Documentos · Comprobantes de Diario</span></h2>
+          <h2><span>📝 Documentos Contables</span></h2>
           <button class="btn-back" id="btn-volver-menu-3"><span class="chevron">‹</span> <span>Menú</span></button>
         </div>
 
-        <!-- REGISTRO INTERACTIVO DE ASIENTO -->
+        <!-- REGISTRO INTERACTIVO DE DOCUMENTO CONTABLE -->
         <div class="subpanel">
-          <h4>Nuevo Comprobante de Diario</h4>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <h4 style="margin-bottom:0; border-bottom:none;">
+              Captura de Documento Contable
+              <span id="lbl-estado-doc" class="pill" style="display:none; font-size:10px; margin-left:8px;"></span>
+            </h4>
+            <span id="lbl-modo-doc-hint" style="font-size:11.5px; color:var(--apple-text-secondary);">Digite el número o tabule para correlativo</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:14px;">
             <div class="form-group" style="margin-bottom:0;">
-              <label>Número de Asiento</label>
-              <input type="text" id="asiento-num" value="AS-2026-0801" style="font-family:var(--apple-mono); font-weight:700; color:var(--apple-cyan);">
+              <label>Número de Documento Contable</label>
+              <input type="text" id="asiento-num" placeholder="Ej. DI-01" style="font-family:var(--apple-mono); font-weight:700; color:var(--apple-cyan);" autocomplete="off">
             </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Tipo de Documento</label>
+              <select id="asiento-tipo-doc" style="font-family:var(--apple-mono);">
+                <optgroup label="📝 Documentos Manuales (01 - 04)">
+                  <option value="01">01 - Ventas</option>
+                  <option value="02">02 - Ingresos de Caja</option>
+                  <option value="03">03 - Recibos de Dinero</option>
+                  <option value="04">04 - Facturas de Compras / Gastos</option>
+                </optgroup>
+                <optgroup label="🏦 Bancos y Conciliación (05 - 74)">
+                  <option value="05">05 - Depósitos Bancarios</option>
+                  <option value="06">06 - Notas de Débito Bancarias</option>
+                  <option value="07">07 - Notas de Crédito Bancarias</option>
+                  <option value="08">08 - Cheques Emitidos</option>
+                  <option value="09">09 - Transferencias Salientes (SINPE)</option>
+                  <option value="10">10 - Transferencias Entrantes (SINPE)</option>
+                  <option value="11">11 - Comisiones y Cargos Bancarios</option>
+                  <option value="12">12 - Intereses Ganados / Bancos</option>
+                  <option value="20">20 - Pagos a Proveedores</option>
+                  <option value="30">30 - Cobros a Clientes</option>
+                </optgroup>
+                <optgroup label="⚙️ Sistemas Integrados (75 - 99)">
+                  <option value="75">75 - Depósitos Automáticos de Facturación</option>
+                  <option value="76">76 - Depreciación Activos Fijos</option>
+                  <option value="77">77 - Cierre Mensual de Ventas / Facturación</option>
+                  <option value="78">78 - Liquidación Costo de Ventas e Inventario</option>
+                  <option value="79">79 - Planillas y Cargas Sociales</option>
+                  <option value="80">80 - Diferencial Cambiario Automático</option>
+                  <option value="85">85 - Ajuste Automático Cuentas por Cobrar</option>
+                  <option value="86">86 - Ajuste Automático Cuentas por Pagar</option>
+                  <option value="90">90 - Cierre Fiscal Anual de Resultados</option>
+                </optgroup>
+              </select>
+            </div>
+
             <div class="form-group" style="margin-bottom:0;">
               <label>Fecha Contable</label>
-              <input type="text" id="asiento-fecha" value="15/08/2026" style="font-family:var(--apple-mono);">
+              <input type="date" id="asiento-fecha" style="font-family:var(--apple-mono);">
             </div>
+
             <div class="form-group" style="margin-bottom:0; grid-column:span 2;">
-              <label>Concepto General del Asiento</label>
-              <input type="text" id="asiento-concepto" value="Registro de ventas y depósito bancario del día" placeholder="Detalle de la transacción...">
+              <label>Detalle General / Referencia</label>
+              <input type="text" id="asiento-concepto" placeholder="Detalle o justificación de la transacción contable...">
             </div>
           </div>
 
-          <!-- LÍNEAS DEL ASIENTO -->
+          <!-- LÍNEAS DEL DOCUMENTO CONTABLE -->
           <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
           <div class="table-box" style="margin-bottom:12px;">
             <table>
               <thead>
                 <tr>
-                  <th style="width:35%;">Cuenta Contable</th>
-                  <th style="width:30%;">Referencia / Detalle</th>
-                  <th style="width:17%;" class="num">Débito (₡)</th>
-                  <th style="width:18%;" class="num">Crédito (₡)</th>
+                  <th style="width:38%;">Cuenta Contable</th>
+                  <th style="width:30%;">Referencia / Detalle de la Partida</th>
+                  <th style="width:14%;" class="num">Débito (₡)</th>
+                  <th style="width:14%;" class="num">Crédito (₡)</th>
+                  <th style="width:4%; text-align:center;"></th>
                 </tr>
               </thead>
               <tbody id="tbody-lineas-asiento">
-                <!-- Líneas editables del asiento -->
-                <tr>
-                  <td>
-                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--apple-mono);">
-                      <!-- Opciones dinámicas -->
-                    </select>
-                  </td>
-                  <td><input type="text" class="asiento-linea-desc" value="Depósito en banco" style="padding:6px; font-size:13px;"></td>
-                  <td><input type="number" class="asiento-linea-deb num" value="500000" style="padding:6px; font-size:13px; font-family:var(--apple-mono); font-weight:700;"></td>
-                  <td><input type="number" class="asiento-linea-cre num" value="0" style="padding:6px; font-size:13px; font-family:var(--apple-mono);"></td>
-                </tr>
-                <tr>
-                  <td>
-                    <select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--apple-mono);">
-                      <!-- Opciones dinámicas -->
-                    </select>
-                  </td>
-                  <td><input type="text" class="asiento-linea-desc" value="Venta de servicios contado" style="padding:6px; font-size:13px;"></td>
-                  <td><input type="number" class="asiento-linea-deb num" value="0" style="padding:6px; font-size:13px; font-family:var(--apple-mono);"></td>
-                  <td><input type="number" class="asiento-linea-cre num" value="500000" style="padding:6px; font-size:13px; font-family:var(--apple-mono); font-weight:700;"></td>
-                </tr>
+                <!-- Se inicializa completamente limpia según RF-04 -->
               </tbody>
             </table>
           </div>
 
+          <small style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-bottom:12px;">
+            * Ingrese cuenta y presione <strong>Enter</strong> o <strong>Tab</strong> para navegar entre columnas. Digite <strong>00</strong> en cuenta para finalizar la captura.
+          </small>
+
           <!-- TOTALES Y PARTIDA DOBLE -->
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; background:rgba(4, 8, 16, 0.85); padding:12px 16px; border-radius:12px; border:1px solid var(--apple-border);">
             <div style="font-family:var(--apple-mono); font-size:13px;">
-              <span>Total Débitos: <strong id="lbl-total-debitos" style="color:var(--apple-cyan);">₡500,000.00</strong></span> | 
-              <span>Total Créditos: <strong id="lbl-total-creditos" style="color:var(--apple-cyan);">₡500,000.00</strong></span> | 
+              <span>Total Débitos: <strong id="lbl-total-debitos" style="color:var(--apple-cyan);">₡0.00</strong></span> | 
+              <span>Total Créditos: <strong id="lbl-total-creditos" style="color:var(--apple-cyan);">₡0.00</strong></span> | 
               <span>Diferencia: <strong id="lbl-total-dif" style="color:var(--apple-mint);">₡0.00</strong></span>
             </div>
-            <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:10px; align-items:center;">
               <button class="btn btn-secondary btn-sm" id="btn-agregar-linea-asiento">+ Agregar Partida</button>
-              <button class="btn" id="btn-guardar-asiento">💾 Guardar Asiento</button>
+              <button class="btn btn-secondary btn-sm" id="btn-guardar-borrador-asiento" style="display:none; color:var(--apple-amber); border-color:rgba(245,158,11,0.5);" title="Permite pausar y guardar documento descuadrado">💾 Guardar Borrador</button>
+              <button class="btn" id="btn-guardar-asiento">💾 Asentar Documento</button>
             </div>
           </div>
 
           <div id="msg-asiento-guardado" class="banner banner-ok hidden" style="margin-top:12px;"></div>
         </div>
 
-        <!-- LISTA DE ASIENTOS GUARDADOS -->
+        <!-- LISTA DE DOCUMENTOS CONTABLES DEL PERÍODO -->
         <div class="subpanel">
-          <h4>Historial de Comprobantes de Diario en el Período</h4>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+            <h4 style="margin-bottom:0; border-bottom:none;">Historial de Documentos Contables en el Período</h4>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <select id="filtro-estado-docs" style="font-size:12px; padding:4px 8px;">
+                <option value="TODOS">Todos los Estados</option>
+                <option value="ASENTADO">Solo Asentados</option>
+                <option value="BORRADOR">Solo Borradores</option>
+              </select>
+            </div>
+          </div>
           <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
           <div class="table-box">
             <table>
               <thead>
                 <tr>
-                  <th>No. Asiento</th>
+                  <th>No. Documento</th>
+                  <th>Tipo</th>
                   <th>Fecha</th>
-                  <th>Concepto General</th>
+                  <th>Detalle General</th>
                   <th class="num">Monto Débitos</th>
                   <th class="num">Monto Créditos</th>
-                  <th>Estado</th>
+                  <th style="text-align:center;">Estado</th>
+                  <th style="text-align:center;">Acciones</th>
                 </tr>
               </thead>
               <tbody id="tbody-historial-asientos">
-                <!-- Asientos dinámicos -->
+                <!-- Documentos dinámicos -->
               </tbody>
             </table>
           </div>
@@ -1786,6 +1827,44 @@
           <!-- LOG DE MAYORIZACIÓN -->
           <div id="box-log-mayorizacion" class="table-box hidden" style="background:#040810; padding:14px; font-family:var(--apple-mono); font-size:12px; color:var(--apple-text-secondary); max-height:220px; overflow-y:auto;">
             <!-- Detalle de cuentas procesadas -->
+          </div>
+        </div>
+
+        <!-- MANTENIMIENTO DE TIPOS DE DOCUMENTO (RF-03) -->
+        <div class="subpanel" style="margin-top:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h4 style="margin-bottom:2px; border-bottom:none;">Tipos de Documento Contable (Procesos Selectos)</h4>
+              <span style="font-size:11.5px; color:var(--apple-text-secondary);">
+                01-04 Manuales · 05-74 Bancos (Alimentan Conciliación Bancaria) · 75-99 Sistemas Integrados Automáticos
+              </span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <select id="filtro-cat-tipos-doc" style="font-size:12px; padding:4px 8px;">
+                <option value="TODOS">Todos los Tipos</option>
+                <option value="MANUAL">01-04 Manuales</option>
+                <option value="BANCOS">05-74 Bancos (Conciliación)</option>
+                <option value="AUTOMATICO">75-99 Automáticos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-scroll-hint">👈 Deslice horizontalmente para ver columnas 👉</div>
+          <div class="table-box" style="max-height:280px; overflow-y:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:70px;">Código</th>
+                  <th>Nombre del Tipo de Documento</th>
+                  <th>Categoría</th>
+                  <th style="text-align:center;">Alimenta Conciliación</th>
+                  <th style="text-align:center;">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-tipos-documento">
+                <!-- Cargado dinámicamente -->
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -2097,8 +2176,10 @@
           renderTablaCatalogo();
         } else if (id === 'vista-documentos') {
           mostrarVista('vista-documentos');
-          poblarCuentasEnAsiento();
-          renderTablaHistorialAsientos();
+          inicializarVistaDocumentos();
+        } else if (id === 'vista-procesos') {
+          mostrarVista('vista-procesos');
+          renderTablaTiposDocumento();
         } else if (id === 'vista-reportes-mensuales') {
           mostrarVista('vista-reportes-mensuales');
           setTabReporte('balance');
@@ -2304,10 +2385,10 @@
           document.getElementById('cat-cuenta').focus();
         } else if (mod === 'documentos') {
           mostrarVista('vista-documentos');
-          poblarCuentasEnAsiento();
-          renderTablaHistorialAsientos();
+          inicializarVistaDocumentos();
         } else if (mod === 'procesos') {
           mostrarVista('vista-procesos');
+          renderTablaTiposDocumento();
         } else if (mod === 'reportes-mensuales') {
           mostrarVista('vista-reportes-mensuales');
           setTabReporte('balance');
@@ -2341,8 +2422,8 @@
       if (enMenu && !isInput) {
         if (e.key === '1') { mostrarVista('vista-companias'); renderTablaCompanias(); }
         else if (e.key === '2') { mostrarVista('vista-catalogo'); renderTablaCatalogo(); }
-        else if (e.key === '3') { mostrarVista('vista-documentos'); poblarCuentasEnAsiento(); renderTablaHistorialAsientos(); }
-        else if (e.key === '4') { mostrarVista('vista-procesos'); }
+        else if (e.key === '3') { mostrarVista('vista-documentos'); inicializarVistaDocumentos(); }
+        else if (e.key === '4') { mostrarVista('vista-procesos'); renderTablaTiposDocumento(); }
         else if (e.key === '5') { mostrarVista('vista-reportes-mensuales'); setTabReporte('balance'); }
         else if (e.key === '6') { mostrarVista('vista-reportes-historicos'); poblarCuentasMayorHistorico(); }
         else if (e.key === '7') { mostrarVista('vista-cierres'); }
@@ -3098,23 +3179,67 @@
     });
 
     // =========================================================================
-    // LÓGICA MÓDULO 3: DOCUMENTOS (ASIENTOS CONTABLES INTERACTIVOS)
+    // LÓGICA MÓDULO 3: DOCUMENTOS CONTABLES (COMPROBANTES DE DIARIO)
     // =========================================================================
-    function poblarCuentasEnAsiento() {
+    const TIPOS_DOCUMENTO_CATALOGO = [
+      { codigo: '01', nombre: 'Ventas', categoria: 'MANUAL', alimenta_conciliacion: 0 },
+      { codigo: '02', nombre: 'Ingresos de Caja', categoria: 'MANUAL', alimenta_conciliacion: 0 },
+      { codigo: '03', nombre: 'Recibos de Dinero', categoria: 'MANUAL', alimenta_conciliacion: 0 },
+      { codigo: '04', nombre: 'Facturas de Compras / Gastos', categoria: 'MANUAL', alimenta_conciliacion: 0 },
+      { codigo: '05', nombre: 'Depósitos Bancarios', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '06', nombre: 'Notas de Débito Bancarias', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '07', nombre: 'Notas de Crédito Bancarias', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '08', nombre: 'Cheques Emitidos', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '09', nombre: 'Transferencias Salientes (SINPE)', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '10', nombre: 'Transferencias Entrantes (SINPE)', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '11', nombre: 'Comisiones y Cargos Bancarios', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '12', nombre: 'Intereses Ganados / Bancos', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '20', nombre: 'Pagos a Proveedores', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '30', nombre: 'Cobros a Clientes', categoria: 'BANCOS', alimenta_conciliacion: 1 },
+      { codigo: '75', nombre: 'Depósitos Automáticos de Facturación', categoria: 'AUTOMATICO', alimenta_conciliacion: 1 },
+      { codigo: '76', nombre: 'Depreciación Activos Fijos', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 },
+      { codigo: '77', nombre: 'Cierre Mensual de Ventas / Facturación', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 },
+      { codigo: '78', nombre: 'Liquidación Costo de Ventas e Inventario', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 },
+      { codigo: '79', nombre: 'Planillas y Cargas Sociales', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 },
+      { codigo: '80', nombre: 'Diferencial Cambiario Automático', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 },
+      { codigo: '85', nombre: 'Ajuste Automático Cuentas por Cobrar', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 },
+      { codigo: '86', nombre: 'Ajuste Automático Cuentas por Pagar', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 },
+      { codigo: '90', nombre: 'Cierre Fiscal Anual de Resultados', categoria: 'AUTOMATICO', alimenta_conciliacion: 0 }
+    ];
+
+    function inicializarVistaDocumentos() {
+      const tbody = document.getElementById('tbody-lineas-asiento');
+      if (tbody && tbody.children.length === 0) {
+        agregarLineaPartida({ autofoco: false });
+      }
+      const inputFecha = document.getElementById('asiento-fecha');
+      if (inputFecha && !inputFecha.value) {
+        const compActual = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+        const anoAct = (compActual && compActual.ano_activo) ? compActual.ano_activo : 2026;
+        const mesAct = (compActual && compActual.mes_activo) ? String(compActual.mes_activo).padStart(2, '0') : '08';
+        inputFecha.value = `${anoAct}-${mesAct}-15`;
+      }
+      poblarCuentasEnAsiento();
+      renderTablaHistorialAsientos();
+      recalcularTotalesAsiento();
+    }
+
+    function poblarCuentasEnAsiento(selectElem) {
       const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || DB_DEMO.catalogos[19] || [];
-      // Ocultar cuenta técnica 999 Y CUENTAS INACTIVAS del selector de comprobantes de diario
       const cuentasOperativas = cat.filter(c => !c.especial && !String(c.codigo).startsWith('999') && c.activo !== 0);
 
-      document.querySelectorAll('.asiento-linea-cuenta').forEach(sel => {
-        sel.innerHTML = '';
+      const targets = selectElem ? [selectElem] : document.querySelectorAll('.asiento-linea-cuenta');
+      targets.forEach(sel => {
+        const valActual = sel.value;
+        sel.innerHTML = '<option value="">-- Seleccione Cuenta (o digite 00) --</option>';
         cuentasOperativas.forEach(c => {
           const opt = document.createElement('option');
           opt.value = c.codigo;
           opt.textContent = `${formatearCodigoContable(c.codigo)} - ${c.desc}`;
           sel.appendChild(opt);
         });
+        if (valActual) sel.value = valActual;
       });
-      recalcularTotalesAsiento();
     }
 
     function recalcularTotalesAsiento() {
@@ -3135,92 +3260,323 @@
       document.getElementById('lbl-total-creditos').textContent = fmtM(totCre);
       
       const lblDif = document.getElementById('lbl-total-dif');
-      lblDif.textContent = fmtM(dif);
-      lblDif.style.color = (dif === 0 && totDeb > 0) ? 'var(--ok)' : 'var(--danger)';
+      const btnGuardar = document.getElementById('btn-guardar-asiento');
+      const btnBorrador = document.getElementById('btn-guardar-borrador-asiento');
+
+      if (dif < 0.005 && totDeb > 0) {
+        lblDif.textContent = '₡0.00 (CUADRADO)';
+        lblDif.style.color = 'var(--apple-mint)';
+        btnGuardar.style.opacity = '1';
+        btnGuardar.innerHTML = '<span>💾 Asentar Documento Contable</span>';
+        if (btnBorrador) btnBorrador.style.display = 'none';
+      } else {
+        lblDif.textContent = fmtM(dif) + (totDeb > 0 || totCre > 0 ? ' (DESCUADRADO)' : '');
+        lblDif.style.color = (totDeb === 0 && totCre === 0) ? 'var(--apple-mint)' : 'var(--apple-crimson)';
+        btnGuardar.style.opacity = (dif < 0.005 && totDeb > 0) ? '1' : '0.6';
+        btnGuardar.innerHTML = '<span>💾 Asentar Documento Contable</span>';
+        if (btnBorrador) {
+          btnBorrador.style.display = (dif >= 0.005 && (totDeb > 0 || totCre > 0)) ? 'inline-block' : 'none';
+        }
+      }
     }
 
-    document.getElementById('tbody-lineas-asiento').addEventListener('input', recalcularTotalesAsiento);
-
-    document.getElementById('btn-agregar-linea-asiento').addEventListener('click', () => {
+    function agregarLineaPartida(datos = {}) {
       const tbody = document.getElementById('tbody-lineas-asiento');
       const tr = document.createElement('tr');
+      const defCta = datos.cuenta || '';
+      const defDesc = datos.desc || (document.getElementById('asiento-concepto')?.value || '');
+      const defDeb = datos.deb !== undefined ? datos.deb : 0;
+      const defCre = datos.cre !== undefined ? datos.cre : 0;
+
       tr.innerHTML = `
-        <td><select class="asiento-linea-cuenta" style="padding:6px; font-size:13px; font-family:var(--mono);"></select></td>
-        <td><input type="text" class="asiento-linea-desc" placeholder="Detalle..." style="padding:6px; font-size:13px;"></td>
-        <td><input type="number" class="asiento-linea-deb num" value="0" style="padding:6px; font-size:13px; font-family:var(--mono);"></td>
-        <td><input type="number" class="asiento-linea-cre num" value="0" style="padding:6px; font-size:13px; font-family:var(--mono);"></td>
+        <td>
+          <select class="asiento-linea-cuenta" style="padding:6px; font-size:12.5px; font-family:var(--apple-mono); width:100%;"></select>
+        </td>
+        <td>
+          <input type="text" class="asiento-linea-desc" value="${defDesc}" placeholder="Detalle de partida..." style="padding:6px; font-size:12.5px; width:100%;">
+        </td>
+        <td>
+          <input type="number" step="0.01" class="asiento-linea-deb num" value="${defDeb}" style="padding:6px; font-size:12.5px; font-family:var(--apple-mono); font-weight:700; width:100%;">
+        </td>
+        <td>
+          <input type="number" step="0.01" class="asiento-linea-cre num" value="${defCre}" style="padding:6px; font-size:12.5px; font-family:var(--apple-mono); width:100%;">
+        </td>
+        <td style="text-align:center;">
+          <button type="button" class="btn btn-secondary btn-sm btn-del-partida" style="padding:2px 6px; font-size:11px; color:var(--apple-crimson); border-color:rgba(239,68,68,0.3);" title="Eliminar partida">✕</button>
+        </td>
       `;
+
       tbody.appendChild(tr);
-      poblarCuentasEnAsiento();
+
+      const selCta = tr.querySelector('.asiento-linea-cuenta');
+      const inpDesc = tr.querySelector('.asiento-linea-desc');
+      const inpDeb = tr.querySelector('.asiento-linea-deb');
+      const inpCre = tr.querySelector('.asiento-linea-cre');
+      const btnDel = tr.querySelector('.btn-del-partida');
+
+      poblarCuentasEnAsiento(selCta);
+      if (defCta) selCta.value = defCta;
+
+      btnDel.addEventListener('click', () => {
+        tr.remove();
+        recalcularTotalesAsiento();
+      });
+
+      // Navegación ágil por teclado (RF-04):
+      selCta.addEventListener('change', () => {
+        if (selCta.value) inpDesc.focus();
+      });
+
+      selCta.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          inpDesc.focus();
+        }
+      });
+
+      inpDesc.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          inpDeb.focus();
+          inpDeb.select();
+        }
+      });
+
+      inpDeb.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const val = parseFloat(inpDeb.value || '0');
+          if (val > 0) {
+            inpCre.value = 0;
+            recalcularTotalesAsiento();
+            agregarLineaPartida({ autofoco: true });
+          } else {
+            inpCre.focus();
+            inpCre.select();
+          }
+        }
+      });
+
+      inpCre.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          recalcularTotalesAsiento();
+          agregarLineaPartida({ autofoco: true });
+        }
+      });
+
+      if (datos.autofoco) {
+        selCta.focus();
+      }
+
+      recalcularTotalesAsiento();
+    }
+
+    document.getElementById('tbody-lineas-asiento')?.addEventListener('input', recalcularTotalesAsiento);
+    document.getElementById('btn-agregar-linea-asiento')?.addEventListener('click', () => agregarLineaPartida({ autofoco: true }));
+
+    // BÚSQUEDA REACTIVA POR NÚMERO DE DOCUMENTO (RF-02)
+    const inputAsientoNum = document.getElementById('asiento-num');
+    
+    function buscarDocumentoReactivo(numRaw) {
+      if (!numRaw) return;
+      const numFmt = numRaw.trim().toUpperCase();
+      const asts = (DB_DEMO.companiaActiva && DB_DEMO.asientos[DB_DEMO.companiaActiva]) ? DB_DEMO.asientos[DB_DEMO.companiaActiva] : [];
+      const lblEstado = document.getElementById('lbl-estado-doc');
+
+      const docExistente = asts.find(a => a.num && a.num.toUpperCase() === numFmt);
+
+      if (docExistente) {
+        if (lblEstado) {
+          lblEstado.style.display = 'inline-block';
+          lblEstado.className = docExistente.estado === 'BORRADOR' ? 'pill pill-amber' : 'pill pill-cyan';
+          lblEstado.textContent = `DOCUMENTO EXISTENTE [${docExistente.estado || 'ASENTADO'}]`;
+        }
+
+        const resp = confirm(`El documento contable [${numFmt}] ya existe registrado en este período.\n\n¿Desea cargar sus partidas en pantalla para agregar más líneas o modificarlo?`);
+        if (resp) {
+          if (docExistente.fecha) document.getElementById('asiento-fecha').value = docExistente.fecha;
+          if (docExistente.tipo) document.getElementById('asiento-tipo-doc').value = docExistente.tipo;
+          if (docExistente.concepto) document.getElementById('asiento-concepto').value = docExistente.concepto;
+
+          const tbody = document.getElementById('tbody-lineas-asiento');
+          tbody.innerHTML = '';
+          (docExistente.lineas || []).forEach(l => {
+            agregarLineaPartida({ cuenta: l.cuenta, desc: l.desc, deb: l.deb, cre: l.cre });
+          });
+          recalcularTotalesAsiento();
+        }
+      } else {
+        if (lblEstado) {
+          lblEstado.style.display = 'inline-block';
+          lblEstado.className = 'pill pill-mint';
+          lblEstado.textContent = '✨ NUEVO DOCUMENTO';
+        }
+      }
+    }
+
+    inputAsientoNum?.addEventListener('blur', (e) => {
+      buscarDocumentoReactivo(e.target.value);
     });
 
-    document.getElementById('btn-guardar-asiento').addEventListener('click', () => {
+    inputAsientoNum?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        buscarDocumentoReactivo(e.target.value);
+        document.getElementById('asiento-tipo-doc')?.focus();
+      }
+    });
+
+    // GUARDADO DE DOCUMENTO CONTABLE (RF-01 Fecha, RF-04 Partidas y Borrador)
+    function guardarDocumentoContable(esBorrador = false) {
+      const num = document.getElementById('asiento-num')?.value.trim();
+      const fecha = document.getElementById('asiento-fecha')?.value.trim();
+      const tipo = document.getElementById('asiento-tipo-doc')?.value;
+      const concepto = document.getElementById('asiento-concepto')?.value.trim();
+
+      if (!num || num === '00' || num === '00-00') {
+        alert('Por favor digite un Número de Documento Contable válido (ej. DI-01).');
+        document.getElementById('asiento-num')?.focus();
+        return;
+      }
+
+      // RF-01: Validación de Fecha Contable
+      if (!fecha) {
+        alert('Por favor ingrese la Fecha Contable del documento.');
+        document.getElementById('asiento-fecha')?.focus();
+        return;
+      }
+
+      const partesFecha = fecha.split('-');
+      if (partesFecha.length === 3) {
+        const ano = parseInt(partesFecha[0], 10);
+        if (ano < 1990 || ano > 2100) {
+          alert(`⚠️ Año contable inválido (${ano}). Error de digitación detectado. Por favor ingrese un año dentro del ejercicio contable (ej. 2026).`);
+          document.getElementById('asiento-fecha')?.focus();
+          return;
+        }
+
+        const compActual = DB_DEMO.companias.find(x => x.id === DB_DEMO.companiaActiva);
+        if (compActual && compActual.anio_inicio && compActual.mes_inicio) {
+          const inicioStr = `${compActual.anio_inicio}-${String(compActual.mes_inicio).padStart(2, '0')}-01`;
+          if (fecha < inicioStr) {
+            alert(`⚠️ Fecha contable inválida: La fecha (${fecha}) es anterior al inicio de operaciones de la compañía (${String(compActual.mes_inicio).padStart(2, '0')}/${compActual.anio_inicio}).`);
+            document.getElementById('asiento-fecha')?.focus();
+            return;
+          }
+        }
+      }
+
       let totDeb = 0;
       let totCre = 0;
       const lineas = [];
 
       document.querySelectorAll('#tbody-lineas-asiento tr').forEach(tr => {
         const cta = tr.querySelector('.asiento-linea-cuenta')?.value;
-        const desc = tr.querySelector('.asiento-linea-desc')?.value;
+        const desc = tr.querySelector('.asiento-linea-desc')?.value.trim();
         const deb = parseFloat(tr.querySelector('.asiento-linea-deb')?.value || '0');
         const cre = parseFloat(tr.querySelector('.asiento-linea-cre')?.value || '0');
-        totDeb += deb;
-        totCre += cre;
-        if (deb > 0 || cre > 0) {
+        if (cta && (deb > 0 || cre > 0)) {
+          totDeb += deb;
+          totCre += cre;
           lineas.push({ cuenta: cta, desc, deb, cre });
         }
       });
 
-      if (totDeb === 0 || Math.abs(totDeb - totCre) > 0.001) {
-        alert('⚠️ El asiento no está cuadrado: Los Débitos deben ser exactamente iguales a los Créditos.');
+      if (lineas.length === 0) {
+        alert('Debe ingresar al menos una partida con cuenta contable y monto mayor a cero.');
         return;
       }
 
-      const num = document.getElementById('asiento-num').value.trim();
-      const fecha = document.getElementById('asiento-fecha').value.trim();
-      const concepto = document.getElementById('asiento-concepto').value.trim();
+      const diferencia = Math.abs(totDeb - totCre);
+      const estaDescuadrado = (diferencia >= 0.005);
+
+      if (estaDescuadrado && !esBorrador) {
+        alert(`⚠️ El documento NO balancea: Débitos (₡${totDeb.toLocaleString('es-CR', {minimumFractionDigits:2})}) != Créditos (₡${totCre.toLocaleString('es-CR', {minimumFractionDigits:2})}).\n\nDiferencia: ₡${diferencia.toLocaleString('es-CR', {minimumFractionDigits:2})}.\n\nSi desea pausar la captura de este asiento largo, utilice el botón "Guardar Borrador".`);
+        return;
+      }
 
       if (!DB_DEMO.asientos[DB_DEMO.companiaActiva]) {
         DB_DEMO.asientos[DB_DEMO.companiaActiva] = [];
       }
 
-      DB_DEMO.asientos[DB_DEMO.companiaActiva].push({
-        num, fecha, concepto, debitos: totDeb, creditos: totCre, lineas
-      });
+      const asts = DB_DEMO.asientos[DB_DEMO.companiaActiva];
+      const estadoDoc = esBorrador ? 'BORRADOR' : 'ASENTADO';
 
-      // Impactar saldos en el catálogo
-      const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || [];
-      lineas.forEach(l => {
-        const c = cat.find(x => x.codigo === l.cuenta);
-        if (c) {
-          if (['1', '5', '6'].includes(c.tipo)) {
-            c.act += (l.deb - l.cre);
-          } else {
-            c.act += (l.cre - l.deb);
+      // Actualizar si ya existía o agregar nuevo
+      const idxExistente = asts.findIndex(a => a.num && a.num.toUpperCase() === num.toUpperCase());
+      const docData = {
+        num,
+        tipo,
+        fecha,
+        concepto: concepto || 'Documento Contable ' + num,
+        debitos: totDeb,
+        creditos: totCre,
+        estado: estadoDoc,
+        lineas
+      };
+
+      if (idxExistente !== -1) {
+        asts[idxExistente] = docData;
+      } else {
+        asts.push(docData);
+      }
+
+      // Solo si está asentado impacta en los saldos del catálogo
+      if (!esBorrador) {
+        const cat = DB_DEMO.catalogos[DB_DEMO.companiaActiva] || [];
+        lineas.forEach(l => {
+          const c = cat.find(x => x.codigo === l.cuenta);
+          if (c) {
+            if (['1', '5', '6', '18'].includes(c.tipo)) {
+              c.act += (l.deb - l.cre);
+            } else {
+              c.act += (l.cre - l.deb);
+            }
           }
-        }
-      });
+        });
+        renderTablaCatalogo();
+      }
 
       const msg = document.getElementById('msg-asiento-guardado');
-      msg.classList.remove('hidden');
-      msg.innerHTML = `✅ Comprobante <strong>${num}</strong> guardado y balanceado con éxito.`;
+      if (msg) {
+        msg.classList.remove('hidden');
+        msg.className = esBorrador ? 'banner banner-amber' : 'banner banner-ok';
+        msg.innerHTML = esBorrador 
+          ? `💾 Documento <strong>${num}</strong> guardado como <strong>BORRADOR</strong> (Diferencia: ₡${diferencia.toLocaleString('es-CR', {minimumFractionDigits:2})}). Bloqueado para mayorización hasta que cuadre.`
+          : `✅ Documento contable <strong>${num}</strong> asentado y balanceado con éxito.`;
+        setTimeout(() => msg.classList.add('hidden'), 5000);
+      }
 
       renderTablaHistorialAsientos();
-      setTimeout(() => msg.classList.add('hidden'), 4000);
-    });
+      
+      // Limpiar formulario y dejar grilla limpia lista
+      document.getElementById('asiento-num').value = '';
+      document.getElementById('asiento-concepto').value = '';
+      document.getElementById('tbody-lineas-asiento').innerHTML = '';
+      document.getElementById('lbl-estado-doc').style.display = 'none';
+      recalcularTotalesAsiento();
+      agregarLineaPartida({ autofoco: false });
+    }
+
+    document.getElementById('btn-guardar-asiento')?.addEventListener('click', () => guardarDocumentoContable(false));
+    document.getElementById('btn-guardar-borrador-asiento')?.addEventListener('click', () => guardarDocumentoContable(true));
 
     function renderTablaHistorialAsientos() {
       const asts = (DB_DEMO.companiaActiva && DB_DEMO.asientos[DB_DEMO.companiaActiva]) ? DB_DEMO.asientos[DB_DEMO.companiaActiva] : [];
       const tbody = document.getElementById('tbody-historial-asientos');
+      const filtro = document.getElementById('filtro-estado-docs')?.value || 'TODOS';
       tbody.innerHTML = '';
 
-      if (asts.length === 0) {
+      const filtrados = filtro === 'TODOS' ? asts : asts.filter(a => a.estado === filtro);
+
+      if (filtrados.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="6" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
+            <td colspan="8" style="text-align:center; padding:32px 20px; color:var(--apple-text-secondary);">
               <div style="font-size:32px; margin-bottom:8px;">📝</div>
-              <strong style="color:#ffffff; font-size:15px;">0 comprobantes de diario registrados.</strong>
-              <p style="font-size:12.5px; margin-top:6px;">Utilice el formulario de la izquierda para registrar su primer asiento contable.</p>
+              <strong style="color:#ffffff; font-size:15px;">0 documentos contables registrados.</strong>
+              <p style="font-size:12.5px; margin-top:6px;">Utilice el formulario superior para registrar su primer documento contable.</p>
             </td>
           </tr>
         `;
@@ -3229,19 +3585,74 @@
 
       const fmtM = (n) => '₡' + Number(n || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 });
 
-      asts.forEach(a => {
+      filtrados.forEach(a => {
         const tr = document.createElement('tr');
+        const esBorrador = (a.estado === 'BORRADOR');
+        const tipoObj = TIPOS_DOCUMENTO_CATALOGO.find(t => t.codigo === a.tipo);
+        const tipoNombre = tipoObj ? `${tipoObj.codigo} - ${tipoObj.nombre}` : (a.tipo || '01 - General');
+
         tr.innerHTML = `
-          <td><strong style="color:var(--cyan); font-family:var(--mono);">${a.num}</strong></td>
-          <td style="font-family:var(--mono); color:var(--text-muted);">${a.fecha}</td>
+          <td><strong style="color:var(--apple-cyan); font-family:var(--apple-mono);">${a.num}</strong></td>
+          <td><span class="pill" style="font-size:10.5px; padding:2px 7px;">${tipoNombre}</span></td>
+          <td style="font-family:var(--apple-mono); color:var(--apple-text-secondary);">${a.fecha}</td>
           <td>${a.concepto}</td>
           <td class="num">${fmtM(a.debitos)}</td>
           <td class="num">${fmtM(a.creditos)}</td>
-          <td><span class="pill pill-green" style="font-size:10.5px; padding:2px 6px;">CUADRADO</span></td>
+          <td style="text-align:center;">
+            <span class="pill ${esBorrador ? 'pill-amber' : 'pill-green'}" style="font-size:10px; padding:2px 7px;">
+              ${esBorrador ? 'BORRADOR' : 'ASENTADO'}
+            </span>
+          </td>
+          <td style="text-align:center;">
+            <button class="btn btn-secondary btn-sm btn-cargar-doc" data-num="${a.num}" style="padding:2px 8px; font-size:11px;">
+              Cargar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('.btn-cargar-doc').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const num = btn.dataset.num;
+          document.getElementById('asiento-num').value = num;
+          buscarDocumentoReactivo(num);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    document.getElementById('filtro-estado-docs')?.addEventListener('change', renderTablaHistorialAsientos);
+
+    // MANTENIMIENTO DE TIPOS DE DOCUMENTO (RF-03)
+    function renderTablaTiposDocumento() {
+      const tbody = document.getElementById('tbody-tipos-documento');
+      if (!tbody) return;
+      const filtro = document.getElementById('filtro-cat-tipos-doc')?.value || 'TODOS';
+      tbody.innerHTML = '';
+
+      const filtrados = filtro === 'TODOS' 
+        ? TIPOS_DOCUMENTO_CATALOGO 
+        : TIPOS_DOCUMENTO_CATALOGO.filter(t => t.categoria === filtro);
+
+      filtrados.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong style="font-family:var(--apple-mono); color:var(--apple-cyan);">${t.codigo}</strong></td>
+          <td><strong>${t.nombre}</strong></td>
+          <td><span class="pill" style="font-size:10.5px; padding:2px 7px;">${t.categoria}</span></td>
+          <td style="text-align:center;">
+            ${t.alimenta_conciliacion ? '<span class="pill pill-green" style="font-size:10px; padding:2px 7px;">SÍ (BANCOS)</span>' : '<span style="color:var(--apple-text-secondary); font-size:11px;">NO</span>'}
+          </td>
+          <td style="text-align:center;">
+            <span class="pill pill-green" style="font-size:10px; padding:2px 7px;">ACTIVO</span>
+          </td>
         `;
         tbody.appendChild(tr);
       });
     }
+
+    document.getElementById('filtro-cat-tipos-doc')?.addEventListener('change', renderTablaTiposDocumento);
 
     // =========================================================================
     // LÓGICA MÓDULO 4: PROCESOS SELECTOS (MAYORIZACIÓN EN CASCADA)

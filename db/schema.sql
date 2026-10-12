@@ -72,17 +72,60 @@ CREATE INDEX IF NOT EXISTS idx_cat_jerarquia ON catalogo_cuentas(id_compania, ni
 CREATE INDEX IF NOT EXISTS idx_cat_activo ON catalogo_cuentas(id_compania, activo);
 
 -- ============================================================
--- DOCUMENTOS / ASIENTOS (encabezado)
+-- TIPOS DE DOCUMENTO (Manuales, Bancos, Automáticos)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS tipos_documento (
+  codigo                TEXT    PRIMARY KEY,         -- '01', '02', '75', etc.
+  nombre                TEXT    NOT NULL,
+  categoria             TEXT    NOT NULL CHECK (categoria IN ('MANUAL', 'BANCOS', 'AUTOMATICO')),
+  alimenta_conciliacion INTEGER NOT NULL DEFAULT 0 CHECK (alimenta_conciliacion IN (0, 1)),
+  activo                INTEGER NOT NULL DEFAULT 1 CHECK (activo IN (0, 1))
+);
+
+INSERT OR REPLACE INTO tipos_documento (codigo, nombre, categoria, alimenta_conciliacion, activo) VALUES
+  -- 01 al 04: Documentos Manuales
+  ('01', 'Ventas', 'MANUAL', 0, 1),
+  ('02', 'Ingresos de Caja', 'MANUAL', 0, 1),
+  ('03', 'Recibos de Dinero', 'MANUAL', 0, 1),
+  ('04', 'Facturas de Compras / Gastos', 'MANUAL', 0, 1),
+  
+  -- 05 al 74: Bancos para Conciliación Bancaria
+  ('05', 'Depósitos Bancarios', 'BANCOS', 1, 1),
+  ('06', 'Notas de Débito Bancarias', 'BANCOS', 1, 1),
+  ('07', 'Notas de Crédito Bancarias', 'BANCOS', 1, 1),
+  ('08', 'Cheques Emitidos', 'BANCOS', 1, 1),
+  ('09', 'Transferencias Salientes (SINPE)', 'BANCOS', 1, 1),
+  ('10', 'Transferencias Entrantes (SINPE)', 'BANCOS', 1, 1),
+  ('11', 'Comisiones y Cargos Bancarios', 'BANCOS', 1, 1),
+  ('12', 'Intereses Ganados / Bancos', 'BANCOS', 1, 1),
+  ('20', 'Pagos a Proveedores', 'BANCOS', 1, 1),
+  ('30', 'Cobros a Clientes', 'BANCOS', 1, 1),
+
+  -- 75 al 99: Asientos Automáticos de Sistemas Integrados
+  ('75', 'Depósitos Automáticos de Facturación', 'AUTOMATICO', 1, 1),
+  ('76', 'Depreciación Activos Fijos', 'AUTOMATICO', 0, 1),
+  ('77', 'Cierre Mensual de Ventas / Facturación', 'AUTOMATICO', 0, 1),
+  ('78', 'Liquidación Costo de Ventas e Inventario', 'AUTOMATICO', 0, 1),
+  ('79', 'Planillas y Cargas Sociales', 'AUTOMATICO', 0, 1),
+  ('80', 'Diferencial Cambiario Automático', 'AUTOMATICO', 0, 1),
+  ('85', 'Ajuste Automático Cuentas por Cobrar', 'AUTOMATICO', 0, 1),
+  ('86', 'Ajuste Automático Cuentas por Pagar', 'AUTOMATICO', 0, 1),
+  ('90', 'Cierre Fiscal Anual de Resultados', 'AUTOMATICO', 0, 1);
+
+-- ============================================================
+-- DOCUMENTOS CONTABLES (encabezado)
+--   - estado: ASENTADO (balanceado y mayorizable) o BORRADOR (en proceso)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS documentos_asientos (
   id_documento     INTEGER PRIMARY KEY AUTOINCREMENT,
   id_compania      INTEGER NOT NULL REFERENCES companias(id_compania),
-  tipo_documento   INTEGER NOT NULL DEFAULT 1,  -- 1=General 2=Ingreso 3=Gasto 77=Cheque
+  tipo_documento   TEXT    NOT NULL DEFAULT '01' REFERENCES tipos_documento(codigo),
   numero_documento TEXT    NOT NULL,
   fecha            TEXT    NOT NULL,             -- YYYY-MM-DD
   detalle_general  TEXT,
   total_debitos    REAL    NOT NULL DEFAULT 0,
   total_creditos   REAL    NOT NULL DEFAULT 0,
+  estado           TEXT    NOT NULL DEFAULT 'ASENTADO' CHECK (estado IN ('ASENTADO', 'BORRADOR', 'ANULADO')),
   UNIQUE (id_compania, numero_documento)
 );
 

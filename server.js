@@ -17,6 +17,7 @@ app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/companias', require('./src/routes/companias'));
 app.use('/api/cuentas', require('./src/routes/cuentas'));
 app.use('/api/asientos', require('./src/routes/asientos'));
+app.use('/api/tipos-documento', require('./src/routes/tipos-documento'));
 app.use('/api/procesos', require('./src/routes/procesos'));
 app.use('/api/reportes', require('./src/routes/reportes'));
 app.use('/api/backup', require('./src/routes/backup'));

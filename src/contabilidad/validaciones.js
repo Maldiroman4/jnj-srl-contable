@@ -182,10 +182,50 @@ function propagarClase(compania, mayorIdCuenta, nuevaClase) {
   ).run(nuevaClase, compania, prefijo + '%');
 }
 
-// Pilar 3: validar un asiento (encabezado + líneas).
-function validarAsiento({ id_compania, lineas }) {
+// Validación de fecha contable (RF-01)
+function validarFechaContable({ id_compania, fecha }) {
+  if (!fecha || typeof fecha !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+    return { ok: false, error: 'Formato de fecha inválido. Debe ser AAAA-MM-DD.' };
+  }
+
+  const [anoStr, mesStr, diaStr] = fecha.split('-');
+  const ano = parseInt(anoStr, 10);
+  const mes = parseInt(mesStr, 10);
+  const dia = parseInt(diaStr, 10);
+
+  if (ano < 1990 || ano > 2100) {
+    return {
+      ok: false,
+      error: `Año contable inválido (${ano}). Error de digitación detectado. El año debe estar en el rango contable permitido (1990 - 2100).`
+    };
+  }
+
+  if (mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+    return { ok: false, error: `Fecha contable inválida: ${fecha}` };
+  }
+
+  if (id_compania) {
+    const cia = db.prepare('SELECT mes_inicio, anio_inicio, mes_activo, ano_activo FROM companias WHERE id_compania = ?')
+      .get(id_compania);
+
+    if (cia && cia.anio_inicio && cia.mes_inicio) {
+      const fechaInicio = `${cia.anio_inicio}-${String(cia.mes_inicio).padStart(2, '0')}-01`;
+      if (fecha < fechaInicio) {
+        return {
+          ok: false,
+          error: `Fecha contable no permitida: La fecha (${fecha}) es anterior al inicio de operaciones de la compañía (${String(cia.mes_inicio).padStart(2, '0')}/${cia.anio_inicio}).`
+        };
+      }
+    }
+  }
+
+  return { ok: true, ano, mes, dia };
+}
+
+// Pilar 3: validar un asiento / documento contable (encabezado + líneas + borrador).
+function validarAsiento({ id_compania, lineas, esBorrador = false }) {
   if (!Array.isArray(lineas) || lineas.length === 0) {
-    return { ok: false, error: 'El asiento debe tener al menos una línea.' };
+    return { ok: false, error: 'El documento contable debe tener al menos una línea.' };
   }
 
   let totalDebitos = 0;
@@ -220,13 +260,26 @@ function validarAsiento({ id_compania, lineas }) {
   }
 
   const diferencia = totalDebitos - totalCreditos;
-  if (Math.abs(diferencia) > 0.005) {
+  const descuadrado = Math.abs(diferencia) > 0.005;
+
+  if (descuadrado && !esBorrador) {
     return {
-      ok: false, error: 'Documento NO Balancea ... Presione Una Tecla',
-      totalDebitos, totalCreditos, diferencia,
+      ok: false,
+      error: 'Documento NO Balancea ... Presione Una Tecla',
+      totalDebitos,
+      totalCreditos,
+      diferencia,
+      puede_guardar_borrador: true
     };
   }
-  return { ok: true, totalDebitos, totalCreditos };
+
+  return {
+    ok: true,
+    totalDebitos,
+    totalCreditos,
+    diferencia,
+    es_borrador: descuadrado && esBorrador
+  };
 }
 
 module.exports = {
@@ -240,5 +293,6 @@ module.exports = {
   cuentaTieneHijos,
   cuentaTieneMovimiento,
   cuentaTieneSaldo,
+  validarFechaContable,
   validarAsiento,
 };

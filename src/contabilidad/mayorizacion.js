@@ -33,6 +33,7 @@ function mayorizar(compania, ano, mes) {
      FROM asientos_detalle a
      JOIN documentos_asientos d ON d.id_documento = a.id_documento
      WHERE d.id_compania = ? AND substr(d.fecha, 1, 4) = ? AND substr(d.fecha, 6, 2) = ?
+       AND (d.estado IS NULL OR d.estado = 'ASENTADO')
      GROUP BY a.id_cuenta, a.tipo_movimiento`
   ).all(compania, a, m)) {
     if (m2.tipo_movimiento === 'D') movD.set(m2.id_cuenta, m2.tot);
